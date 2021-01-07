@@ -2,20 +2,14 @@
 Bachelor thesis on the social media coverage of fake news. 
 
 - Devide the task 
-- 
 - Who has to write report 
-- 
-
 - Repository 
 - Rapport metting 
 - Starting requirements 
 - Which apis to look at 
 - Find out Facebook api, is useable?
-
-- Who is working on what task 
+- Who is working on what tasks 
 - Share it with vinay
-
-
 - Cover 3 social media 
     - Reddit, Facebook, twitter
 
