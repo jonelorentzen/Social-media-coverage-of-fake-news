@@ -1,22 +1,3 @@
 # Social-media-coverage-of-fake-news
 Bachelor thesis on the social media coverage of fake news. 
-
-- Devide the task 
-- Who has to write report 
-- Repository 
-- Rapport metting 
-- Starting requirements 
-- Which apis to look at 
-- Find out Facebook api, is useable?
-- Who is working on what tasks 
-- Share it with vinay
-- Cover 3 social media 
-    - Reddit, Facebook, twitter
-
-- Devide in three parts
-    - Input is a fact we want to check, is a query (frontend)
-    - Searching part, take the query and reach how it is covered on social media. How it is retweeted. Find the right API. What people use in search enige, score functions. Tagging named entities recognition. A service called tagMe 
-    - Show the information, how the information is spreading (front-end person)
-    - 
-
-- Timeline, finish everything by april
+Create a cool webApp on how a fact is covered on the social media. 
