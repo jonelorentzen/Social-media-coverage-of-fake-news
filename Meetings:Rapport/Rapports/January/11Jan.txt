@@ -14,3 +14,5 @@ Reddit https://www.reddit.com/dev/api
 Useful extension 
 https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc
 
+Today we created a twitter account and requested to become a developer so we can get accesses to the API.  
+We also began to create a flask app so we can try to create something simple for ourselfes first and then push the code into the main branch on our repository. 
