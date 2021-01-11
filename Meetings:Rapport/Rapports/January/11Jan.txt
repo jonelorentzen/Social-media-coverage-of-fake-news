@@ -1,0 +1,16 @@
+create a webside that covers these things in each social media.
+
+Twitter 
+- Geografical visualation
+- Retweets 
+- Likes 
+- Most followers 
+- Most relevant 
+
+Reddit https://www.reddit.com/dev/api
+- based on karma
+- subreddit
+
+Useful extension 
+https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc
+
