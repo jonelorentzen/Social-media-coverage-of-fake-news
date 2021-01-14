@@ -16,3 +16,16 @@ In our first meeting we got information on what we should be look more into:
 		- Use Score functions. This is also used in Search Engines 
 		- Tagging named entities (a service called tagMe https://services.d4science.org/web/tagme/)
 - the code should be finished by April
+
+Meeting Thursday 14.January: 
+- In our second meeting with vinay we looked more specifically at the hoaxy website
+- We want to figure out a way to filter out any unrelevant and unneccessary posts when we are searching in the app.
+
+- Typical use cases:
+	- Compare two or more posts(statements) related to the same theme. Fex "Capitol Hill attack done by Antifa thugs" vs "Capitol Hill attack done by Trump-	supporters"
+	
+	- Compare two or more posts(statements) that are not related to the same theme.
+- Use the google fact checker API to fact check different statements
+- Make the searches more specific, clarify what the queries are about. Fex if you search for something apple related the app should be able to know if you are searching for an actual apple or the company named Apple.
+
+- Check out "tagme" link is in the notes
