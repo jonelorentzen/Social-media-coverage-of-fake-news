@@ -14,5 +14,5 @@ In our first meeting we got information on what we should be look more into:
 		How much it has been retweeted.
 		- Find the right API.
 		- Use Score functions. This is also used in Search Engines 
-		- Tagging named entities (a service called tagMe)
+		- Tagging named entities (a service called tagMe https://services.d4science.org/web/tagme/)
 - the code should be finished by April
