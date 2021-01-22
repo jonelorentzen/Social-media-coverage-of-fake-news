@@ -9,10 +9,10 @@ app = Flask(__name__)
 
 app_data = {
     "name":         "Fake news tracker -  Web App",
-    "description":  "A basic Flask app using bootstrap for layout",
+    "description":  "A basic Flask app using bootstrap for layout to represent the spread of fake news on social media",
     "author":       "FakeNewsTrack3",
-    "html_title":   "Template for a Flask Web App",
-    "project_name": "Starter Template",
+    "html_title":   "Fake News Tracker",
+    "project_name": "Fake News Tracker",
     "keywords":     "flask, webapp, template, basic"
 }
 

@@ -2,12 +2,70 @@
 
 {% block body %}
 <div class="jumbotron">
-    <h1 class="display-4">Bootstrap starter template by {{ app_data['author'] }} </h1>
-    <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-    <p>Title: {{ app_data['html_title'] }}</p>
+    <h1 class="display-4">Fake news tracker by: {{ app_data['author'] }} </h1>
+    <br>
+    <p class="lead">This webpage will take the input of a fake news and represent the spread in social medias</p>   
+</div>
 
-    <hr class="my-4">
-    <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-    <a class="btn btn-primary btn-lg" href="/contact" role="button">Contact</a>
-  </div>
+		<section id="form" class="container">
+			<div class="container">
+				<form>
+					<div class="col-12 text-center">
+					  <div class="col-12 text-center d-md-flex align-items-center">
+              <div class="pr-2 text-nowrap">
+                Search by:
+              </div>
+              <div class="btn-group btn-group-toggle pr-2">
+                <button type="button" class="btn btn-primary active text-light">
+                  Twitter
+                </button>
+                <button type="button" class="btn btn-danger active text-light">
+                  Reddit
+                </button>
+                <button type="button" class="btn btn-primary active text-light">
+                  Facebook
+                </button>
+              </div>
+
+              <input id="query" 
+                class="form-control my-2 my-md-0" 
+                type="text" ref="searchBox"/>
+              &nbsp; &nbsp; &nbsp; &nbsp;
+
+              <div for="name" class="control-label" v-if="twitterSearchSelected">
+                Language:&nbsp;
+              </div>
+              <select class="form-control" style="width: auto">
+                <option value="">Any</option>
+                <option value="ar">Arabic (العربية)</option>
+                <option value="bn">Bengali (বাংলা)</option>
+                <option value="bg">Bulgarian (български език)</option>
+                <option value="zh">Chinese (中文, 汉语, 漢語)</option>
+                <option value="en">English</option>
+                <option value="fr">French (français)</option>
+                <option value="de">German (Deutsch)</option>
+                <option value="hi">Hindi (हिन्दी)</option>
+                <option value="it">Italian (Italiano)</option>
+                <option value="ja">Japanese (日本語)</option>
+                <option value="ms">Malay (بهاس ملايو‎)</option>
+                <option value="pt">Portuguese (Português)</option>
+                <option value="ru">Russian (русский)</option>
+                <option value="es">Spanish (Español)</option>
+                <option value="tr">Turkish (Türkçe)</option>
+              </select>
+            </div>
+          </div>
+				</form>
+
+				<div class="col-12 text-center">
+          <button type="button" class="btn btn-outline-primary">
+                  Search
+          </button>
+				</div>
+			</div>
+		</section>
+
+
+
+
 {% endblock %}
