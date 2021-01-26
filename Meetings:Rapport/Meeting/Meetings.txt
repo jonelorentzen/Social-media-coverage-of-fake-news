@@ -29,3 +29,15 @@ Meeting Thursday 14.January:
 - Make the searches more specific, clarify what the queries are about. Fex if you search for something apple related the app should be able to know if you are searching for an actual apple or the company named Apple.
 
 - Check out "tagme" link is in the notes
+
+
+26. Jan 
+- Trouble running the backend. Not connecting to the database.
+- screen -r 
+- some update on the frontend
+	- looking at some charts with d3. 
+	- adding buttons to expand the details. 
+- until next week we will try to visualise some data on some chart & have the backend running
+- Get access to the ssh 
+- SSHFS working with visual Studio 
+ 
