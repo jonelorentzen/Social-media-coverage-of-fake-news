@@ -16,3 +16,8 @@ https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgol
 
 Today we created a twitter account and requested to become a developer so we can get accesses to the API.  
 We also began to create a flask app so we can try to create something simple for ourselfes first and then push the code into the main branch on our repository. 
+
+26. Jan 2020
+Until now we have done research on different things such as, which chart we are going to use in our WebApp. We have gotten familiar with using Twitter V2 Api and 1.1. The different information we can get out and we can visualise the data. 
+We have been trying to install the Hoaxy backend, but have run into some trouble with PSQL database, there are some problems when connecting to the database, it cannot read the password it seems like. Check this out with vinay.
+
