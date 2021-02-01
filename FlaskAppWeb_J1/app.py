@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, request, render_template,jsonify
+from flask import Flask, render_template, request, render_template,jsonify,redirect, url_for
 import requests
 import json
 import os
@@ -15,8 +15,10 @@ app_data = {
     "author":       "FakeNewsTrack3",
     "html_title":   "Fake News Tracker",
     "project_name": "Fake News Tracker",
-    "keywords":     "flask, webapp, template, basic"
+    "keywords":     "Flask, webapp, template, basic"
 }
+
+app.config['newdata'] = {}
 
 #getting data from TWITTER
 #....................................................
@@ -31,11 +33,13 @@ def create_url(query):
     # in_reply_to_user_id, lang, non_public_metrics, organic_metrics,
     # possibly_sensitive, promoted_metrics, public_metrics, referenced_tweets,
     # source, text, and withheld
-    tweet_fields = "tweet.fields=author_id"
-    url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}".format(
-        query, tweet_fields
-    )
+    tweet_fields = "tweet.fields=public_metrics"
+    max_results = "max_results=100"
+    url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}&{}".format(
+        query, tweet_fields, max_results
+        )
     return url
+#https://api.twitter.com/1.1/search/tweets.json?q=trump&result_type=popular
 
 def create_headers(bearer_token):
     headers = {"Authorization": "Bearer AAAAAAAAAAAAAAAAAAAAAEYbLwEAAAAA2QFmIRNmiAc3uEuMAPT9AoknvZw%3D7rtwFRPtWgSFp70bogE1sBP1WzqkR5cubh9vlN2COt9AiT6kfk"}
@@ -50,35 +54,18 @@ def connect_to_endpoint(url, headers):
 
 @app.route('/showinfo', methods=['GET', 'POST'])
 def showinfo():
-    query = request.form.get('query')
     if request.method == 'POST':
         querys = request.form.get('query')
         bearer_token = auth()
         url = create_url(querys)
         headers = create_headers(bearer_token)
         json_response = connect_to_endpoint(url, headers)
-
-        #handle the data in a different function
-        show_autherId(json_response)
+        app.config['newdata'] = json_response
         
-        #print(json.dumps(json_response, indent=4, sort_keys=True))
-        return json.dumps(json_response, indent=4, sort_keys=True)
-    
-    return render_template('showinfo.html', app_data=app_data)
+        return redirect(url_for('testingJs'))
 
-def show_autherId(json_response):
-    #print(json_response)
-    # print([obj['text'] for obj in json_response['data'] if(obj['text'])])
-    print("___________________")
-    print([{"author_id" : obj['author_id']} for obj in json_response['data'] if(obj['author_id'])])
-
-    #print ([obj['author_id'] for obj in json_response if (obj['author_id'])])
-    # newDict={}
-    # for item in json_response['data']:
-    #     newDict.update(item)
-    # json_response['data'] = newDict
-    # print(json_response['data']['author_id'])
-
+    print(app.config['newdata'])    
+    return json.dumps(app.config['newdata'])
 
 
 @app.route('/test1', methods=['GET', 'POST'])
@@ -112,7 +99,13 @@ def service():
 def contact():
     return render_template('contact.html', app_data=app_data)
 
+@app.route('/testingJs')
+def testingJs():
+    return render_template('testingJs.html', app_data=app_data)
 
+@app.route('/new')
+def new():
+    return render_template('new.html', app_data=app_data)
 
 if __name__ == '__main__':
     app.run(debug=DEVELOPMENT_ENV)
