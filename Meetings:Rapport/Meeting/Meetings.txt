@@ -40,4 +40,18 @@ Meeting Thursday 14.January:
 - until next week we will try to visualise some data on some chart & have the backend running
 - Get access to the ssh 
 - SSHFS working with visual Studio 
+
+
+Meeting February 2nd:
+
+In this meeting we showed how far we had come with our page, we started testing with a graph and some queries.
+- We need to get several models to present the data aswell as add a timeline of how much the tweet is spreadigng over time.
+- Vinay showed us how to use SSHFS to be able to edit the files in the ubuntu virtual env. locally on our computer
+	- Download sshfs
+	- make a directory mkdir users/awallemo/hoaxy
+	- Write the command 'sshfs -o allow_other,defer_permissions,IdentityFile=~/.ssh/id_rsa ubuntu@18.222.210.219:/home/ubuntu/users/awallemo/hoaxy
+- We asked Vinay to explain more about how the hoaxy backend on ubuntu works, i.e how to edit it and how the server communicates with the client
+	- We use sshfs to edit the files on our computer locally, which means we can run and edit the code in vscode.
+	- The client communicates with the server using RestAPI(?)
+	- Use the different APIs for the different functions on the site: searching tweets, searching articles, trending news, popular news 
  
