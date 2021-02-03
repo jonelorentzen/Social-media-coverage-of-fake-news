@@ -67,6 +67,9 @@ function chart(allData) {
 };
 
 // Extracting the public metrics from allData
+// The API returns 100 tweets that can be in the format for a orignal tweet, a reply to a tweet, a quote of a tweet or a retweet of a tweet
+// The problem with the API is that most of 100 tweets we get from the API is retweets from another tweet
+// A retweet only has the "retweet_count" from the orignal tweet
 function transform_data(allData){
     let total_retweets = 0
     let total_likes = 0
@@ -74,11 +77,21 @@ function transform_data(allData){
     let total_quotes = 0
 
     for (let i = 0; i < allData.length; i++) {
-        total_retweets += allData[i]['public_metrics']["retweet_count"]
-        total_likes += allData[i]['public_metrics']["like_count"]
-        total_replies += allData[i]['public_metrics']["reply_count"]
-        total_quotes += allData[i]['public_metrics']["quote_count"]
-    };  
+        if("referenced_tweets" in allData[i]){
+            if(allData[i]['referenced_tweets']['0']["type"]!== "retweeted"){
+                total_retweets += allData[i]['public_metrics']["retweet_count"]
+                total_likes += allData[i]['public_metrics']["like_count"]
+                total_replies += allData[i]['public_metrics']["reply_count"]
+                total_quotes += allData[i]['public_metrics']["quote_count"]
+                
+            }
+        }else{   
+                total_retweets += allData[i]['public_metrics']["retweet_count"]
+                total_likes += allData[i]['public_metrics']["like_count"]
+                total_quotes += allData[i]['public_metrics']["quote_count"]
+                total_replies += allData[i]['public_metrics']["reply_count"]       
+        }
+    }
 
     var total_list = [total_retweets, total_likes, total_quotes,total_replies]
     return total_list

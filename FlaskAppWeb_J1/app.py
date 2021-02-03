@@ -33,13 +33,23 @@ def create_url(query):
     # in_reply_to_user_id, lang, non_public_metrics, organic_metrics,
     # possibly_sensitive, promoted_metrics, public_metrics, referenced_tweets,
     # source, text, and withheld
-    tweet_fields = "tweet.fields=public_metrics"
+    tweet_fields = "tweet.fields=public_metrics,created_at,geo,lang,referenced_tweets,text"
+
     max_results = "max_results=100"
     url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}&{}".format(
         query, tweet_fields, max_results
         )
     return url
 #https://api.twitter.com/1.1/search/tweets.json?q=trump&result_type=popular
+
+def create_id_url(query):
+   
+    tweet_fields = "tweet.fields=public_metrics,created_at,geo,lang,referenced_tweets,text"
+
+    url = "https://api.twitter.com/2/tweets?ids={}&{}".format(
+        query, tweet_fields
+        )
+    return url
 
 def create_headers(bearer_token):
     headers = {"Authorization": "Bearer AAAAAAAAAAAAAAAAAAAAAEYbLwEAAAAA2QFmIRNmiAc3uEuMAPT9AoknvZw%3D7rtwFRPtWgSFp70bogE1sBP1WzqkR5cubh9vlN2COt9AiT6kfk"}
@@ -60,12 +70,34 @@ def showinfo():
         url = create_url(querys)
         headers = create_headers(bearer_token)
         json_response = connect_to_endpoint(url, headers)
+        
+        # New call to the the Twitter API that uses the ID of the retweeted tweets
+        ids = extract_retweets(json_response)
+        url_ids = create_id_url(ids)
+        print(url_ids)
+        json_response2 = connect_to_endpoint(url_ids, headers)
+        print(json_response2)
+
+        # Må sende denne responsen videre til JS eller få kombinert begge responsene
+
+        
         app.config['newdata'] = json_response
         
         return redirect(url_for('testingJs'))
 
-    print(app.config['newdata'])    
+    #print(app.config['newdata'])    
     return json.dumps(app.config['newdata'])
+
+def extract_retweets(json_response):
+    id_list = []
+    tweet_dict = json_response["data"]
+    for i in range(len(tweet_dict)):
+        if "referenced_tweets" in tweet_dict[i]:
+            if tweet_dict[i]["referenced_tweets"][0]["type"] == "retweeted":
+                if tweet_dict[i]["referenced_tweets"][0]["id"] not in id_list:
+                    id_list.append(tweet_dict[i]["referenced_tweets"][0]["id"])
+    joined_string = ",".join(id_list)
+    return joined_string
 
 
 @app.route('/test1', methods=['GET', 'POST'])
