@@ -1,4 +1,5 @@
-#myChart {
-    width: 14em;
-    height: 15em;
+.buttons {
+    border-radius: 12px;
+    background-color: #beb8b8;
+    color: black
 }

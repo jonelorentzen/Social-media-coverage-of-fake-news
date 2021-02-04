@@ -25,6 +25,16 @@ async function fetchdata() {
         });
 };
 
+//showing/hiding bar-DIV
+function barCanvas() {
+    var x = document.getElementById("barCanvas");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+
 // Plotting the allData in the form of a bar chart
 function chart(allData) {
     var ctx = document.getElementById('myChart').getContext('2d');
