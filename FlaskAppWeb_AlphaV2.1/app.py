@@ -20,19 +20,11 @@ app_data = {
 
 app.config['newdata'] = {}
 
-#getting data from TWITTER
-#....................................................
+#Getting data from TWITTER
 def auth():
     return os.environ.get("BEARER_TOKEN")
 
 def create_url(query):
-    # Tweet fields are adjustable.s
-    # Options include:
-    # attachments, author_id, context_annotations,
-    # conversation_id, created_at, entities, geo, id,
-    # in_reply_to_user_id, lang, non_public_metrics, organic_metrics,
-    # possibly_sensitive, promoted_metrics, public_metrics, referenced_tweets,
-    # source, text, and withheld
     tweet_fields = "tweet.fields=public_metrics,created_at,geo,lang,referenced_tweets,text"
 
     max_results = "max_results=100"
@@ -40,12 +32,12 @@ def create_url(query):
         query, tweet_fields, max_results
         )
     return url
+
 #https://api.twitter.com/1.1/search/tweets.json?q=trump&result_type=popular
 
 def create_id_url(query):
    
     tweet_fields = "tweet.fields=public_metrics,created_at,geo,lang,referenced_tweets,text"
-
     url = "https://api.twitter.com/2/tweets?ids={}&{}".format(
         query, tweet_fields
         )
@@ -70,22 +62,19 @@ def showinfo():
         url = create_url(querys)
         headers = create_headers(bearer_token)
         json_response = connect_to_endpoint(url, headers)
-        
+
         # New call to the the Twitter API that uses the ID of the retweeted tweets
         ids = extract_retweets(json_response)
         url_ids = create_id_url(ids)
-        print(url_ids)
         json_response2 = connect_to_endpoint(url_ids, headers)
-        print(json_response2)
-
-        # Må sende denne responsen videre til JS eller få kombinert begge responsene
-
+        
+        for item in json_response2["data"]:
+            json_response["data"].append(item)
         
         app.config['newdata'] = json_response
         
         return redirect(url_for('testingJs'))
-
-    #print(app.config['newdata'])    
+   
     return json.dumps(app.config['newdata'])
 
 def extract_retweets(json_response):
@@ -99,18 +88,6 @@ def extract_retweets(json_response):
     joined_string = ",".join(id_list)
     return joined_string
 
-
-@app.route('/test1', methods=['GET', 'POST'])
-def testing():
-    #for GET requests
-    if request.method == 'GET':
-        message = {'greeting':'Hello from Flask'}
-        return jsonify(message)
-
-    #for POST requests
-    if request.method == 'POST':
-        print(request.get_json()) #parsing as JSON
-        return 'Success', 200
 
 @app.route('/', methods=['GET'])
 def index():
@@ -135,9 +112,6 @@ def contact():
 def testingJs():
     return render_template('testingJs.html', app_data=app_data)
 
-@app.route('/new')
-def new():
-    return render_template('new.html', app_data=app_data)
 
 if __name__ == '__main__':
     app.run(debug=DEVELOPMENT_ENV)
