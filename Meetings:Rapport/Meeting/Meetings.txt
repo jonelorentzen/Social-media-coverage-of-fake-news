@@ -55,3 +55,6 @@ In this meeting we showed how far we had come with our page, we started testing 
 	- The client communicates with the server using RestAPI(?)
 	- Use the different APIs for the different functions on the site: searching tweets, searching articles, trending news, popular news 
  
+ Meeting February 9nd:
+ 
+
