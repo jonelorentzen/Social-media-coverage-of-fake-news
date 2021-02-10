@@ -60,4 +60,5 @@ In this meeting we showed how far we had come with our page, we started testing 
 - We were having difficulties with running the backend and also with the automatic deployment of the backend so Vinay said he would take a look at it.
 - Read up on screen commands, this is used in the steps with "Running the backend for the first time".
 - We asked how to go forward with the frontend of the application when we don't have any good backend available at the moment
-	- we should try to implement the Hoaxy api in out frontend and see how we can get more and diverse data out. 
+	- we should try to implement the Hoaxy api in out frontend and see how we can get more and diverse data out.
+- Try to get paging in the application we already have created so we can get more results up to 1000 tweets per search. This can be done if we send 10 requests per search and then remove the duplicates.
