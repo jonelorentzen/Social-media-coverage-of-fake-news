@@ -6,5 +6,7 @@ To run Application, follow instructions:
 ```sh
 $ cd FlaskApp
 $ pip install -r requirements.txt
-$ python app.py
+$ export FLASK_APP=app.py
+$ export FLASK_ENV=development
+$ flask run
 ```
