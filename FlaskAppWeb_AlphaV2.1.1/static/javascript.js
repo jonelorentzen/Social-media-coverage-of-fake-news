@@ -13,6 +13,7 @@ async function start() {
         list = transform_data(allData);
         console.log(list);
         chart(list);
+        checklist();
     }, false);
 };
 
@@ -33,6 +34,18 @@ function barCanvas() {
     } else {
         x.style.display = "none";
     }
+}
+
+function checklist(){
+    test = []
+    for (let i = 0; i < allData.length; i++){
+        if(test.includes(allData[i]["id"])){
+            console.log("DUPLICATE")
+        }else{
+            test.push(allData[i]["id"])
+        }
+    }
+    console.log(test.length)
 }
 
 // Plotting the allData in the form of a bar chart

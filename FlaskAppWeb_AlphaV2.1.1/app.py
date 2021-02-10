@@ -5,7 +5,9 @@ from flask import Flask, render_template, request, render_template,jsonify,redir
 import requests
 import json
 import os
+import time
 DEVELOPMENT_ENV  = True
+
 
 app = Flask(__name__)
 
@@ -58,24 +60,66 @@ def connect_to_endpoint(url, headers):
 def showinfo():
     if request.method == 'POST':
         querys = request.form.get('query')
-        bearer_token = auth()
-        url = create_url(querys)
-        headers = create_headers(bearer_token)
-        json_response = connect_to_endpoint(url, headers)
+        json_response = api_caller(querys)
+    
 
         # New call to the the Twitter API that uses the ID of the retweeted tweets
-        ids = extract_retweets(json_response)
-        url_ids = create_id_url(ids)
-        json_response2 = connect_to_endpoint(url_ids, headers)
+        # ids = extract_retweets(json_response)
+        # url_ids = create_id_url(ids)
+        # json_response2 = connect_to_endpoint(url_ids, headers)
         
-        for item in json_response2["data"]:
-            json_response["data"].append(item)
+        # for item in json_response2["data"]:
+        #     json_response["data"].append(item)
         
         app.config['newdata'] = json_response
         
         return redirect(url_for('testingJs'))
    
     return json.dumps(app.config['newdata'])
+
+
+def api_caller(query):
+    
+    bearer_token = auth()
+    url = create_url(query)
+    headers = create_headers(bearer_token)
+    json_response = connect_to_endpoint(url, headers)
+
+    time.time()
+    count = 0
+    while True:
+        api_call = connect_to_endpoint(url, headers)
+        for item in api_call["data"]:
+            if item["id"] not in json_response["data"]:
+                json_response["data"].append(item)
+        
+        time.sleep(2)
+        count += 1
+        print ("tick")
+        if count == 3:
+            count = 0
+            break
+
+    json_response_no_duplicates = remove_duplicates(json_response)
+    return json_response_no_duplicates
+
+def remove_duplicates(json_response):
+    id_list = []
+    json_response_copy = json_response.copy()
+    print(len(json_response_copy["data"]))
+    for i in range(len(json_response_copy["data"])):
+        print(i)
+        print(json_response_copy["data"][i]["id"])
+        if json_response_copy["data"][i]["id"] not in id_list:
+            id_list.append(json_response_copy["data"][i]["id"])
+            print(len(json_response_copy["data"]))
+
+        else:
+            del json_response["data"][i]
+           
+            
+    return json_response
+
 
 def extract_retweets(json_response):
     id_list = []
