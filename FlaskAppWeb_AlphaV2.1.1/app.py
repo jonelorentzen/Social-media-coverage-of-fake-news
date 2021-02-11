@@ -5,7 +5,9 @@ from flask import Flask, render_template, request, render_template,jsonify,redir
 import requests
 import json
 import os
+import time
 DEVELOPMENT_ENV  = True
+
 
 app = Flask(__name__)
 
@@ -33,8 +35,6 @@ def create_url(query):
         )
     return url
 
-#https://api.twitter.com/1.1/search/tweets.json?q=trump&result_type=popular
-
 def create_id_url(query):
    
     tweet_fields = "tweet.fields=public_metrics,created_at,geo,lang,referenced_tweets,text"
@@ -57,11 +57,14 @@ def connect_to_endpoint(url, headers):
 @app.route('/showinfo', methods=['GET', 'POST'])
 def showinfo():
     if request.method == 'POST':
-        querys = request.form.get('query')
+        #Create the token to get acess to the Twitter 
         bearer_token = auth()
-        url = create_url(querys)
         headers = create_headers(bearer_token)
-        json_response = connect_to_endpoint(url, headers)
+
+        querys = request.form.get('query')
+
+        #API call to get back a dictionary with 10 api call without any duplicates
+        json_response = api_caller(querys, headers)
 
         # New call to the the Twitter API that uses the ID of the retweeted tweets
         ids = extract_retweets(json_response)
@@ -74,8 +77,61 @@ def showinfo():
         app.config['newdata'] = json_response
         
         return redirect(url_for('testingJs'))
-   
+    #print(app.config["newdata"])
     return json.dumps(app.config['newdata'])
+
+
+def api_caller(query, headers):
+    url = create_url(query)
+    json_response = connect_to_endpoint(url, headers)
+
+    time.time()
+    count = 0
+    while True:
+        api_call = connect_to_endpoint(url, headers)
+        for item in api_call["data"]:
+            if item["id"] not in json_response["data"]:
+                json_response["data"].append(item)
+        
+        time.sleep(2)
+        count += 1
+        print ("tick")
+        if count == 8:
+            count = 0
+            break
+
+    json_response_no_duplicates = remove_duplicates(json_response)
+    return json_response_no_duplicates
+
+def remove_duplicates(json_response):
+    # id_list = []
+    # json_response_copy = json_response.copy()
+    # print(len(json_response_copy["data"]))
+    # for i in range(len(json_response_copy["data"])):
+    #     print(i)
+    #     print(json_response_copy["data"][i]["id"])
+    #     if json_response_copy["data"][i]["id"] not in id_list:
+    #         id_list.append(json_response_copy["data"][i]["id"])
+    #         print(len(json_response_copy["data"]))
+
+    #     else:
+    #         del json_response["data"][i]
+           
+    response_map = {}
+    for i in range(len(json_response["data"])):
+        key = json_response["data"][i]["id"] 
+        value = json_response["data"][i]
+        response_map[key] = value 
+
+    json_response_no_duplicates = {"data":[]}
+    for value in response_map.values():
+        json_response_no_duplicates["data"].append(value)
+
+
+
+   
+    return json_response_no_duplicates
+
 
 def extract_retweets(json_response):
     id_list = []
@@ -85,6 +141,8 @@ def extract_retweets(json_response):
             if tweet_dict[i]["referenced_tweets"][0]["type"] == "retweeted":
                 if tweet_dict[i]["referenced_tweets"][0]["id"] not in id_list:
                     id_list.append(tweet_dict[i]["referenced_tweets"][0]["id"])
+                    if len(id_list) == 100:
+                        break
     joined_string = ",".join(id_list)
     return joined_string
 

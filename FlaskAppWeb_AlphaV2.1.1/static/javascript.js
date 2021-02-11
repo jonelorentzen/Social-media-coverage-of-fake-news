@@ -10,6 +10,7 @@ window.addEventListener('DOMContentLoaded', () => start(), false);
 async function start() {
     fetchdata().then(() => {
         console.log(allData);
+        console.log(typeof allData);
         list = transform_data(allData);
         console.log(list);
         chart(list);
@@ -20,7 +21,7 @@ async function start() {
 async function fetchdata() {
     return fetch('http://127.0.0.1:5000/showinfo')
         .then(response => response.json())
-        .then(data => {
+        .then(data => {  
             allData = data.data
         });
 };
@@ -93,15 +94,17 @@ function transform_data(allData) {
     let total_quotes = 0
 
     for (let i = 0; i < allData.length; i++) {
-        if ("referenced_tweets" in allData[i]) {
-            if (allData[i]['referenced_tweets']['0']["type"] !== "retweeted") {
+        console.log(typeof allData);
+        if("referenced_tweets" in allData[i]){
+            if(allData[i]['referenced_tweets']['0']["type"]!== "retweeted"){
                 total_retweets += allData[i]['public_metrics']["retweet_count"]
                 total_likes += allData[i]['public_metrics']["like_count"]
                 total_replies += allData[i]['public_metrics']["reply_count"]
                 total_quotes += allData[i]['public_metrics']["quote_count"]
-
+                
             }
-        } else {
+        }
+         else {
             total_retweets += allData[i]['public_metrics']["retweet_count"]
             total_likes += allData[i]['public_metrics']["like_count"]
             total_quotes += allData[i]['public_metrics']["quote_count"]
