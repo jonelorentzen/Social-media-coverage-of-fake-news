@@ -20,7 +20,7 @@ app_data = {
     "keywords":     "Flask, webapp, template, basic"
 }
 
-app.config['newdata'] = []
+app.config['newdata'] = {}
 
 #Getting data from TWITTER
 def auth():
@@ -34,8 +34,6 @@ def create_url(query):
         query, tweet_fields, max_results
         )
     return url
-
-#https://api.twitter.com/1.1/search/tweets.json?q=trump&result_type=popular
 
 def create_id_url(query):
    
@@ -59,30 +57,32 @@ def connect_to_endpoint(url, headers):
 @app.route('/showinfo', methods=['GET', 'POST'])
 def showinfo():
     if request.method == 'POST':
+        #Create the token to get acess to the Twitter 
+        bearer_token = auth()
+        headers = create_headers(bearer_token)
+
         querys = request.form.get('query')
-        json_response = api_caller(querys)
-    
+
+        #API call to get back a dictionary with 10 api call without any duplicates
+        json_response = api_caller(querys, headers)
 
         # New call to the the Twitter API that uses the ID of the retweeted tweets
-        # ids = extract_retweets(json_response)
-        # url_ids = create_id_url(ids)
-        # json_response2 = connect_to_endpoint(url_ids, headers)
+        ids = extract_retweets(json_response)
+        url_ids = create_id_url(ids)
+        json_response2 = connect_to_endpoint(url_ids, headers)
         
-        # for item in json_response2["data"]:
-        #     json_response["data"].append(item)
+        for item in json_response2["data"]:
+            json_response["data"].append(item)
         
         app.config['newdata'] = json_response
         
         return redirect(url_for('testingJs'))
-    print(app.config["newdata"])
+    #print(app.config["newdata"])
     return json.dumps(app.config['newdata'])
 
 
-def api_caller(query):
-    
-    bearer_token = auth()
+def api_caller(query, headers):
     url = create_url(query)
-    headers = create_headers(bearer_token)
     json_response = connect_to_endpoint(url, headers)
 
     time.time()
@@ -96,7 +96,7 @@ def api_caller(query):
         time.sleep(2)
         count += 1
         print ("tick")
-        if count == 3:
+        if count == 8:
             count = 0
             break
 
@@ -122,9 +122,15 @@ def remove_duplicates(json_response):
         key = json_response["data"][i]["id"] 
         value = json_response["data"][i]
         response_map[key] = value 
-    print (response_map)
-            
-    return list(response_map.values())
+
+    json_response_no_duplicates = {"data":[]}
+    for value in response_map.values():
+        json_response_no_duplicates["data"].append(value)
+
+
+
+   
+    return json_response_no_duplicates
 
 
 def extract_retweets(json_response):
@@ -135,6 +141,8 @@ def extract_retweets(json_response):
             if tweet_dict[i]["referenced_tweets"][0]["type"] == "retweeted":
                 if tweet_dict[i]["referenced_tweets"][0]["id"] not in id_list:
                     id_list.append(tweet_dict[i]["referenced_tweets"][0]["id"])
+                    if len(id_list) == 100:
+                        break
     joined_string = ",".join(id_list)
     return joined_string
 

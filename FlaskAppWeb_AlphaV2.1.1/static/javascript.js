@@ -8,12 +8,12 @@ window.addEventListener('DOMContentLoaded', () => start(), false);
 // Async function that starts by fetching the data from the json response in the fetch() function. The fetch() function sets the allData variable to the dictionary with all of the data. 
 // After the allData variable is set, we extract the public_metrics by the transform_data() function. It returns a list that is used as the parameter for plotting the chart by the chart() function.
 async function start() {
-    fetchdata().then(allData => {
+    fetchdata().then(() => {
         console.log(allData);
+        console.log(typeof allData);
         list = transform_data(allData);
         console.log(list);
         chart(list);
-        checklist();
     }, false);
 };
 
@@ -21,6 +21,9 @@ async function start() {
 async function fetchdata() {
     return fetch('http://127.0.0.1:5000/showinfo')
         .then(response => response.json())
+        .then(data => {  
+            allData = data.data
+        });
 };
 
 //showing/hiding bar-DIV
@@ -31,18 +34,6 @@ function barCanvas() {
     } else {
         x.style.display = "none";
     }
-}
-
-function checklist() {
-    test = []
-    for (let i = 0; i < allData.length; i++) {
-        if (test.includes(allData[i]["id"])) {
-            console.log("DUPLICATE")
-        } else {
-            test.push(allData[i]["id"])
-        }
-    }
-    console.log(test.length)
 }
 
 // Plotting the allData in the form of a bar chart
@@ -103,14 +94,17 @@ function transform_data(allData) {
     let total_quotes = 0
 
     for (let i = 0; i < allData.length; i++) {
-        if ("referenced_tweets" in allData[i] && allData[i]['referenced_tweets']['0']["type"] !== "retweeted") {
-
-            total_retweets += allData[i]['public_metrics']["retweet_count"]
-            total_likes += allData[i]['public_metrics']["like_count"]
-            total_replies += allData[i]['public_metrics']["reply_count"]
-            total_quotes += allData[i]['public_metrics']["quote_count"]
-
-        } else {
+        console.log(typeof allData);
+        if("referenced_tweets" in allData[i]){
+            if(allData[i]['referenced_tweets']['0']["type"]!== "retweeted"){
+                total_retweets += allData[i]['public_metrics']["retweet_count"]
+                total_likes += allData[i]['public_metrics']["like_count"]
+                total_replies += allData[i]['public_metrics']["reply_count"]
+                total_quotes += allData[i]['public_metrics']["quote_count"]
+                
+            }
+        }
+         else {
             total_retweets += allData[i]['public_metrics']["retweet_count"]
             total_likes += allData[i]['public_metrics']["like_count"]
             total_quotes += allData[i]['public_metrics']["quote_count"]
