@@ -22,4 +22,10 @@ Until now we have done research on different things such as, which chart we are 
 We have been trying to install the Hoaxy backend, but have run into some trouble with PSQL database, there are some problems when connecting to the database, it cannot read the password it seems like. Check this out with vinay.
 
 11. Feb 2021
-Alpha 
+Alpha V2.1.1
+- Made some ajustments on how we retrive tweets from the TwitterAPI(V2). We wanted to get more than the max amounts of tweets it´s possible to get per request, so we made a function called api_caller() that is responsible for the paging. Now we get 500 (OR MORE IF WE WANT) results instead of only 100. 
+- Removed the duplicate tweets with remove_duplicates(), so the chart is now more accurate.
+- Also in this version, we made a function called extract_retweets() that extract retweets, because we only want the to count the amount of retweets, replies, likes and quoted of the original tweet for now.
+- Now, the next steps are to make a better visiualization of the data we´re getting, try to implement D3.js.
+
+
