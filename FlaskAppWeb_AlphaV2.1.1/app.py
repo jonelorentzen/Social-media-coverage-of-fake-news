@@ -20,7 +20,7 @@ app_data = {
     "keywords":     "Flask, webapp, template, basic"
 }
 
-app.config['newdata'] = {}
+app.config['newdata'] = []
 
 #Getting data from TWITTER
 def auth():
@@ -74,7 +74,7 @@ def showinfo():
         app.config['newdata'] = json_response
         
         return redirect(url_for('testingJs'))
-   
+    print(app.config["newdata"])
     return json.dumps(app.config['newdata'])
 
 
@@ -104,21 +104,27 @@ def api_caller(query):
     return json_response_no_duplicates
 
 def remove_duplicates(json_response):
-    id_list = []
-    json_response_copy = json_response.copy()
-    print(len(json_response_copy["data"]))
-    for i in range(len(json_response_copy["data"])):
-        print(i)
-        print(json_response_copy["data"][i]["id"])
-        if json_response_copy["data"][i]["id"] not in id_list:
-            id_list.append(json_response_copy["data"][i]["id"])
-            print(len(json_response_copy["data"]))
+    # id_list = []
+    # json_response_copy = json_response.copy()
+    # print(len(json_response_copy["data"]))
+    # for i in range(len(json_response_copy["data"])):
+    #     print(i)
+    #     print(json_response_copy["data"][i]["id"])
+    #     if json_response_copy["data"][i]["id"] not in id_list:
+    #         id_list.append(json_response_copy["data"][i]["id"])
+    #         print(len(json_response_copy["data"]))
 
-        else:
-            del json_response["data"][i]
+    #     else:
+    #         del json_response["data"][i]
            
+    response_map = {}
+    for i in range(len(json_response["data"])):
+        key = json_response["data"][i]["id"] 
+        value = json_response["data"][i]
+        response_map[key] = value 
+    print (response_map)
             
-    return json_response
+    return list(response_map.values())
 
 
 def extract_retweets(json_response):
