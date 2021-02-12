@@ -96,7 +96,7 @@ def api_caller(query, headers):
         time.sleep(2)
         count += 1
         print ("tick")
-        if count == 8:
+        if count == 3:
             count = 0
             break
 
@@ -169,6 +169,17 @@ def contact():
 @app.route('/testingJs')
 def testingJs():
     return render_template('testingJs.html', app_data=app_data)
+
+@app.route("/loading")
+def loading():
+    count = 0
+    time.time()
+    time.sleep(2)
+    count += 1
+    if count == 9:
+        count = 0
+        return redirect(url_for('testingJs'))
+    return render_template('loading.html')
 
 
 if __name__ == '__main__':
