@@ -11,9 +11,10 @@ async function start() {
     fetchdata().then(() => {
         console.log(allData);
         console.log(typeof allData);
-        list = transform_data(allData);
-        console.log(list);
-        chart(list);
+        stat_list = transform_data(allData);
+        top_retweets_list = sort_amountRT(allData);
+        console.log("sorted list", top_retweets_list);
+        chart(stat_list, top_retweets_list);
     }, false);
 };
 
@@ -37,14 +38,14 @@ function barCanvas() {
 }
 
 // Plotting the allData in the form of a bar chart
-function chart(allData) {
+function chart(allData, top_retweets_list) {
     var ctx = document.getElementById('myChart').getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: ['Retweets', 'Likes', 'Reply', 'Quote'],
             datasets: [{
-                label: '#',
+                label: "The most retweets is:" + top_retweets_list[0]["public_metrics"]["retweet_count"],
                 data: allData,
                 backgroundColor: [
                     'red',
@@ -94,7 +95,6 @@ function transform_data(allData) {
     let total_quotes = 0
 
     for (let i = 0; i < allData.length; i++) {
-        console.log(typeof allData);
         if ("referenced_tweets" in allData[i]) {
             if (allData[i]['referenced_tweets']['0']["type"] !== "retweeted") {
                 total_retweets += allData[i]['public_metrics']["retweet_count"]
@@ -112,7 +112,6 @@ function transform_data(allData) {
     }
 
     var total_list = [total_retweets, total_likes, total_quotes, total_replies]
-    sort_amountRT(allData)
     return total_list
 };
 
@@ -121,32 +120,16 @@ function transform_data(allData) {
 // send request with the three different ID´s
 // retrieve more info about their account
 // display information
-function more_data() {
-    sort_amountRT()
-
-
-
-}
 
 function sort_amountRT(allData) {
-    var sortedRT = {};
-    items = Object.keys(allData).map(function(key) {
-        return [key, allData[key]];
-    });
-    items.sort(function(first, second) {
-        if ("referenced_tweets" in allData[i]) {
-            if (allData[i]['referenced_tweets']['0']["type"] !== "retweeted") {
 
-                return second[1] - first[1];
-            }
-        }
-    });
-
+    var orignal_tweets = []
     for (let i = 0; i < allData.length; i++) {
-        if ("referenced_tweets" in allData[i]) {
-            if (allData[i]['referenced_tweets']['0']["type"] !== "retweeted") {
-
-            }
+        if (!("referenced_tweets" in allData[i])) {
+            orignal_tweets.push(allData[i]);
         }
     }
+    orignal_tweets.sort((a, b)=>{ return b.public_metrics.retweet_count - a.public_metrics.retweet_count  })
+    
+    return orignal_tweets 
 }

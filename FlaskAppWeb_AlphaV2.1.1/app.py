@@ -96,7 +96,7 @@ def api_caller(query, headers):
         time.sleep(2)
         count += 1
         print ("tick")
-        if count == 8:
+        if count == 2:
             count = 0
             break
 
