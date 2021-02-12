@@ -6,14 +6,12 @@ window.addEventListener('DOMContentLoaded', () => start(), false);
 
 
 // Async function that starts by fetching the data from the json response in the fetch() function. The fetch() function sets the allData variable to the dictionary with all of the data. 
-// After the allData variable is set, we extract the public_metrics by the transform_data() function. It returns a list that is used as the parameter for plotting the chart by the chart() function.
+// After the allData variable is set, we extract the public_metrics by the transform_data() function. It returns a list that is used as the parameter stat_list for plotting the chart by the chart() function.
+// We set the variable top_retweeted_list as sort_amountRT(allData), where we get back a list with dict object that is sorted by retweets with top_retweets_list[0]["public_metrics"]["retweet_count"] being the top. 
 async function start() {
     fetchdata().then(() => {
-        console.log(allData);
-        console.log(typeof allData);
         stat_list = transform_data(allData);
         top_retweets_list = sort_amountRT(allData);
-        console.log("sorted list", top_retweets_list);
         chart(stat_list, top_retweets_list);
     }, false);
 };
@@ -115,21 +113,15 @@ function transform_data(allData) {
     return total_list
 };
 
-// finding more of the person top 3 person that has got most retweets
-// sort by amount of retweets
-// send request with the three different ID´s
-// retrieve more info about their account
-// display information
-
+// Sorting by retweets and returning a list with objects with all of the data of the tweet
 function sort_amountRT(allData) {
-
     var orignal_tweets = []
     for (let i = 0; i < allData.length; i++) {
         if (!("referenced_tweets" in allData[i])) {
             orignal_tweets.push(allData[i]);
         }
     }
-    orignal_tweets.sort((a, b)=>{ return b.public_metrics.retweet_count - a.public_metrics.retweet_count  })
-    
+    orignal_tweets.sort((a, b)=>{ return b.public_metrics.retweet_count - a.public_metrics.retweet_count  });
+
     return orignal_tweets 
 }
