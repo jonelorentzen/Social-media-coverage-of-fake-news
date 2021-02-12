@@ -21,7 +21,7 @@ async function start() {
 async function fetchdata() {
     return fetch('http://127.0.0.1:5000/showinfo')
         .then(response => response.json())
-        .then(data => {  
+        .then(data => {
             allData = data.data
         });
 };
@@ -95,16 +95,15 @@ function transform_data(allData) {
 
     for (let i = 0; i < allData.length; i++) {
         console.log(typeof allData);
-        if("referenced_tweets" in allData[i]){
-            if(allData[i]['referenced_tweets']['0']["type"]!== "retweeted"){
+        if ("referenced_tweets" in allData[i]) {
+            if (allData[i]['referenced_tweets']['0']["type"] !== "retweeted") {
                 total_retweets += allData[i]['public_metrics']["retweet_count"]
                 total_likes += allData[i]['public_metrics']["like_count"]
                 total_replies += allData[i]['public_metrics']["reply_count"]
                 total_quotes += allData[i]['public_metrics']["quote_count"]
-                
+
             }
-        }
-         else {
+        } else {
             total_retweets += allData[i]['public_metrics']["retweet_count"]
             total_likes += allData[i]['public_metrics']["like_count"]
             total_quotes += allData[i]['public_metrics']["quote_count"]
@@ -113,5 +112,41 @@ function transform_data(allData) {
     }
 
     var total_list = [total_retweets, total_likes, total_quotes, total_replies]
+    sort_amountRT(allData)
     return total_list
 };
+
+// finding more of the person top 3 person that has got most retweets
+// sort by amount of retweets
+// send request with the three different ID´s
+// retrieve more info about their account
+// display information
+function more_data() {
+    sort_amountRT()
+
+
+
+}
+
+function sort_amountRT(allData) {
+    var sortedRT = {};
+    items = Object.keys(allData).map(function(key) {
+        return [key, allData[key]];
+    });
+    items.sort(function(first, second) {
+        if ("referenced_tweets" in allData[i]) {
+            if (allData[i]['referenced_tweets']['0']["type"] !== "retweeted") {
+
+                return second[1] - first[1];
+            }
+        }
+    });
+
+    for (let i = 0; i < allData.length; i++) {
+        if ("referenced_tweets" in allData[i]) {
+            if (allData[i]['referenced_tweets']['0']["type"] !== "retweeted") {
+
+            }
+        }
+    }
+}
