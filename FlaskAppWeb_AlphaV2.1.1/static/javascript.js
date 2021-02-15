@@ -72,9 +72,9 @@ function chart(allData) {
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Retweets', 'Likes', 'Reply', 'Quote'],
+            label: 'Retweets',
             datasets: [{
-                label: '#',
+                labels: ['Retweets', 'Likes', 'Reply', 'Quote'],
                 data: allData,
                 backgroundColor: [
                     'red',
