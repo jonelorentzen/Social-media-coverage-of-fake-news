@@ -174,7 +174,7 @@ def testingJs():
 def loading():
     count = 0
     time.time()
-    time.sleep(2)
+    time.sleep(10)
     count += 1
     if count == 9:
         count = 0
