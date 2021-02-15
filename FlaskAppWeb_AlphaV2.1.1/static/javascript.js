@@ -41,9 +41,9 @@ function chart(allData, top_retweets_list) {
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Retweets', 'Likes', 'Reply', 'Quote'],
+            label: 'Retweets',
             datasets: [{
-                label: "The most retweets is:" + top_retweets_list[0]["public_metrics"]["retweet_count"],
+                labels: ['Retweets', 'Likes', 'Reply', 'Quote'] ,
                 data: allData,
                 backgroundColor: [
                     'red',
