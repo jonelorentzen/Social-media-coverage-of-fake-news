@@ -21,12 +21,12 @@ async function start() {
 async function fetchdata() {
     return fetch('http://127.0.0.1:5000/showinfo')
         .then(response => response.json())
-        .then(data => {  
+        .then(data => {
             allData = data.data
         });
 };
 
-//showing/hiding bar-DIV
+//showing/hiding chart-DIV
 function barCanvas() {
     var x = document.getElementById("barCanvas");
     if (x.style.display === "none") {
@@ -36,6 +36,36 @@ function barCanvas() {
     }
 }
 
+// creating a loading screen when clicked on search
+// TODO: make the loading screen come to the middle. 
+function loadScreen() {
+    var indexDiv = document.getElementById("indexWrapper")
+
+    // validate form in search field 
+    var x = document.forms["myForm"]["query"].value;
+    if (x == "") {
+        alert("Search cannot be empty.");
+        return false;
+
+    } else {
+        indexDiv.style.display = "none";
+        var newDivLoader = document.createElement("div"); //create new div
+        var box1 = document.createElement("div");
+        var box2 = document.createElement("div");
+        var box3 = document.createElement("div");
+
+        newDivLoader.className = 'container1'
+        box1.className = 'box1'
+        box2.className = 'box2'
+        box3.className = 'box3'
+
+        document.body.appendChild(newDivLoader);
+        newDivLoader.appendChild(box1)
+        newDivLoader.appendChild(box2)
+        newDivLoader.appendChild(box3)
+    }
+
+}
 // Plotting the allData in the form of a bar chart
 function chart(allData) {
     var ctx = document.getElementById('myChart').getContext('2d');
@@ -95,16 +125,15 @@ function transform_data(allData) {
 
     for (let i = 0; i < allData.length; i++) {
         console.log(typeof allData);
-        if("referenced_tweets" in allData[i]){
-            if(allData[i]['referenced_tweets']['0']["type"]!== "retweeted"){
+        if ("referenced_tweets" in allData[i]) {
+            if (allData[i]['referenced_tweets']['0']["type"] !== "retweeted") {
                 total_retweets += allData[i]['public_metrics']["retweet_count"]
                 total_likes += allData[i]['public_metrics']["like_count"]
                 total_replies += allData[i]['public_metrics']["reply_count"]
                 total_quotes += allData[i]['public_metrics']["quote_count"]
-                
+
             }
-        }
-         else {
+        } else {
             total_retweets += allData[i]['public_metrics']["retweet_count"]
             total_likes += allData[i]['public_metrics']["like_count"]
             total_quotes += allData[i]['public_metrics']["quote_count"]
