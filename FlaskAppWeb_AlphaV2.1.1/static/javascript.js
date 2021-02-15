@@ -6,15 +6,13 @@ window.addEventListener('DOMContentLoaded', () => start(), false);
 
 
 // Async function that starts by fetching the data from the json response in the fetch() function. The fetch() function sets the allData variable to the dictionary with all of the data. 
-// After the allData variable is set, we extract the public_metrics by the transform_data() function. It returns a list that is used as the parameter for plotting the chart by the chart() function.
+// After the allData variable is set, we extract the public_metrics by the transform_data() function. It returns a list that is used as the parameter stat_list for plotting the chart by the chart() function.
+// We set the variable top_retweeted_list as sort_amountRT(allData), where we get back a list with dict object that is sorted by retweets with top_retweets_list[0]["public_metrics"]["retweet_count"] being the top. 
 async function start() {
     fetchdata().then(() => {
-        console.log(allData);
-        list = transform_data(allData);
-        console.log(list)
-        sorted_list = sort_amountRT(allData);
-        console.log("The number 1 most retweeted tweet is:" + sorted_list[0]["text"] + " with " + sorted_list[0]['public_metrics']["retweet_count"] + "retweets")
-        chart(list);
+        stat_list = transform_data(allData);
+        top_retweets_list = sort_amountRT(allData);
+        chart(stat_list, top_retweets_list);
     }, false);
 };
 
@@ -68,7 +66,7 @@ function loadScreen() {
 
 }
 // Plotting the allData in the form of a bar chart
-function chart(allData) {
+function chart(allData, top_retweets_list) {
     var ctx = document.getElementById('myChart').getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'bar',

@@ -163,17 +163,6 @@ def contact():
 def testingJs():
     return render_template('testingJs.html', app_data=app_data)
 
-@app.route("/loading")
-def loading():
-    count = 0
-    time.time()
-    time.sleep(10)
-    count += 1
-    if count == 9:
-        count = 0
-        return redirect(url_for('testingJs'))
-    return render_template('loading.html')
-
 
 if __name__ == '__main__':
     app.run(debug=DEVELOPMENT_ENV)
