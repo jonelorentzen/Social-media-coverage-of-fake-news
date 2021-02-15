@@ -43,7 +43,7 @@ function chart(allData, top_retweets_list) {
         data: {
             label: 'Retweets',
             datasets: [{
-                labels: ['Retweets', 'Likes', 'Reply', 'Quote'] ,
+                labels: ['Retweets', 'Likes', 'Reply', 'Quote'],
                 data: allData,
                 backgroundColor: [
                     'red',
