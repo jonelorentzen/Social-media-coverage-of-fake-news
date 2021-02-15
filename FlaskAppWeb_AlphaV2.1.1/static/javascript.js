@@ -25,7 +25,7 @@ async function fetchdata() {
         });
 };
 
-//showing/hiding bar-DIV
+//showing/hiding chart-DIV
 function barCanvas() {
     var x = document.getElementById("barCanvas");
     if (x.style.display === "none") {
@@ -35,6 +35,36 @@ function barCanvas() {
     }
 }
 
+// creating a loading screen when clicked on search
+// TODO: make the loading screen come to the middle. 
+function loadScreen() {
+    var indexDiv = document.getElementById("indexWrapper")
+
+    // validate form in search field 
+    var x = document.forms["myForm"]["query"].value;
+    if (x == "") {
+        alert("Search cannot be empty.");
+        return false;
+
+    } else {
+        indexDiv.style.display = "none";
+        var newDivLoader = document.createElement("div"); //create new div
+        var box1 = document.createElement("div");
+        var box2 = document.createElement("div");
+        var box3 = document.createElement("div");
+
+        newDivLoader.className = 'container1'
+        box1.className = 'box1'
+        box2.className = 'box2'
+        box3.className = 'box3'
+
+        document.body.appendChild(newDivLoader);
+        newDivLoader.appendChild(box1)
+        newDivLoader.appendChild(box2)
+        newDivLoader.appendChild(box3)
+    }
+
+}
 // Plotting the allData in the form of a bar chart
 function chart(allData, top_retweets_list) {
     var ctx = document.getElementById('myChart').getContext('2d');
@@ -93,6 +123,7 @@ function transform_data(allData) {
     let total_quotes = 0
 
     for (let i = 0; i < allData.length; i++) {
+
         if ("referenced_tweets" in allData[i]) {
             if (allData[i]['referenced_tweets']['0']["type"] !== "retweeted") {
                 total_retweets += allData[i]['public_metrics']["retweet_count"]

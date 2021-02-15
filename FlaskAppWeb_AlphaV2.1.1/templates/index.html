@@ -1,30 +1,32 @@
 {% extends 'layout.html' %} {% block body %}
 
 
+<div id="indexWrapper">
 
-<div class="jumbotron">
-    <h1 class="display-4">Fake news tracker by: {{ app_data['author'] }} </h1>
-    <br>
-    <p class="lead">This webpage will take the input of a fake news and represent the spread in social medias</p>   
-</div>
-
-<section id="form" class="container">
-	<div class="container">
-		<div class="col-12 text-center">
-			<div class="col-12 text-center d-md-flex align-items-center">
-              <div class="pr-2 text-nowrap">Search by:</div>
-            <div class="btn-group btn-group-toggle pr-2">
-                <button type="button" class="btn btn-primary active text-light">Twitter</button>
-                <button type="button" class="btn btn-danger active text-light ">Reddit</button>
-                <button type="button" class="btn btn-primary active text-light ">Facebook</button>
-              </div>
-    <form action="{{ url_for('showinfo') }}" method="post" class="form-check form-check-inline">
-        <input type="text" placeholder="Tweet Query" name="query" class="form-control my-2 my-md-0 m-5 text-center">
+    <div class="jumbotron">
+        <h1 class="display-4">Fake news tracker by: {{ app_data['author'] }} </h1>
         <br>
-        <button class="btn btn-outline-primary" type="submit" >Search</button>
-    </form>
+        <p class="lead">This webpage will take the input of a fake news and represent the spread in social medias</p>
+    </div>
+
+    <section id="form" class="container">
+        <div class="container">
+            <div class="col-12 text-center">
+                <div class="col-12 text-center d-md-flex align-items-center">
+                    <div class="pr-2 text-nowrap">Search by:</div>
+                    <div class="btn-group btn-group-toggle pr-2">
+                        <button type="button" class="btn btn-primary active text-light">Twitter</button>
+                        <button type="button" class="btn btn-danger active text-light ">Reddit</button>
+                        <button type="button" class="btn btn-primary active text-light ">Facebook</button>
+                    </div>
+                    <form name="myForm" action="{{ url_for('showinfo') }}" method="post" class="form-check form-check-inline" onsubmit="return validateForm()">
+                        <input type="text" placeholder="Tweet Query" name="query" class="form-control my-2 my-md-0 m-5 text-center">
+                        <br>
+                        <button class="btn btn-outline-primary" type="submit" onclick="loadScreen()" required="required">Search</button>
+                    </form>
+                </div>
             </div>
-          </div>		
-	</div>
-</section>
+        </div>
+    </section>
+</div>
 {% endblock %}
