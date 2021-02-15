@@ -10,9 +10,10 @@ window.addEventListener('DOMContentLoaded', () => start(), false);
 async function start() {
     fetchdata().then(() => {
         console.log(allData);
-        console.log(typeof allData);
         list = transform_data(allData);
-        console.log(list);
+        console.log(list)
+        sorted_list = sort_amountRT(allData);
+        console.log("The number 1 most retweeted tweet is:" + sorted_list[0]["text"] + " with " + sorted_list[0]['public_metrics']["retweet_count"] + "retweets")
         chart(list);
     }, false);
 };
@@ -72,9 +73,9 @@ function chart(allData) {
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            label: 'Retweets',
+            labels: ['Retweets', 'Likes', 'Reply', 'Quote'],
             datasets: [{
-                labels: ['Retweets', 'Likes', 'Reply', 'Quote'],
+                label: "#",
                 data: allData,
                 backgroundColor: [
                     'red',
@@ -124,7 +125,6 @@ function transform_data(allData) {
     let total_quotes = 0
 
     for (let i = 0; i < allData.length; i++) {
-        console.log(typeof allData);
         if ("referenced_tweets" in allData[i]) {
             if (allData[i]['referenced_tweets']['0']["type"] !== "retweeted") {
                 total_retweets += allData[i]['public_metrics']["retweet_count"]
@@ -144,3 +144,16 @@ function transform_data(allData) {
     var total_list = [total_retweets, total_likes, total_quotes, total_replies]
     return total_list
 };
+
+// Sorting by retweets and returning a list with objects with all of the data of the tweet
+function sort_amountRT(allData) {
+    var orignal_tweets = []
+    for (let i = 0; i < allData.length; i++) {
+        if (!("referenced_tweets" in allData[i])) {
+            orignal_tweets.push(allData[i]);
+        }
+    }
+    orignal_tweets.sort((a, b)=>{ return b.public_metrics.retweet_count - a.public_metrics.retweet_count  });
+
+    return orignal_tweets 
+}
