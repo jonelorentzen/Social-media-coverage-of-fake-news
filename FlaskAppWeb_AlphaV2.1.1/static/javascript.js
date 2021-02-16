@@ -153,5 +153,5 @@ function sort_amountRT(allData) {
     }
     orignal_tweets.sort((a, b)=>{ return b.public_metrics.retweet_count - a.public_metrics.retweet_count  });
 
-    return orignal_tweets 
+    return orignal_tweets
 }
