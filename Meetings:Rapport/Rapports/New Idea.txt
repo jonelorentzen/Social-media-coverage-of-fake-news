@@ -1,0 +1,49 @@
+17. Feb 2021
+
+We have learned ways we can use the twitter API v1/v2. We have learned the restrictions that the API gives us only 7 days of tweets and a maximum result of 100 tweets, this is the reason we implemented paging. So must come up with ideas to store these data we get somewhere such that it's not lost.
+We need to think outside the box.
+We need to create a login system such that a user can login and see how their query has spread over a longer period (3-6 days...), basically the search is requested to the Twitter- & Reddit- & Instagram API every 3 hours. Creating a login will make it much easier to track the query that we want, since that way we can see how the data has spread over time.
+
+
+THIS A IDEA ON HOW THE FINAL PRODUCT WILL BE:
+
+- When logged in we will be greeted with a page that will show us if we want to add a query to our tracking & Social listening. Each user can have maximum of 3 queries they can track (IN THE FREE VERSION) This way we can also monitize the site (require money) if the user want to track more queries. The user can also choose which social medias the application should track from now on. 
+
+- After the query has been written & chosen which social medias to keep track of, the user will be redirected to a new page. This page is the dashboard: Here the user will be see a timeline on how many posts there has been the last 7 days. We can group the timeline in sections for each for hour (timestamp). E.g 17. Feb 5pm, 240 posts, and so on.. Now that we know what we should keep track on, we will write (on the timeline) when the application started to keep track of this exact query. A sketch will be made (check "new ideas pictures")
+
+- Right below the timeline the user will see a "information"<div> that is and has different information based on the query that we are tracking. Such as: At this moment, "there are x amounts on posts about this topic." and "this topic has x amounts of likes/retweets/quotes/replies"(this we have already done). We can create small logos such as a heart for likes, chat bubbles for posts, retweet logo for retweets etc.. 
+
+- Below the information bar: Here comes the most interesting part. We will have different sections for showing how the different twitter/reddit/insta users have engaged on this topic. 
+	- Section 1: Top Posts (check out Top Posts sketch)
+	Here the user will have the opportunity to sort the posts in the most engaging(most retweets/most likes) OR most recent posts. The posts will be shown in a div in this section.
+		- with the profile picture on the left 
+		- the username as title and the text below the title.
+		- The amount of retweets & likes this posts has on the right
+		- at what date the post was posted on the right. 
+		- A logo of the social media that the post is created with is also in this box. 
+		- Here we will only show the top 3 "most engaging" & "Most Recent" posts. There will be a opportunity to view all of the posts when clicked on a tab below the (max)three 
+		posts that is showing.
+
+		- When clicked on the post in our app, a new tab opens with the actual post.
+
+- In right of Section 1, there will a new section that is called "Impact Users"
+	- Section 2: Impactful Users (check out Impactful Users sketch)
+	This section will show which users have most followers that has tweeted about this topic, and how many times they have tweeted about this topic(query)
+		- this section will show top 6 (2x3)
+		- username as title 
+		- how many followers this user has
+		- how much engagement they have 
+		- the social media logo
+
+
+- Below Sec 1 & 2, there will be a section called location
+	- Section 3: Location
+	Here, the location of the posts will be shown in a world map.
+		- The country with most posts will have slightly a darker colour 
+		- when you hover over the country, it will show how many posts that are from there & which country you are hovering above.
+		
+
+
+- In the right of Section 3, there will be a new section called the types of Social medias used.
+	- Section 4: Types of Social media.
+
