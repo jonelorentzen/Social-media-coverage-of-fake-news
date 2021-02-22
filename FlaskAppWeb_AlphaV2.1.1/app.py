@@ -27,19 +27,20 @@ def auth():
     return os.environ.get("BEARER_TOKEN")
 
 def create_url(query):
-    tweet_fields = "tweet.fields=public_metrics,created_at,geo,lang,referenced_tweets,text"
-
+    tweet_fields = "tweet.fields=public_metrics,created_at,geo,referenced_tweets,text,author_id"
     max_results = "max_results=100"
-    url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}&{}".format(
-        query, tweet_fields, max_results
+    user_fields = "user.fields=profile_image_url"
+    url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}&{}&{}".format(
+        query, tweet_fields, user_fields ,max_results
         )
     return url
 
 def create_id_url(query):
    
-    tweet_fields = "tweet.fields=public_metrics,created_at,geo,lang,referenced_tweets,text"
+    tweet_fields = "tweet.fields=public_metrics,created_at,geo,lang,referenced_tweets,text,author_id"
+    user_fields = "user.fields=profile_image_url"
     url = "https://api.twitter.com/2/tweets?ids={}&{}".format(
-        query, tweet_fields
+        query, tweet_fields, user_fields
         )
     return url
 
@@ -125,7 +126,6 @@ def remove_duplicates(json_response):
 #The reasoning behind this is because the twitter search api returns alot of retweets of an orignal tweet.
 #And when the api returns a retweet you only get the retweets not the likes, quotes or the replies of the orginal tweet.
 #So we call the api for the orignal tweets that we extract from the retweets.
-#
 def extract_retweets(json_response):
     id_list = []
     tweet_dict = json_response["data"]

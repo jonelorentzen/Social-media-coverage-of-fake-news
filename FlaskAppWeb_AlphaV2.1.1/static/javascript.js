@@ -12,7 +12,8 @@ async function start() {
     fetchdata().then(() => {
         stat_list = transform_data(allData);
         top_retweets_list = sort_amountRT(allData);
-        chart(stat_list, top_retweets_list);
+        console.log(top_retweets_list)
+        chart(stat_list);
     }, false);
 };
 
@@ -66,7 +67,7 @@ function loadScreen() {
 
 }
 // Plotting the allData in the form of a bar chart
-function chart(allData, top_retweets_list) {
+function chart(allData) {
     var ctx = document.getElementById('myChart').getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'bar',
