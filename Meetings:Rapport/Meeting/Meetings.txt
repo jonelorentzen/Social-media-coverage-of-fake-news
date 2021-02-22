@@ -62,3 +62,13 @@ In this meeting we showed how far we had come with our page, we started testing 
 - We asked how to go forward with the frontend of the application when we don't have any good backend available at the moment
 	- we should try to implement the Hoaxy api in out frontend and see how we can get more and diverse data out.
 - Try to get paging in the application we already have created so we can get more results up to 1000 tweets per search. This can be done if we send 10 requests per search and then remove the duplicates.
+
+Meeting February 19nd:
+- Talked about the deployment of the backend of hoaxy.
+- We should start with using the api for the articles and when it is set up properly we can deploy the backend. 
+- Disscussed the possibility of pivoting to a web site that tracks a certain query for you over time. This was not reccomended by Vinay and we should stick to the 1 week  time period that we originally was creating.
+- Agreed on a website that searches for a query and returns 5-6 charts per social media.
+- We are going to focus on Twitter, Articles on twitter and Reddit.
+- The charts that we want is: 1. Network chart (from Hoaxy) 2. Timeline chart (from Hoaxy) 3. Top posts 4. Influential users 5. Stat chart (DONE) 6. Map (If possible).
+- The user should have the possibility to change between the social media.
+- Implement a twitter login for the user so the website uses the user token instead of our token
