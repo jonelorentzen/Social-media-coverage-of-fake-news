@@ -29,3 +29,5 @@ Alpha V2.1.1
 - Now, the next steps are to make a better visiualization of the data we´re getting, try to implement D3.js.
 
 
+23. Feb 2021
+- It´s a green light on the idea we have presented, just without the database. We made a stetch on how the website will potentially look like... We have chosen to use vue.js as our front-end. Now we will make a much more detailed wireframe based on the stetch and write different components that must be used. Then we can proceed with our skeleton code and then divide different tasks. 
