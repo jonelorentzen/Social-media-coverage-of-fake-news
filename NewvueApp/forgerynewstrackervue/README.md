@@ -9,7 +9,10 @@ npm install
 ```
 npm run serve
 ```
-
+## Run backend on app.py
+```
+flask run
+```
 ### Compiles and minifies for production
 ```
 npm run build
