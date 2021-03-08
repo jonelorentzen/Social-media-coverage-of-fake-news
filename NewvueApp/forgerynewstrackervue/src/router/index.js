@@ -1,6 +1,7 @@
 import { createWebHistory } from 'vue-router';
 import Ping from '../components/Ping.vue';
-import Home from '../views/Home.vue'
+import Home from '../views/Home.vue';
+import Yourtrackers from '../views/Yourtrackers.vue';
 import { createRouter } from 'vue-router';
 // import Start from '../views/Start.vue';
 import BarChart from '../components/BarChart.vue'
@@ -22,6 +23,11 @@ export default createRouter({
     path: '/barchart',
     name: 'barchart',
     component: BarChart,
-  }
-  ],
+  },
+  {
+    path: '/yourtrackers',
+    name: 'Yourtrackers',
+    component: Yourtrackers
+  },
+  ]
 });
