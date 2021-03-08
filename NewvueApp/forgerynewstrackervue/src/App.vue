@@ -10,11 +10,11 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #ffffff;
+  color: #000000;
   margin-top: 50px;
 }
-body{
-  background-color: #2a2a2a;
+html body{
+  background-color: #bebebe;
 }
 #nav {
   padding: 30px;
