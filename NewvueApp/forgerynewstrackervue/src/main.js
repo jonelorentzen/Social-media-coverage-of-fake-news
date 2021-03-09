@@ -8,10 +8,6 @@ import Chartkick from 'vue-chartkick'
 import Chart from 'chart.js'
 
 
-
-
-
-
 createApp(App)
   .use(store)
   .use(router)

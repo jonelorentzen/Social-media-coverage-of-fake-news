@@ -4,7 +4,7 @@ import Home from '../views/Home.vue';
 import Yourtrackers from '../views/Yourtrackers.vue';
 import { createRouter } from 'vue-router';
 // import Start from '../views/Start.vue';
-import BarChart from '../components/BarChart.vue'
+import Dashboard from '../views/Dashboard.vue'
 
 // here we create our routes
 export default createRouter({
@@ -20,14 +20,15 @@ export default createRouter({
     component: Ping,
   },
   {
-    path: '/barchart',
-    name: 'barchart',
-    component: BarChart,
-  },
-  {
     path: '/yourtrackers',
     name: 'Yourtrackers',
     component: Yourtrackers
   },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard
+  },
+
   ]
 });
