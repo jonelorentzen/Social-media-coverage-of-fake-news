@@ -32,7 +32,7 @@ export default {
  
 }
 html body{
-  background-color: #bebebe;
+  
 }
 #nav {
   padding: 30px;
