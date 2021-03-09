@@ -1,52 +1,20 @@
 <template>
-  
-    <Header/>
-    <div class="d-flex" id="wrapper">
-      <Sidebar/>
-      <router-view/>
+    <div class="bg-light border-right" id="sidebar-wrapper">
+      <div class="list-group list-group-flush">
+        <a href="#" class="list-group-item list-group-item-action bg-light">Dashboard</a>
+        <a href="#" class="list-group-item list-group-item-action bg-light">Your Trackers</a>
+        <a href="#" class="list-group-item list-group-item-action bg-light">About us</a>
       </div>
-  
+    </div>
 </template>
 
 <script>
-import Sidebar from "./components/Sidebar.vue";
-import Header from "./components/Header.vue"
-
 export default {
-  name: "app",
-  components: {
-    Sidebar,
-    Header
-  }
-  
+    name: "Sidebar"
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #ffffff;
- 
-}
-body{
-  background-color: #2a2a2a;
-}
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-
+<style scoped>
 #wrapper {
     overflow-x: hidden;
  }

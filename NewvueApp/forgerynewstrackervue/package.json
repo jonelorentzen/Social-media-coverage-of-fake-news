@@ -15,6 +15,7 @@
     "bootstrap-vue": "^2.21.2",
     "core-js": "^3.6.5",
     "vue": "^3.0.7",
+    "vue-burger-menu": "^2.0.5",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
   },
