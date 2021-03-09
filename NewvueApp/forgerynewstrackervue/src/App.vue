@@ -31,8 +31,8 @@ export default {
   color: #ffffff;
  
 }
-body{
-  background-color: #2a2a2a;
+html body{
+  background-color: #bebebe;
 }
 #nav {
   padding: 30px;

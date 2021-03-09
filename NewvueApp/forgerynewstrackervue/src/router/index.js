@@ -1,8 +1,10 @@
 import { createWebHistory } from 'vue-router';
 import Ping from '../components/Ping.vue';
-import Home from '../views/Home.vue'
+import Home from '../views/Home.vue';
+import Yourtrackers from '../views/Yourtrackers.vue';
 import { createRouter } from 'vue-router';
 // import Start from '../views/Start.vue';
+import Dashboard from '../views/Dashboard.vue'
 
 // here we create our routes
 export default createRouter({
@@ -17,5 +19,16 @@ export default createRouter({
     name: 'Ping',
     component: Ping,
   },
-  ],
+  {
+    path: '/yourtrackers',
+    name: 'Yourtrackers',
+    component: Yourtrackers
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard
+  },
+
+  ]
 });

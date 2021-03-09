@@ -1,6 +1,6 @@
 <template>
     <div>
-        <input v-model="searchValue"
+        <input v-model="searchValue" class="form-control"
         @keyup.enter="sendData()" type="text" placeholder="Search here">
     </div>
 </template>
