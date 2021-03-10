@@ -59,29 +59,30 @@ def connect_to_endpoint(url, headers):
 
 @app.route('/showinfo', methods=['GET', 'POST'])
 def showinfo():
+    d = request.json
+    print(d)
+    #Create the token to get acess to the Twitter 
+    bearer_token = auth()
+    headers = create_headers(bearer_token)
 
-        #Create the token to get acess to the Twitter 
-        bearer_token = auth()
-        headers = create_headers(bearer_token)
 
 
+    #API call to get back a dictionary with 10 api call without any duplicates
+    json_response = api_caller(d["query"], headers)
 
-        #API call to get back a dictionary with 10 api call without any duplicates
-        json_response = api_caller('Trump', headers)
-
-        # New call to the the Twitter API that uses the ID of the retweeted tweets and adds the data of the original tweets to the dictionary
-        #The create_id_url creates the url that is used to call the api with.
-        ids = extract_retweets(json_response)
-        url_ids = create_id_url(ids)
-        json_response2 = connect_to_endpoint(url_ids, headers)
-        
-        for item in json_response2["data"]:
-            json_response["data"].append(item)
-        
-        app.config['newdata'] = json_response
-        
-        #return redirect(url_for('testingJs'))
-        return json.dumps(app.config['newdata'])
+    # New call to the the Twitter API that uses the ID of the retweeted tweets and adds the data of the original tweets to the dictionary
+    #The create_id_url creates the url that is used to call the api with.
+    ids = extract_retweets(json_response)
+    url_ids = create_id_url(ids)
+    json_response2 = connect_to_endpoint(url_ids, headers)
+    
+    for item in json_response2["data"]:
+        json_response["data"].append(item)
+    
+    app.config['newdata'] = json_response
+    
+    #return redirect(url_for('testingJs'))
+    return json.dumps(app.config['newdata'])
 
 #The fuction api_caller is a fuction that is used to call the api 10 times and add the responses to the json_response
 #We use the time libery to avoid getting the same json response back from the api, so it waits 1 second between every api call
