@@ -2,7 +2,6 @@
   <div class="container">
     <LineChart id="linechart" :listdata='LineChartData'/>
     <BarChart :listdata='BarChartData'/>
-  
 
   </div>
 </template>
@@ -12,6 +11,7 @@
 
 import BarChart from '../components/BarChart'
 import LineChart from '../components/LineChart'
+
 
 
 export default {
