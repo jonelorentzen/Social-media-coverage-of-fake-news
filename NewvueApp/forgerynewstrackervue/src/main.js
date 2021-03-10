@@ -4,10 +4,10 @@ import router from "./router";
 import store from "./store";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
-import Chartkick from 'vue-chartkick'
-import Chart from 'chart.js'
+import Chartkick from 'vue-chartkick';
+import Chart from 'chart.js';
 
-Chartkick.configure({language: "de", mapsApiKey: "AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY"})
+Chartkick.configure({language: "en", mapsApiKey: "AIzaSyBFMGWqY_cNwPHVeElwZAulhY7DL2cTIEA"});
 
 
 createApp(App)
