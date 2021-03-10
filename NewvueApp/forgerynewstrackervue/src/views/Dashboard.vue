@@ -1,9 +1,9 @@
 <template>
   <div class="container">
 
-    <div> Toppen av Headeren,skal inneholde Query tittel component</div>
-    <div> Engagement, Likes, Retweets osv</div>
+    <Trackerheader/>
     
+    <Engagement/>
     <div class="container_for_linechart">
     <LineChart id="linechart" :listdata='LineChartData'/>
     </div>
@@ -35,6 +35,8 @@ import BarChart from '../components/BarChart'
 import LineChart from '../components/LineChart'
 import topPosts from '../components/Topposts'
 import mostinfluentialusers from '../components/MostInfluentialUsers'
+import Trackerheader from "../components/Trackerheader"
+import Engagement from "../components/Engagement"
 
 
 
@@ -44,7 +46,9 @@ export default {
     BarChart,
     LineChart,
     topPosts,
-    mostinfluentialusers
+    mostinfluentialusers,
+    Trackerheader,
+    Engagement
     
   },
   data(){
@@ -61,10 +65,13 @@ export default {
 <style>
     .container{
       margin: 50px;
+      display: grid;
+      
     }
 
     #linechart{
         padding-bottom: 50px;
+        
 
     }
     .Post_user_container{
