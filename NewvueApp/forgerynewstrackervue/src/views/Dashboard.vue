@@ -1,7 +1,29 @@
 <template>
   <div class="container">
+
+    <div> Toppen av Headeren,skal inneholde Query tittel component</div>
+    <div> Engagement, Likes, Retweets osv</div>
+    
+    <div class="container_for_linechart">
     <LineChart id="linechart" :listdata='LineChartData'/>
-    <BarChart :listdata='BarChartData'/>
+    </div>
+    
+    <div class="container_for_barchart">
+    <BarChart id="Barchart" :listdata='BarChartData'/>
+    </div>
+    
+    
+      <div class="Post_user_container">
+        
+        <topPosts/>
+       
+        
+        <mostinfluentialusers />
+  
+
+      </div>
+    
+  
 
   </div>
 </template>
@@ -11,6 +33,8 @@
 
 import BarChart from '../components/BarChart'
 import LineChart from '../components/LineChart'
+import topPosts from '../components/Topposts'
+import mostinfluentialusers from '../components/MostInfluentialUsers'
 
 
 
@@ -18,7 +42,9 @@ export default {
   name: 'Dashboard',
   components: {
     BarChart,
-    LineChart
+    LineChart,
+    topPosts,
+    mostinfluentialusers
     
   },
   data(){
@@ -40,6 +66,10 @@ export default {
     #linechart{
         padding-bottom: 50px;
 
+    }
+    .Post_user_container{
+      display: flex;
+      max-height: 80%;
     }
 
 
