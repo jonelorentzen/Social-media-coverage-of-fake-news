@@ -1,9 +1,13 @@
 <template>
-    <div class="bg-light border-right" id="sidebar-wrapper">
+    <div class="border-right" id="sidebar-wrapper">
       <div class="list-group list-group-flush">
+
         <a href="#" class="list-group-item list-group-item-action bg-light" @click="gotoHOME()">Dashboard</a>
         <a href="#" class="list-group-item list-group-item-action bg-light" @click="gotoYT()">Your Trackers</a>
         <a href="#" class="list-group-item list-group-item-action bg-light" @click="gotoABOUTus()">About us</a>
+
+ 
+
       </div>
     </div>
 </template>
@@ -37,6 +41,7 @@ export default {
   -moz-transition: margin .25s ease-out;
   -o-transition: margin .25s ease-out;
   transition: margin .25s ease-out;
+  background-color: #30344C;
 }
 
 #sidebar-wrapper .sidebar-heading {
@@ -68,6 +73,10 @@ export default {
 
   #wrapper.toggled #sidebar-wrapper {
     margin-left: -15rem;
+  }
+  a{
+    background-color: #30344C;
+    color: #FFFFFF80;
   }
 }
 </style>

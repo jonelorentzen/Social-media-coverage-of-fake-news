@@ -2,7 +2,7 @@
   <div class="container">
     <LineChart id="linechart" :listdata='LineChartData'/>
     <BarChart :listdata='BarChartData'/>
-
+  
 
   </div>
 </template>
@@ -33,6 +33,9 @@ export default {
 </script>
 
 <style>
+    .container{
+      margin: 50px;
+    }
 
     #linechart{
         padding-bottom: 50px;

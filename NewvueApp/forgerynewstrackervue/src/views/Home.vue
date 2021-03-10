@@ -10,7 +10,6 @@
     <button class="btn btn-primary" @click="gotoPage()">Redirect to next page</button><br><br>
 
     <search-box/>
-    <bar-chart/>
   </div>
 </template>
 
