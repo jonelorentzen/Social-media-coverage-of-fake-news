@@ -44,14 +44,7 @@ export default {
     },
     
 
-  },
-  data() {
-    return {
-      searchValue: '',
-    };
-  },
-    }
-};
+  }
 </script>
 
 <style>
