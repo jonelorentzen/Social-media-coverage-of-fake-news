@@ -16,6 +16,7 @@ export default {
   methods: {
     sendData() {
       console.log(this.searchValue);
+      return "daddad"
     },
   },
 };
