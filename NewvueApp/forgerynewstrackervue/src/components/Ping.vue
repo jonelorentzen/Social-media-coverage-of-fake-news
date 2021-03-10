@@ -4,12 +4,14 @@
       <button type="button" class="btn btn-primary">{{ msg }}</button>
     </div>
     <search-box />
+    <all-data />
   </div>
 </template>
 
 <script>
 import axios from 'axios';
 import SearchBox from './SearchBox.vue';
+
 
 export default {
   name: 'Ping',

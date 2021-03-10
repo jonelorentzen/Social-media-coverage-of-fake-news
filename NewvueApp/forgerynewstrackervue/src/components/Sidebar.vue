@@ -1,16 +1,29 @@
 <template>
     <div class="border-right" id="sidebar-wrapper">
       <div class="list-group list-group-flush">
+
         <a href="/dashboard" class="list-group-item list-group-item-action">Dashboard</a>
         <a href="/yourtrackers" class="list-group-item list-group-item-action">Your Trackers</a>
         <a href="/about" class="list-group-item list-group-item-action">About us</a>
+
       </div>
     </div>
 </template>
 
 <script>
 export default {
-    name: "Sidebar"
+    name: "Sidebar",
+    methods: {
+      gotoYT(){
+        this.$router.push('/yourtrackers')
+      },
+      gotoHOME(){
+        this.$router.push('/')
+      },
+      gotoABOUTus(){
+        this.$router.push('/about')
+      }
+    }
 }
 </script>
 
