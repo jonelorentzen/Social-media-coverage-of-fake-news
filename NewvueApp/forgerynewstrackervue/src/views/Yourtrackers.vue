@@ -36,3 +36,12 @@ export default {
 },
 };
 </script>
+
+<style>
+.container{
+    color: black;
+}
+
+
+
+</style>
