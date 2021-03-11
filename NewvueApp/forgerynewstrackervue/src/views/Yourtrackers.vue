@@ -45,6 +45,9 @@ export default {
             };
     },
     methods: {
+        getResult(){
+            this.$store.dispatch("getResult", this.searchValue)
+        }
 
     },
     
