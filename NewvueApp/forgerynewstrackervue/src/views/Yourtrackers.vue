@@ -49,8 +49,9 @@ export default {
             this.$store.dispatch('addNewSearch',this.searchValue)
         },
         getResult(){
-            console.log("clicked")
+            this.$store.dispatch("getResult", this.searchValue)
         }
+
     },
     
     
