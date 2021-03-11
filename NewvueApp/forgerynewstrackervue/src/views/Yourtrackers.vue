@@ -4,7 +4,7 @@
         <div>
             <h3>Please enter what you want to search for. Or choose an already made query below</h3> <br>
             <input v-model="searchValue" class="form-control" type="text" placeholder="Search here">
-              <button class="btn btn-primary" @click="getResult()">Get result</button><br><br>
+              <button class="btn btn-primary" @click="getResult(); addSearch();">Get result</button><br><br>
 
             <h4>Your Recent Searches</h4> <br>
             <search-list/>
@@ -45,7 +45,12 @@ export default {
             };
     },
     methods: {
-
+        addSearch(){
+            this.$store.dispatch('addNewSearch',this.searchValue)
+        },
+        getResult(){
+            console.log("clicked")
+        }
     },
     
     

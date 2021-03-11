@@ -14,8 +14,17 @@ export default createStore({
     }
   ]
   },
-  mutations: {},
+  mutations: {
+    NEW_SEARCH(state,SearchItem){
+      state.searches.push({
+        title: SearchItem
+      })
+    }
+  },
   actions: {
+    addNewSearch({commit}, SearchItem){
+      commit("NEW_SEARCH",SearchItem);
+  },
   },
   modules: {}
 });
