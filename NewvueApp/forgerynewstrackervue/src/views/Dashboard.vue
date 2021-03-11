@@ -1,5 +1,10 @@
 <template>
   <div class="container">
+
+    <dir class="recent-searches">
+      <h5>Selected Trackers: </h5>
+      <search-list/>
+    </dir>
     <LineChart id="linechart" :listdata='LineChartData'/>
     <BarChart :listdata='BarChartData'/>
 
@@ -11,6 +16,7 @@
 
 import BarChart from '../components/BarChart'
 import LineChart from '../components/LineChart'
+import SearchList from '../components/SearchList';
 
 
 
@@ -18,10 +24,10 @@ export default {
   name: 'Dashboard',
   components: {
     BarChart,
-    LineChart 
+    LineChart,
+    SearchList,
   },
-  
-  computed:{
+   computed:{
     BarChartData() {
       return this.$store.getters.GetBarChartList;
     },
@@ -30,11 +36,13 @@ export default {
     }
 
   },
-
 };
 </script>
 
 <style>
+    .recent-searches{
+      float: right;
+    }
     .container{
       margin: 50px;
     }

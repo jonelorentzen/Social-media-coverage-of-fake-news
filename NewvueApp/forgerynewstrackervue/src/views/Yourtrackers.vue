@@ -1,24 +1,25 @@
 <template>
     <div class="container">
         <h2>Welcome back @{{twitteruser}}</h2><br>
+
         <div>
-            <h3>Please enter what you want to search for. Or choose an already made query below</h3> <br>
-            <input v-model="searchValue" class="form-control" type="text" placeholder="Search here">
-              <button class="btn btn-primary" @click="getResult(); addSearch();">Get result</button><br><br>
-
-            <h4>Your Recent Searches</h4> <br>
-            <search-list/>
-
-            <select v-model="selected">
-                <option disabled value="">Please select one</option>
+            <h3>Please enter what you want to search for. Or choose an already made query below</h3>
+            <select id="selected" v-model="selected">
+                <option disabled value="">Premade searches</option>
                 <option>Trump</option>
                 <option>Barack Obama is white</option>
                 <option>Corona changes DNA</option>
                 <option>Apple is made by Microsoft</option>
             </select>
+        <br>
+        <br>
+            <input v-model="searchValue" class="form-control" type="text" placeholder="Search here">
+            <button class="btn btn-primary" @click="getResult(); addSearch();">Get result</button><br><br>
 
-            
-            <h3></h3>
+            <h4>Your Recent Searches</h4>
+            <search-list/>
+
+
 
         </div>
         
@@ -42,13 +43,25 @@ export default {
         return {
             twitteruser: 'Dönerkebab123',
             searchValue: '',
+            selected: ''
             };
     },
     methods: {
         addSearch(){
-            this.$store.dispatch('addNewSearch',this.searchValue)
+            var e = document.getElementById("selected");
+            var text = e.options[e.selectedIndex].text;
+            console.log(text)
+            if (text) !! "" || this.searchValue == "";{
+                this.searchValue = text
+                
+                this.$store.dispatch('addNewSearch',this.searchValue)
+
+            }
         },
         getResult(){
+            var e = document.getElementById("selected");
+            var text = e.options[e.selectedIndex].text;
+            this.searchValue = text
             this.$store.dispatch("getResult", this.searchValue)
         }
 
