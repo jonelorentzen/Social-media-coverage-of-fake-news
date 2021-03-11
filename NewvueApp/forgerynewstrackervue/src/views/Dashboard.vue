@@ -18,19 +18,17 @@ export default {
   name: 'Dashboard',
   components: {
     BarChart,
-    LineChart
-    
+    LineChart 
   },
-  data(){
-    return{
-       LineChartData: {'2017-05-13T:13:03:00': 1, '2017-05-13T:14:03:00': 2,'2017-05-13T:15:03:00': 3,'2017-05-13T:16:03:00': 4,}
-
-    };
-  },
+  
   computed:{
     BarChartData() {
       return this.$store.getters.GetBarChartList;
+    },
+    LineChartData() {
+      return this.$store.getters.GetLineChartList;
     }
+
   },
 
 };
