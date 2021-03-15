@@ -1,11 +1,13 @@
 <template>
-    <div styl>
-        <table class="table table-striped">
+    <div v-if="titles.length > 0">
+        
+        <table >
             <tr>
                 <justlist v-for="(title, index) in titles" :key="index" :title="title"/> <br>
             </tr>
         </table>
-        
+    </div>
+    <div v-else>
     </div>
 </template>
 
