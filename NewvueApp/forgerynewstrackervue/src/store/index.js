@@ -75,6 +75,9 @@ export default createStore({
       state.searches.push({
         title: SearchItem
       })
+    },
+    loading(){
+      console.log("loading")
     }
 
   },
@@ -84,16 +87,19 @@ export default createStore({
       commit("NEW_SEARCH",SearchItem);
     },
     async getResult(state, searchValue) {
-
-      let api = new Backendapi();
-      let response = await api.getMessages(searchValue);
-      console.log(response)
-      state.commit("SetTweets", response);
-      state.commit("SetBarChartList", response);
-      state.commit("SetLineChartList", response);
-
-
-  },
+      this.commit('loading')
+      try{
+        let api = new Backendapi();
+        let response = await api.getMessages(searchValue);
+        console.log(response)
+        state.commit("SetTweets", response);
+        state.commit("SetBarChartList", response);
+        state.commit("SetLineChartList", response);
+        
+      } catch (err){
+        this.commit('error',err)
+      }
+    }
   },
   modules: {
 

@@ -1,7 +1,8 @@
 <template>
     <div>
-    <div class="table-container" v-if="titles.length>0">
-        <table class="table table-striped">
+    <div v-if="titles.length > 0">
+        
+        <table >
             <tr>
                 <td>
         
@@ -11,9 +12,9 @@
                 
             </tr>
         </table>
-        
     </div>
     <div v-else>
+   
 
     </div>
     </div>
