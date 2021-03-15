@@ -16,7 +16,7 @@
 
 import BarChart from '../components/BarChart'
 import LineChart from '../components/LineChart'
-import SearchList from '../components/SearchList';
+import SearchList from '../components/SearchList.vue';
 
 
 
@@ -25,7 +25,7 @@ export default {
   components: {
     BarChart,
     LineChart,
-    SearchList,
+    SearchList
   },
    computed:{
     BarChartData() {
@@ -33,7 +33,14 @@ export default {
     },
     LineChartData() {
       return this.$store.getters.GetLineChartList;
-    }
+    },
+    yourTrackers(){
+      return this.$store.state.searches -1;
+    },
+
+
+  },
+  data(){
 
   },
 };

@@ -1,20 +1,24 @@
 <template>
     <div class="container">
-        <h2>Welcome back @{{twitteruser}}</h2><br>
+        <h2>Welcome @{{twitteruser}}</h2><br>
 
         <div>
             <h3>Please enter what you want to search for. Or choose an already made query below</h3>
             <select id="selected" v-model="selected">
-                <option disabled value="">Premade searches</option>
-                <option>Trump</option>
+                <option disabled>Premade searches</option>
+                <option>Donald Trump</option>
+                <option>Joe Biden</option>
                 <option>Barack Obama is white</option>
                 <option>Corona changes DNA</option>
                 <option>Apple is made by Microsoft</option>
+                <option>Humans waste too much water</option>
+                <option>Jesus and I and are friends on Facebook</option>
+                <option>The earth is flat</option>
             </select>
         <br>
         <br>
             <input v-model="searchValue" class="form-control" type="text" placeholder="Search here">
-            <button class="btn btn-primary" @click="getResult(); addSearch();">Get result</button><br><br>
+            <button class="btn btn-primary" @click="addSearch();">Get result</button><br><br>
 
             <h4>Your Recent Searches</h4>
             <search-list/>
@@ -48,23 +52,25 @@ export default {
     },
     methods: {
         addSearch(){
-            var e = document.getElementById("selected");
-            var text = e.options[e.selectedIndex].text;
-            console.log(text)
-            if (text) !! "" || this.searchValue == "";{
-                this.searchValue = text
+            var dropValueElement = document.getElementById("selected");
+            var text = this.searchValue
+
+            
+            if (text == "") {
+                var option = dropValueElement.options[dropValueElement.selectedIndex].text
+                this.$store.dispatch('addNewSearch',option)
+                this.$store.dispatch("getResult", option)
+                this.searchValue = "";
+                option = "";
                 
-                this.$store.dispatch('addNewSearch',this.searchValue)
-
-            }
+            } else {
+                text = this.searchValue
+                this.$store.dispatch('addNewSearch',text)
+                this.$store.dispatch("getResult", text)
+                this.searchValue = "";
+                
+            }        
         },
-        getResult(){
-            var e = document.getElementById("selected");
-            var text = e.options[e.selectedIndex].text;
-            this.searchValue = text
-            this.$store.dispatch("getResult", this.searchValue)
-        }
-
     },
     
     

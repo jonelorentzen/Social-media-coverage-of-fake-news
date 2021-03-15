@@ -1,6 +1,11 @@
 <template>
-    <div>
-        <justlist v-for="(title, index) in titles" :key="index" :title="title"/>
+    <div styl>
+        <table class="table table-striped">
+            <tr>
+                <justlist v-for="(title, index) in titles" :key="index" :title="title"/> <br>
+            </tr>
+        </table>
+        
     </div>
 </template>
 
