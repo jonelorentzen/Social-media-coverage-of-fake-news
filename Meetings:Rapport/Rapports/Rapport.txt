@@ -31,3 +31,9 @@ Alpha V2.1.1
 
 23. Feb 2021
 - It´s a green light on the idea we have presented, just without the database. We made a stetch on how the website will potentially look like... We have chosen to use vue.js as our front-end. Now we will make a much more detailed wireframe based on the stetch and write different components that must be used. Then we can proceed with our skeleton code and then divide different tasks. 
+
+15. Mars 2021 
+- Working with Vue and learning different methods we can use Vue.
+- We have created a Vue application and brought all the features from the previous application into this one. 
+- Now we are figuring out how to sort the data in backend, and when it´s sent to front-end.
+- 
