@@ -1,11 +1,21 @@
 <template>
-    <div styl>
+    <div>
+    <div class="table-container" v-if="titles.length>0">
         <table class="table table-striped">
             <tr>
-                <justlist v-for="(title, index) in titles" :key="index" :title="title"/> <br>
+                <td>
+        
+                <justlist class="row" v-for="(title, index) in titles" :key="index" :title="title"/>
+                </td>
+               
+                
             </tr>
         </table>
         
+    </div>
+    <div v-else>
+
+    </div>
     </div>
 </template>
 
@@ -26,5 +36,10 @@ export default {
 </script>
 
 <style>
+   
+
+
+
+   
 
 </style>

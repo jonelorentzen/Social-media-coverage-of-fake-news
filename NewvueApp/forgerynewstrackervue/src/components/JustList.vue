@@ -1,5 +1,5 @@
 <template>
-  <div>{{title.title}}</div>
+  <div><p>{{title.title}}</p></div>
 </template>
 
 <script>
@@ -9,6 +9,18 @@ export default {
 }
 </script>
 
-<style>
+<style scoped> 
 
+div{
+
+  border: 1px black solid;
+  height: 100px;
+
+}
+div p{
+  text-align: center;
+  
+  
+
+}
 </style>
