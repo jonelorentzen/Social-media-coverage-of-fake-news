@@ -3,9 +3,8 @@ import Backendapi from '../backend_api/api.js';
 
 export default createStore({
   state: {
-    searches: [{
-      title: '',
-    }],
+    searches: [
+    ],
   //   {'text': '@GunnarBj @marie_holmqvist fast i Norge så sa man åt Alpenresenärer att sätta sig i karantän oavsett symptom. Här gjorde man faktiskt inte det. Har du läst den här? Jag är öppen för att diskutera sakfel i den https://t.co/lrBtJus2ld',
   //    'author_id': '1273549542806491136', 'id': '1369942833973649408', 'created_at': '2021-03-11T09:26:38.000Z', 'public_metrics': {'retweet_count': 0, 'reply_count': 2, 'like_count': 12, 'quote_count': 0}, 'referenced_tweets': [{'type': 'replied_to', 'id': '1369942131805196291'}]},
   //     {'text': 'RT @ingel2: En håndfull selskaper eier covid-vaksinene, men klarer ikke å lage nok. 100 land krever at de slipper patentet fri, så all ledi…',

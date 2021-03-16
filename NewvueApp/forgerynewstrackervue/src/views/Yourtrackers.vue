@@ -47,7 +47,8 @@ export default {
         return {
             twitteruser: 'Dönerkebab123',
             searchValue: '',
-            selected: ''
+            selected: '',
+            
             };
     },
     methods: {
