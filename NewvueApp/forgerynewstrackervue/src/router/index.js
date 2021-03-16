@@ -6,6 +6,7 @@ import { createRouter } from 'vue-router';
 // import Start from '../views/Start.vue';
 import Dashboard from '../views/Dashboard.vue';
 import About from '../views/About.vue';
+
 // here we create our routes
 export default createRouter({
   history: createWebHistory(process.env.BASE_URL),

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <column-chart :data="listdata" :colors="['#666']"></column-chart>
+        <column-chart :data="listdata" :colors="['#l00']"></column-chart>
     </div>
 </template>
 

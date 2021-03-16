@@ -41,9 +41,17 @@ def create_id_url(query):
    
     tweet_fields = "tweet.fields=public_metrics,created_at,geo,lang,referenced_tweets,text,author_id"
     user_fields = "user.fields=profile_image_url"
-    url = "https://api.twitter.com/2/tweets?ids={}&{}".format(
+    url = "https://api.twitter.com/2/tweets?ids={}&{}&{}".format(
         query, tweet_fields, user_fields
         )
+    return url
+
+def create_users_url(query):
+
+    user_fields= "user.fields=id,location,name,profile_image_url,public_metrics,username,verified"
+    url = "https://api.twitter.com/2/users?ids={}&{}".format(
+        query, user_fields
+    )
     return url
 
 def create_headers(bearer_token):
@@ -78,11 +86,32 @@ def showinfo():
     
     for item in json_response2["data"]:
         json_response["data"].append(item)
+
+    json_response["data"] = sorted(json_response["data"], key = lambda i: i['public_metrics']["retweet_count"],reverse=True)
+
+    user_ids = extract_usernames(json_response)
+    url_users_ids = create_users_url(user_ids)
+    json_response3 = connect_to_endpoint(url_users_ids, headers)
+        
+    for i in range(99):
+        json_response3["data"][i]["public_metrics_user"] = json_response3["data"][i].pop("public_metrics")
+        json_response["data"][i].update(json_response3["data"][i])
+    
     
     app.config['newdata'] = json_response
     
     #return redirect(url_for('testingJs'))
     return json.dumps(app.config['newdata'])
+
+def extract_usernames(json_response):
+    author_id_list = []
+    tweet_dict = json_response["data"]
+    for i in range(99):
+        author_id_list.append(tweet_dict[i]["author_id"])
+
+    joined_string = ",".join(author_id_list)
+    return joined_string
+
 
 #The fuction api_caller is a fuction that is used to call the api 10 times and add the responses to the json_response
 #We use the time libery to avoid getting the same json response back from the api, so it waits 1 second between every api call
