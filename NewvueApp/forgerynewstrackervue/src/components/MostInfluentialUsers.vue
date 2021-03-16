@@ -2,13 +2,13 @@
     <div class="influential-users-with-headline">
     <div class="influential-users-container">
 
-        <div class="user-wrapper" v-for="data in user_list" :key="data" >
+        <div class="user-wrapper" v-for="(data,index) in topUsers" :key="index">
             <div class="user-info">
             <img id="profile-picture" v-bind:src="data.img">
             <p class="tweet-username">@{{data.username}}</p>
         </div>
         <div id="follower-count">
-            <p id>{{data.followers}}M Followers</p>
+            <p id>{{data.followers}} Followers</p>
             </div>
         </div>
     
@@ -19,30 +19,13 @@
 
 <script>
 export default {
-    name: "mostinfluentialusers",
-    data(){
-        return{
-            data_list : [{"author_id": 1245312, "retweets": 6969, "number": 1, "img": "https://cdn2.thecatapi.com/images/iQpCnqHXc.jpg", 
-    "username": "Catman", "text": "The recent studies shows that cats are able to get infected by COVID-19", "date": "Feb 12",
-    "followers": 6.9, "verified": true}, 
-    {"author_id": 134626, "retweets": 1234, "number": 2, "img": "https://www.w3schools.com/images/w3schools_green.jpg", 
-    "username": "w3school", "text": "Here at W3 schools you can learn to code programs for COVID-19 or other things!", "date": "Feb 20",
-    "followers": 6.9, "verified": true}, 
-    {"author_id": 43568234, "retweets": 888, "number": 3, "img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", 
-    "username": "PONTUS", "text":"Today I announced our Administration will: - Expand COVID-19 testing for schools and underserved communities - Increase manufacturing of testing supplies - Increase genome sequencing to track emerging strains",
-    "date": "Feb 21", "followers": 6.9, "verified": true}] ,
-    user_list: [{"img": "https://cdn2.thecatapi.com/images/iQpCnqHXc.jpg", "username": "Catman",  "date": "Feb 12", "followers": 69.6, "verified": true},
-    {"img": "https://www.w3schools.com/images/w3schools_green.jpg", "username": "w3school", "date": "Feb 20", "followers": 2.1, "verified": true},
-    {"img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", "username": "PONTUS", "followers": 19.7, "verified": true},
-    {"img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", "username": "PONTUS", "followers": 19.7, "verified": true},
-    {"img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", "username": "PONTUS", "followers": 19.7, "verified": true},
-    {"img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", "username": "PONTUS", "followers": 19.7, "verified": true},
-    {"img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", "username": "PONTUS", "followers": 19.7, "verified": true},
-    {"img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", "username": "PONTUS", "followers": 19.7, "verified": true},
-    {"img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", "username": "PONTUS", "followers": 19.7, "verified": true}]
-        
+    name: "topusers",
+    computed: {
+      topUsers(){
+        return this.$store.state.TopUsers
+      }
     }
-    }
+  
 }
 </script>
 
