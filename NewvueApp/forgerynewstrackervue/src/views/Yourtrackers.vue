@@ -16,7 +16,6 @@
                 <option>The earth is flat</option>
             </select>
         <br>
-        <br>
             <input v-model="searchValue" class="form-control" type="text" placeholder="Search here">
             <button class="btn btn-primary" @click="addSearch();">Get result</button><br><br>
 

@@ -3,7 +3,7 @@
     <div v-if="titles.length > 0" class="query-container">
         <table>
             <tr v-for="(title, index) in titles" v-bind:key="index">
-                <td>{{title}}</td> 
+                <td>{{title.title}}</td> 
             </tr>
         </table>
     </div>
