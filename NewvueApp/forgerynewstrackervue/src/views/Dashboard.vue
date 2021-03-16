@@ -1,10 +1,17 @@
 <template>
   <div class="container">
 
+
+    <dir class="recent-searches">
+      <h5>Selected Trackers: </h5>
+      <search-list/>
+    </dir>
+
     <Trackerheader/>
     
     <Engagement/>
     <div class="container_for_linechart">
+
     <LineChart id="linechart" :listdata='LineChartData'/>
     </div>
     
@@ -33,10 +40,14 @@
 
 import BarChart from '../components/BarChart'
 import LineChart from '../components/LineChart'
+
+import SearchList from '../components/SearchList.vue';
+
 import topPosts from '../components/Topposts'
 import mostinfluentialusers from '../components/MostInfluentialUsers'
 import Trackerheader from "../components/Trackerheader"
 import Engagement from "../components/Engagement"
+
 
 
 
@@ -45,24 +56,39 @@ export default {
   components: {
     BarChart,
     LineChart,
+
+    SearchList,
+
     topPosts,
     mostinfluentialusers,
     Trackerheader,
     Engagement
     
+
+  },
+   computed:{
+    BarChartData() {
+      return this.$store.getters.GetBarChartList;
+    },
+    LineChartData() {
+      return this.$store.getters.GetLineChartList;
+    },
+    yourTrackers(){
+      return this.$store.state.searches -1;
+    },
+
+
   },
   data(){
-    return{
-       BarChartData: [['Likes', 345], ['Retweeets', 247],['Replies', 47],['Quotes', 27]],
-       LineChartData: {'2017-05-13T:13:03:00': 1, '2017-05-13T:14:03:00': 2,'2017-05-13T:15:03:00': 3,'2017-05-13T:16:03:00': 4,}
 
-    };
   },
-
 };
 </script>
 
 <style>
+    .recent-searches{
+      float: right;
+    }
     .container{
       margin: 50px;
       display: grid;
@@ -70,6 +96,7 @@ export default {
     }
 
     #linechart{
+
         padding-bottom: 50px;
         
 
