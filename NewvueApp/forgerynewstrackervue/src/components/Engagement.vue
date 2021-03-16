@@ -52,6 +52,7 @@ export default {
     width: 100px;
     height: 70px;
     border: 1px solid black;
+    margin-right: 120px;
 
 }
 
