@@ -18,7 +18,7 @@ export default createStore({
       let total_likes = 0
       let total_replies = 0
       let total_quotes = 0
-     
+     console.log(tweets.data)
       for (let i = 0; i < Object.keys(tweets.data).length; i++) {
           if ("referenced_tweets" in tweets.data[i]) {
               if (tweets.data[i]['referenced_tweets']['0']["type"] !== "retweeted") {
@@ -34,7 +34,7 @@ export default createStore({
               total_replies += tweets.data[i]['public_metrics']["reply_count"]
           }
       }
-      console.log(total_likes, total_retweets, total_replies, total_quotes)
+      // console.log(total_likes, total_retweets, total_replies, total_quotes)
       state.BarChartList = [['Likes', total_likes], ['Retweeets', total_retweets],['Replies', total_replies],['Quotes',total_quotes]]
     
     },
@@ -66,18 +66,22 @@ export default createStore({
 
     NEW_SEARCH(state,SearchItem){
       state.searches.push({
-        title: SearchItem
+        title: SearchItem,
+        active: false,
       })
     },
     loading(){
       console.log("loading")
+    },
+    searchItemActive(state, index){
+      state.searches[index].active = !state.searches[index].active
     }
 
   },
 
   actions: {
     addNewSearch({commit}, SearchItem){
-      commit("NEW_SEARCH",SearchItem);
+      commit("NEW_SEARCH",SearchItem, );
     },
     async getResult(state, searchValue) {
       this.commit('loading')
@@ -88,10 +92,13 @@ export default createStore({
         state.commit("SetTweets", response);
         state.commit("SetBarChartList", response);
         state.commit("SetLineChartList", response);
-        
+        console.log("done")
       } catch (err){
         this.commit('error',err)
       }
+    },
+    searchItemActive(commit, index){
+      this.commit("searchItemActive", index)
     }
   },
   modules: {
@@ -99,7 +106,8 @@ export default createStore({
   },
   getters: {
     GetBarChartList: state => state.BarChartList,
-    GetLineChartList: state => state.LineChartList
+    GetLineChartList: state => state.LineChartList,
+    getSearchByIndex: (state) => (index) => {return state.searches[index]}
 
   }
 });

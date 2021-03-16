@@ -17,15 +17,14 @@
             </select>
         <br>
             <input v-model="searchValue" class="form-control" type="text" placeholder="Search here">
-            <button class="btn btn-primary" @click="addSearch();">Get result</button><br><br>
+            <button class="btn btn-primary" @click="addSearch();">Add search</button><br><br>
 
             <h4>Your Recent Searches</h4>
-            <search-list/>
-
-
+            <search-list/> <br>
+            <button class="btn btn-primary" @click="getResult();">Get result for selected searches</button>
 
         </div>
-        
+
     </div>
 </template>
 
@@ -40,14 +39,13 @@ export default {
     name: 'Home',
     components: {
         SearchList,
-        // store
+
     },
     data() {
         return {
             twitteruser: 'Dönerkebab123',
             searchValue: '',
             selected: '',
-            
             };
     },
     methods: {
@@ -55,25 +53,28 @@ export default {
             var dropValueElement = document.getElementById("selected");
             var text = this.searchValue
 
-            
             if (text == "") {
                 var option = dropValueElement.options[dropValueElement.selectedIndex].text
                 this.$store.dispatch('addNewSearch',option)
-                this.$store.dispatch("getResult", option)
+                // this.$store.dispatch("getResult", option, this.active)
                 this.searchValue = "";
                 option = "";
-                
+
             } else {
                 text = this.searchValue
                 this.$store.dispatch('addNewSearch',text)
-                this.$store.dispatch("getResult", text)
+                // this.$store.dispatch("getResult", text, this.active)
                 this.searchValue = "";
-                
-            }        
+
+            }
         },
+        getResult(){
+            this.$store.dispatch("getResult", this.$store.state.searches.active)
+        },
+        
     },
-    
-    
+
+
 
   };
 

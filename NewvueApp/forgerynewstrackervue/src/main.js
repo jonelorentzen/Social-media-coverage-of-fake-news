@@ -8,6 +8,7 @@ import Chartkick from 'vue-chartkick';
 import Chart from 'chart.js';
 
 
+
 Chartkick.configure({language: "en", mapsApiKey: "AIzaSyBFMGWqY_cNwPHVeElwZAulhY7DL2cTIEA"});
 
 
