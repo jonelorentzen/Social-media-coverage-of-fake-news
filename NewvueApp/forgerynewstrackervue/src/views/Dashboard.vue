@@ -22,10 +22,10 @@
     
       <div class="Post_user_container">
         
-        <topPosts/>
+        <topPosts id="TopPosts"/>
        
         
-        <mostinfluentialusers />
+        <mostinfluentialusers id="TopUsers"/>
   
 
       </div>
@@ -56,9 +56,7 @@ export default {
   components: {
     BarChart,
     LineChart,
-
     SearchList,
-
     topPosts,
     mostinfluentialusers,
     Trackerheader,
@@ -72,6 +70,12 @@ export default {
     },
     LineChartData() {
       return this.$store.getters.GetLineChartList;
+    },
+    TopPostsData() {
+      return this.$store.getters.GetTopPosts;
+    },
+    TopUsersData() {
+      return this.$store.getters.GetTopUsers;
     },
     yourTrackers(){
       return this.$store.state.searches -1;

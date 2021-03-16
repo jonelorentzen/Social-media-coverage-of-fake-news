@@ -1,6 +1,6 @@
 <template>
     <div>
-        <area-chart :data="listdata" :colors="['#d00']" xtitle="Tweeted at" ytitle="Cumulative Tweets"></area-chart>
+        <line-chart :data="listdata" :colors="['#d00']" xtitle="Tweeted at" ytitle="Cumulative Tweets"></line-chart>
     </div>
 </template>
 

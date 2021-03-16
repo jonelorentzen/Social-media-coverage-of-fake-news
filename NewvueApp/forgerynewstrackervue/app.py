@@ -16,14 +16,6 @@ app.config.from_object(__name__)
 CORS(app, resources={r'/*': {'origins': '*'}})
 
 
-# sanity check route
-@app.route('/ping', methods=['GET'])
-def ping_pong():
-    return jsonify('ppppng!')
-
-#Dictionary that is used to send the data to the javascript
-app.config['newdata'] = {}
-
 #Getting data from TWITTER
 def auth():
     return os.environ.get("BEARER_TOKEN")
@@ -98,10 +90,15 @@ def showinfo():
         json_response["data"][i].update(json_response3["data"][i])
     
     
-    app.config['newdata'] = json_response
+    #Create Barchart and LineChart from json_response
+    barchart = create_barchart(json_response)
+    linechart = create_linechart(json_response)
+    topposts = create_topposts(json_response)
+    topusers = create_topusers(json_response)
+     
+    json_response["data"] = {d["query"]: {"barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers}}
     
-    #return redirect(url_for('testingJs'))
-    return json.dumps(app.config['newdata'])
+    return json.dumps(json_response)
 
 def extract_usernames(json_response):
     author_id_list = []
@@ -131,7 +128,7 @@ def api_caller(query, headers):
         count += 1
         print ("tick")
 
-        if count == 3:
+        if count == 1:
             count = 0
             break
 
@@ -170,6 +167,92 @@ def extract_retweets(json_response):
                         break
     joined_string = ",".join(id_list)
     return joined_string
+
+def create_barchart(json_response):
+    tweets = json_response["data"]
+    total_retweets = 0
+    total_likes = 0
+    total_replies = 0
+    total_quotes = 0
+
+    for i in range(len(tweets)):
+        if "referenced_tweets" in tweets[i]:
+              if tweets[i]['referenced_tweets'][0]["type"] != "retweeted":
+                  total_retweets += tweets[i]['public_metrics']["retweet_count"]
+                  total_likes += tweets[i]['public_metrics']["like_count"]
+                  total_replies += tweets[i]['public_metrics']["reply_count"]
+                  total_quotes += tweets[i]['public_metrics']["quote_count"]
+        else:
+              total_retweets += tweets[i]['public_metrics']["retweet_count"]
+              total_likes += tweets[i]['public_metrics']["like_count"]
+              total_quotes += tweets[i]['public_metrics']["quote_count"]
+              total_replies += tweets[i]['public_metrics']["reply_count"]
+       
+    barchartlist = [['Likes', total_likes], ['Retweeets', total_retweets],['Replies', total_replies],['Quotes',total_quotes]]
+
+    return barchartlist
+    
+def create_linechart(json_response):
+    tweets = json_response["data"]
+    allDates = []
+    finalDates = []
+      
+    for i in range(len(tweets)):
+        element = tweets[i]["created_at"]
+        allDates.append(element)
+
+    for i in range(len(tweets)):
+        allDates[i] = allDates[i].replace(".000Z", "")
+
+    allDates.sort()
+
+    for i in range(len(tweets)):
+        finalDates.append([allDates[i],i+1])
+          
+    return finalDates
+
+def create_topposts(json_response):
+    tweets = json_response["data"]
+    topposts = []
+    for i in range(len(tweets)):
+        if "referenced_tweets" not in tweets[i]:
+            date = format_date(tweets[i]["created_at"])
+
+            topposts.append({"author_id": tweets[i]["author_id"], "retweets": tweets[i]['public_metrics']["retweet_count"], "likes": tweets[i]['public_metrics']["like_count"], "text": tweets[i]['text'],
+            "username": tweets[i]["username"], "img": tweets[i]["profile_image_url"], "date": date, "followers": tweets[i]['public_metrics_user']["followers_count"], "verified": tweets[i]["verified"]})
+            if len(topposts) == 3:
+                break
+
+    return topposts
+
+
+#Maybe add functionality that returns day and month like 13 Feb...
+def format_date(timestamp):
+    ts = time.strptime(timestamp[:19], "%Y-%m-%dT%H:%M:%S")
+    s = time.strftime("%m/%d/%Y", ts)
+    return s
+
+def create_topusers(json_response):
+    tweets = json_response["data"]
+    topusers = []
+    for i in range(len(tweets)):
+        topusers.append({"username": tweets[i]["username"], "img": tweets[i]["profile_image_url"], "followers": tweets[i]['public_metrics_user']["followers_count"], "verified": tweets[i]["verified"]})
+        if len(topusers) == 9:
+            break
+    sorted_topusers = sorted(topusers, key = lambda i: i['followers'],reverse=True)
+    return sorted_topusers
+
+def create_activity(json_response):
+    tweets = json_response["data"]
+    user_ids = []
+    for i in range(len(tweets)):
+        user_ids.append(tweets[i]["author_id"])
+    print(len(user_ids))
+    list(dict.fromkeys(user_ids))
+    print(len(user_ids))
+
+
+
 
 
 if __name__ == '__main__':
