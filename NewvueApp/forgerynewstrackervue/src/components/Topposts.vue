@@ -1,5 +1,6 @@
 <template>
 
+
    <!-- <div class="topposts_box">
      <div class="topposts_header">
        <h3><span>Top Posts</span></h3>
@@ -26,53 +27,20 @@
        </div>
      </div>
    </div> -->
-    <div class="influential-posts-container">
-    <div class="post-wrapper" v-for="data in data_list" :key="data">
-      <div class="profile-info">
-          <img id="profile-picture" v-bind:src="data.img">
-          <p class="tweet-username">@{{data.username}}</p>
-          <p id="date">{{data.date}}</p>
-      </div>
-      <div class="tweet-stats">
-          <p id="retweets">{{data.retweets}}</p>
-          <img id="retweet-image" src="static/clipart2858379.png"> 
-          <p id="likes">{{data.retweets}}</p>
-          <img id="like-image" src="static/PikPng.com_red-heart-emoji-png_1669725.png">
-      </div>
-          <p class="tweet-text">"{{data.text}}"</p>
-      </div>
-    </div> 
+
+
     
 </template>
 
 <script>
 export default {
     name: "topPosts",
-    data(){
-        return {
-            data_list : [{"author_id": 1245312, "retweets": 6969, "number": 1, "img": "https://cdn2.thecatapi.com/images/iQpCnqHXc.jpg", 
-    "username": "Catman", "text": "The recent studies shows that cats are able to get infected by COVID-19", "date": "Feb 12",
-    "followers": 6.9, "verified": true}, 
-    {"author_id": 134626, "retweets": 1234, "number": 2, "img": "https://www.w3schools.com/images/w3schools_green.jpg", 
-    "username": "w3school", "text": "Here at W3 schools you can learn to code programs for COVID-19 or other things!", "date": "Feb 20",
-    "followers": 6.9, "verified": true}, 
-    {"author_id": 43568234, "retweets": 888, "number": 3, "img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", 
-    "username": "PONTUS", "text":"Today I announced our Administration will: - Expand COVID-19 testing for schools and underserved communities - Increase manufacturing of testing supplies - Increase genome sequencing to track emerging strains",
-    "date": "Feb 21", "followers": 6.9, "verified": true}] ,
-    user_list: [{"img": "https://cdn2.thecatapi.com/images/iQpCnqHXc.jpg", "username": "Catman",  "date": "Feb 12", "followers": 69.6, "verified": true},
-    {"img": "https://www.w3schools.com/images/w3schools_green.jpg", "username": "w3school", "date": "Feb 20", "followers": 2.1, "verified": true},
-    {"img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", "username": "PONTUS", "followers": 19.7, "verified": true},
-    {"img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", "username": "PONTUS", "followers": 19.7, "verified": true},
-    {"img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", "username": "PONTUS", "followers": 19.7, "verified": true},
-    {"img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", "username": "PONTUS", "followers": 19.7, "verified": true},
-    {"img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", "username": "PONTUS", "followers": 19.7, "verified": true},
-    {"img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", "username": "PONTUS", "followers": 19.7, "verified": true},
-    {"img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", "username": "PONTUS", "followers": 19.7, "verified": true}]
-        }
-    },
-    mounted(){
-        console.log("DATALIST", this.data_list)
+    computed: {
+      topPosts(){
+        return this.$store.state.TopPosts
+      }
     }
+
 }
 </script>
 

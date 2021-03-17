@@ -1,4 +1,5 @@
 <template>
+
     <div class="chart-box">
         <div class="chartheader">
             <h3><span>Timeline</span></h3>
@@ -7,7 +8,7 @@
         <div class="chart-container">
         <area-chart :data="listdata" :colors="['#d00']" xtitle="Tweeted at" ytitle="Cumulative Tweets"></area-chart>
         </div>
-    </div>
+
 </template>
 
 <script>
