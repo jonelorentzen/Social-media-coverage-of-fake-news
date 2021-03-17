@@ -1,10 +1,10 @@
 <template>
   
-    <Header/>
+  <Header/>
     <div class="d-flex" id="wrapper">
       <Sidebar/>
       <router-view/>
-      </div>
+    </div>
   <Footer/>
   
 </template>
