@@ -1,12 +1,18 @@
 <template>
-   
-    <div class="influential-posts-container">
-    <div class="post-wrapper" v-for="data in data_list" :key="data">
-      <div class="profile-info">
-          <img id="profile-picture" v-bind:src="data.img">
-          <p class="tweet-username">@{{data.username}}</p>
-          <p id="date">{{data.date}}</p>
-      </div>
+
+
+   <!-- <div class="topposts_box">
+     <div class="topposts_header">
+       <h3><span>Top Posts</span></h3>
+     </div>
+     <div class="topposts_container">
+       <div class="toppostsRows_wrapper" v-for="data in data_list" :key="data">
+         <div class="toppostsRow">
+           <div class="profile-info">
+            <img id="profile-picture" v-bind:src="data.img">
+            <p class="tweet-username">@{{data.username}}</p>
+            <p id="date">{{data.date}}</p>
+          </div>
       <div class="tweet-stats">
           <p id="retweets">{{data.retweets}}</p>
           <img id="retweet-image" src="static/clipart2858379.png"> 
@@ -14,46 +20,70 @@
           <img id="like-image" src="static/PikPng.com_red-heart-emoji-png_1669725.png">
       </div>
           <p class="tweet-text">"{{data.text}}"</p>
-      </div>
-    </div>
+         </div>
+       </div>
+       <div class="topposts_footer">
+
+       </div>
+     </div>
+   </div> -->
+
+
     
 </template>
 
 <script>
 export default {
     name: "topPosts",
-    data(){
-        return {
-            data_list : [{"author_id": 1245312, "retweets": 6969, "number": 1, "img": "https://cdn2.thecatapi.com/images/iQpCnqHXc.jpg", 
-    "username": "Catman", "text": "The recent studies shows that cats are able to get infected by COVID-19", "date": "Feb 12",
-    "followers": 6.9, "verified": true}, 
-    {"author_id": 134626, "retweets": 1234, "number": 2, "img": "https://www.w3schools.com/images/w3schools_green.jpg", 
-    "username": "w3school", "text": "Here at W3 schools you can learn to code programs for COVID-19 or other things!", "date": "Feb 20",
-    "followers": 6.9, "verified": true}, 
-    {"author_id": 43568234, "retweets": 888, "number": 3, "img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", 
-    "username": "PONTUS", "text":"Today I announced our Administration will: - Expand COVID-19 testing for schools and underserved communities - Increase manufacturing of testing supplies - Increase genome sequencing to track emerging strains",
-    "date": "Feb 21", "followers": 6.9, "verified": true}] ,
-    user_list: [{"img": "https://cdn2.thecatapi.com/images/iQpCnqHXc.jpg", "username": "Catman",  "date": "Feb 12", "followers": 69.6, "verified": true},
-    {"img": "https://www.w3schools.com/images/w3schools_green.jpg", "username": "w3school", "date": "Feb 20", "followers": 2.1, "verified": true},
-    {"img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", "username": "PONTUS", "followers": 19.7, "verified": true},
-    {"img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", "username": "PONTUS", "followers": 19.7, "verified": true},
-    {"img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", "username": "PONTUS", "followers": 19.7, "verified": true},
-    {"img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", "username": "PONTUS", "followers": 19.7, "verified": true},
-    {"img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", "username": "PONTUS", "followers": 19.7, "verified": true},
-    {"img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", "username": "PONTUS", "followers": 19.7, "verified": true},
-    {"img": "https://pbs.twimg.com/profile_images/1349837426626330628/CRMNXzQJ_normal.jpg", "username": "PONTUS", "followers": 19.7, "verified": true}]
-        }
-    },
-    mounted(){
-        console.log("DATALIST", this.data_list)
+    computed: {
+      topPosts(){
+        return this.$store.state.TopPosts
+      }
     }
+
 }
 </script>
 
 <style scoped>
 
+.topposts_box{
+  grid-column: span 6 / auto;
+}
 
+.topposts_header h3{
+  font-size: 1.1em;
+  line-height: 1.25;
+  font-weight: 900;
+  color: #44496b;
+  font-family: Quicksand,Helvetica,Arial,sans-serif;
+  margin: 0;
+}
 
+.topposts_container{
+  padding: 0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  transition: .2s ease-in-out;
+  border: 1px solid #dddfea;
+  
+}
+
+.toppostsRows_wrapper{
+  padding-bottom: 1.9em;
+}
+
+.toppostsRow{
+  display: flex;
+  flex-direction: row;
+  padding: 1em 2em;
+  margin-top: -1px;
+  min-height: 6.75em;
+  border-top: 1px solid #edeef4;
+  border-bottom: 1px solid #edeef4;
+  cursor: pointer;
+  
+}
 
 
 .influential-posts-container{  
