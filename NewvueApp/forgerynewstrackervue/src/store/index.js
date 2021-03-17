@@ -91,7 +91,7 @@ export default createStore({
   getters: {
     GetBarChartList: state => state.BarChartList,
     GetLineChartList: state => state.LineChartList,
-    getSearchByIndex: (state) => (index) => {return state.searches[index]}
+    getSearchByIndex: (state) => (index) => {return state.searches[index]},
     GetTopPosts: state => state.TopPosts,
     GetTopUsers: state => state.TopUsers,
 
