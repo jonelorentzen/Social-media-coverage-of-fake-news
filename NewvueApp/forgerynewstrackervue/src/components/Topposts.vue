@@ -14,7 +14,9 @@
       </div>
           <p class="tweet-text">"{{data.text}}"</p>
       </div>
+      
     </div>
+    
     
 </template>
 
