@@ -21,8 +21,8 @@
 
             <h4>Your Recent Searches</h4>
             <search-list/> <br>
-            <button class="btn btn-primary" @click="getResult();">Get result for selected searches</button>
-
+            <button class="btn btn-primary" @click="gotoPage();">See results on DashBoard</button>
+            
         </div>
 
     </div>
@@ -71,7 +71,10 @@ export default {
         getResult(){
             this.$store.dispatch("getResult", this.$store.state.searches.active)
         },
-        
+        gotoPage() {
+        this.$router.push('/Dashboard');
+        },
+
     },
 
 
