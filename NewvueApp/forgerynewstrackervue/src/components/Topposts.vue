@@ -1,20 +1,34 @@
 <template>
-    <div class="influential-posts-container">
-    <div class="post-wrapper" v-for="(data,index) in topPosts" :key="index">
-      <div class="profile-info">
-          <img id="profile-picture" v-bind:src="data.img">
-          <p class="tweet-username">@{{data.username}}</p>
-          <p id="date">{{data.date}}</p>
-      </div>
+
+
+   <!-- <div class="topposts_box">
+     <div class="topposts_header">
+       <h3><span>Top Posts</span></h3>
+     </div>
+     <div class="topposts_container">
+       <div class="toppostsRows_wrapper" v-for="data in data_list" :key="data">
+         <div class="toppostsRow">
+           <div class="profile-info">
+            <img id="profile-picture" v-bind:src="data.img">
+            <p class="tweet-username">@{{data.username}}</p>
+            <p id="date">{{data.date}}</p>
+          </div>
       <div class="tweet-stats">
           <p id="retweets">{{data.retweets}}</p>
           <img id="retweet-image" src="static/clipart2858379.png"> 
-          <p id="likes">{{data.likes}}</p>
+          <p id="likes">{{data.retweets}}</p>
           <img id="like-image" src="static/PikPng.com_red-heart-emoji-png_1669725.png">
       </div>
           <p class="tweet-text">"{{data.text}}"</p>
-      </div>
-    </div>
+         </div>
+       </div>
+       <div class="topposts_footer">
+
+       </div>
+     </div>
+   </div> -->
+
+
     
 </template>
 
@@ -32,8 +46,44 @@ export default {
 
 <style scoped>
 
+.topposts_box{
+  grid-column: span 6 / auto;
+}
 
+.topposts_header h3{
+  font-size: 1.1em;
+  line-height: 1.25;
+  font-weight: 900;
+  color: #44496b;
+  font-family: Quicksand,Helvetica,Arial,sans-serif;
+  margin: 0;
+}
 
+.topposts_container{
+  padding: 0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  transition: .2s ease-in-out;
+  border: 1px solid #dddfea;
+  
+}
+
+.toppostsRows_wrapper{
+  padding-bottom: 1.9em;
+}
+
+.toppostsRow{
+  display: flex;
+  flex-direction: row;
+  padding: 1em 2em;
+  margin-top: -1px;
+  min-height: 6.75em;
+  border-top: 1px solid #edeef4;
+  border-bottom: 1px solid #edeef4;
+  cursor: pointer;
+  
+}
 
 
 .influential-posts-container{  

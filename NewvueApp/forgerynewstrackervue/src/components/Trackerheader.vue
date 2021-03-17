@@ -3,7 +3,7 @@
         
         <div class="trackerheader_title">
         <p>Real Time Tracker:</p>     
-        <h1>
+        <h1 class="display-1">
             <strong>"TRACKER"</strong>
         </h1>
         </div>

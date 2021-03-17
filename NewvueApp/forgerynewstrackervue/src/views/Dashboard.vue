@@ -2,34 +2,38 @@
   <div class="container">
 
 
-    <dir class="recent-searches">
-      <h5>Selected Trackers: </h5>
-      <search-list/>
-    </dir>
-
-    <Trackerheader/>
+    <Trackerheader class="dashboard-comp"/>
     
-    <Engagement/>
+    <Engagement class="dashboard-comp"/>
+    
+
+    
     <div class="container_for_linechart">
 
-    <LineChart id="linechart" :listdata='LineChartData'/>
+    <LineChart class="dashboard-comp" id="linechart" :listdata='LineChartData'/>
+
     </div>
+   
+    
     
     <div class="container_for_barchart">
-    <BarChart id="Barchart" :listdata='BarChartData'/>
+    <BarChart class="dashboard-comp" id="Barchart" :listdata='BarChartData'/>
     </div>
     
     
       <div class="Post_user_container">
         
-        <topPosts id="TopPosts"/>
+
+        <topPosts class="dashboard-comp"/>
        
         
-        <mostinfluentialusers id="TopUsers"/>
-  
+        <mostinfluentialusers class="dashboard-comp"/>
 
-      </div>
+  
+    </div>
+
     
+ 
   
 
   </div>
@@ -37,6 +41,8 @@
 
 <script>
 //here we import other components
+
+//Alle delene på komponentene skal ha grid-column: span 12 / auto;
 
 import BarChart from '../components/BarChart'
 import LineChart from '../components/LineChart'
@@ -89,14 +95,24 @@ export default {
 };
 </script>
 
-<style>
-    .recent-searches{
-      float: right;
+
+<style scoped>
+    .dashboard-comp{
+      margin: 20px;
+
     }
     .container{
-      margin: 50px;
+      margin: auto;
       display: grid;
-      
+      min-height: 100vh;
+      grid-column-gap: 1.5em;
+      grid-row-gap: 1.5em;
+      grid-auto-rows: min-content;
+
+      font-family: Quicksand,Helvetica,Arial,sans-serif;
+      font-weight: 500;
+      font-size: 16px;
+      color: #26293c;
     }
 
     #linechart{
