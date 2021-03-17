@@ -15,6 +15,7 @@ export default createStore({
       state.tweets = response
 
     },
+
     SetBarChartList(state, barchart) {
       state.BarChartList = barchart;
       },
@@ -22,6 +23,7 @@ export default createStore({
     SetLineChartList(state, linechart) {
       state.LineChartList = linechart;
       },
+
     
     SetTopPosts(state, topposts) {
       state.TopPosts = topposts;
@@ -34,17 +36,21 @@ export default createStore({
   
     NEW_SEARCH(state,SearchItem){
       state.searches.push({
-        title: SearchItem
+        title: SearchItem,
+        active: false,
       })
     },
     loading(){
       console.log("loading")
+    },
+    searchItemActive(state, index){
+      state.searches[index].active = !state.searches[index].active
     }
   },
 
   actions: {
     addNewSearch({commit}, SearchItem){
-      commit("NEW_SEARCH",SearchItem);
+      commit("NEW_SEARCH",SearchItem, );
     },
     async getResult(state, searchValue) {
       this.commit('loading')
@@ -58,6 +64,11 @@ export default createStore({
         console.log(response.data[searchValue]["topusers"])
 
         state.commit("SetTweets", response);
+
+        state.commit("SetBarChartList", response);
+        state.commit("SetLineChartList", response);
+        console.log("done")
+
         state.commit("SetBarChartList", response.data[searchValue]["barchart"]);
         state.commit("SetLineChartList", response.data[searchValue]["linechart"]);
         state.commit("SetTopPosts", response.data[searchValue]["topposts"]);
@@ -65,9 +76,13 @@ export default createStore({
         
         
         
+
       } catch (err){
         this.commit('error',err)
       }
+    },
+    searchItemActive(commit, index){
+      this.commit("searchItemActive", index)
     }
   },
   modules: {
@@ -76,6 +91,7 @@ export default createStore({
   getters: {
     GetBarChartList: state => state.BarChartList,
     GetLineChartList: state => state.LineChartList,
+    getSearchByIndex: (state) => (index) => {return state.searches[index]}
     GetTopPosts: state => state.TopPosts,
     GetTopUsers: state => state.TopUsers,
 

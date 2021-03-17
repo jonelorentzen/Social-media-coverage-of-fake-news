@@ -11,6 +11,7 @@ import { faBullhorn, faComments, faHeart, faHome, faMicrophone, faUser, faUserSe
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 
+
 library.add(faUserSecret, 
   faHome, 
   faComments,
@@ -19,6 +20,7 @@ library.add(faUserSecret,
   faMicrophone,
   faHeart
   )
+
 
 Chartkick.configure({language: "en", mapsApiKey: "AIzaSyBFMGWqY_cNwPHVeElwZAulhY7DL2cTIEA"});
 
