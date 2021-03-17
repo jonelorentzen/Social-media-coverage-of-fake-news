@@ -9,6 +9,8 @@
         <area-chart :data="listdata" :colors="['#d00']" xtitle="Tweeted at" ytitle="Cumulative Tweets"></area-chart>
         </div>
 
+    </div>
+
 </template>
 
 <script>

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
 
-
+    <SearchList/>
     <Trackerheader class="dashboard-comp"/>
     
     <Engagement class="dashboard-comp"/>
