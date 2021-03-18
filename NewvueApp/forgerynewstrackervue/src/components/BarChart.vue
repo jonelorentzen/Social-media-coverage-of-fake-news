@@ -2,7 +2,7 @@
     
      <div class="chart-box">
         <div class="chartheader">
-            <h3><span>Timeline</span></h3>
+            <h3><span>Barchart</span></h3>
         </div>
 
         <div class="chart-container">
