@@ -5,33 +5,21 @@
 
             <div class="topstats">
                 <fa icon="comments" size="2x"/>
-                <h1>1,049</h1>
+                <h1>{{activity.posts}}</h1>
                 <p>Posts</p>
             </div>
 
             <div class="topstats">
                 <fa icon="user" size="2x"/>
-                <h1>801</h1>
+                <h1>{{activity.users}}</h1>
                 <p>Users</p>
             </div>
 
             <div class="topstats" >
                 <fa icon="heart" size="2x"/>
-                <h1 class="display display-">158,589</h1>
+                <h1 class="display display-">{{activity.engagement}}</h1>
                 <p>Engagement</p>
             </div>
-
-            <!-- <div class="topstats">
-                <fa icon="bullhorn" size="2x"/>
-                <h1>7,659,796</h1>
-                <p>Reach</p>
-            </div>
-
-            <div class="topstats">
-                <fa icon="microphone" size="2x"/>
-                <h1>7,783,086</h1>
-                <p>Impression</p>
-            </div> -->
 
         </div>
 
@@ -41,8 +29,11 @@
 <script>
 
 export default {
-    components:{
-        
+    name: "activity",
+    computed: {
+      activity(){
+        return this.$store.state.activity
+      },
     }
 }
 </script>

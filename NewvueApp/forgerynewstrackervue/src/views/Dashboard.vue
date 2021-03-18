@@ -86,8 +86,6 @@ export default {
     yourTrackers(){
       return this.$store.state.searches -1;
     },
-
-
   },
   data(){
 
@@ -116,7 +114,6 @@ export default {
     }
 
     #linechart{
-
         padding-bottom: 50px;
         
 

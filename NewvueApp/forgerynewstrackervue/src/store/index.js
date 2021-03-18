@@ -8,7 +8,8 @@ export default createStore({
     BarChartList: [],
     LineChartList: [],
     TopPosts: [],
-    TopUsers: []
+    TopUsers: [],
+    activity: {}
   },
   mutations: {
     SetTweets(state, response){
@@ -24,13 +25,16 @@ export default createStore({
       state.LineChartList = linechart;
       },
 
-    
     SetTopPosts(state, topposts) {
       state.TopPosts = topposts;
       },
 
     SetTopUsers(state, topusers) {
       state.TopUsers = topusers;
+      },
+    
+    SetActivity(state, activity) {
+      state.activity = activity;
       },
 
   
@@ -58,10 +62,12 @@ export default createStore({
         let api = new Backendapi();
         let response = await api.getMessages(searchValue);
         console.log(response.data)
+
         console.log(response.data[searchValue]["barchart"])
         console.log(response.data[searchValue]["linechart"])
         console.log(response.data[searchValue]["topposts"])
         console.log(response.data[searchValue]["topusers"])
+        console.log(response.data[searchValue]["activity"])
 
         state.commit("SetTweets", response);
 
@@ -73,6 +79,8 @@ export default createStore({
         state.commit("SetLineChartList", response.data[searchValue]["linechart"]);
         state.commit("SetTopPosts", response.data[searchValue]["topposts"]);
         state.commit("SetTopUsers", response.data[searchValue]["topusers"]);
+        state.commit("SetActivity", response.data[searchValue]["activity"]);
+        
         
         
         
@@ -94,6 +102,7 @@ export default createStore({
     getSearchByIndex: (state) => (index) => {return state.searches[index]},
     GetTopPosts: state => state.TopPosts,
     GetTopUsers: state => state.TopUsers,
+    GetActivity: state => state.activity,
 
   }
 });

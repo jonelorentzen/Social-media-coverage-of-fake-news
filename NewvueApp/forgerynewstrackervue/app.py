@@ -95,8 +95,9 @@ def showinfo():
     linechart = create_linechart(json_response)
     topposts = create_topposts(json_response)
     topusers = create_topusers(json_response)
+    activity = create_activity(json_response)
      
-    json_response["data"] = {d["query"]: {"barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers}}
+    json_response["data"] = {d["query"]: {"barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, "activity": activity}}
     
     return json.dumps(json_response)
 
@@ -168,6 +169,8 @@ def extract_retweets(json_response):
     joined_string = ",".join(id_list)
     return joined_string
 
+#Function to extract the total likes, retweets, replies and quotes. The API return the total retweets of the original tweet is a user has retweeted it.
+#So the function does not count the retweets of a retweet. Only the retweets of the orignal tweet
 def create_barchart(json_response):
     tweets = json_response["data"]
     total_retweets = 0
@@ -191,7 +194,8 @@ def create_barchart(json_response):
     barchartlist = [['Likes', total_likes], ['Retweeets', total_retweets],['Replies', total_replies],['Quotes',total_quotes]]
 
     return barchartlist
-    
+
+#Function to make a list that is needed to display the areachart   
 def create_linechart(json_response):
     tweets = json_response["data"]
     allDates = []
@@ -204,20 +208,47 @@ def create_linechart(json_response):
     for i in range(len(tweets)):
         allDates[i] = allDates[i].replace(".000Z", "")
 
-    allDates.sort()
+    allDates.sort() 
+    print(len(allDates))
+    allDates = allDates[6:]
+    print(len(allDates))
 
-    for i in range(len(tweets)):
+    for i in range(len(allDates)):
         finalDates.append([allDates[i],i+1])
           
     return finalDates
 
+#Function that returns the dates from when a person retweets a tweet
+def create_retweet_linechart(json_response):
+    tweets = json_response["data"]
+    allDates = []
+    finalDates = []
+      
+    for i in range(len(tweets)):
+        if "referenced_tweets" in tweets[i]:
+              if tweets[i]['referenced_tweets'][0]["type"] == "retweeted":
+                    element = tweets[i]["created_at"]
+                    allDates.append(element)
+ 
+
+    for i in range(len(tweets)):
+        allDates[i] = allDates[i].replace(".000Z", "")
+
+    allDates.sort() 
+    allDates = allDates[5:]
+    
+    for i in range(len(allDates)):
+        finalDates.append([allDates[i],i+1])
+          
+    return finalDates
+
+#Function the extract the top 3 post and returns a dictonary with all the data needed to display as a tweet
 def create_topposts(json_response):
     tweets = json_response["data"]
     topposts = []
     for i in range(len(tweets)):
         if "referenced_tweets" not in tweets[i]:
             date = format_date(tweets[i]["created_at"])
-
             topposts.append({"author_id": tweets[i]["author_id"], "retweets": tweets[i]['public_metrics']["retweet_count"], "likes": tweets[i]['public_metrics']["like_count"], "text": tweets[i]['text'],
             "username": tweets[i]["username"], "img": tweets[i]["profile_image_url"], "date": date, "followers": tweets[i]['public_metrics_user']["followers_count"], "verified": tweets[i]["verified"]})
             if len(topposts) == 3:
@@ -232,27 +263,48 @@ def format_date(timestamp):
     s = time.strftime("%m/%d/%Y", ts)
     return s
 
+#Function for extracting the top 9 users with the most followers with a check that is not added 
 def create_topusers(json_response):
     tweets = json_response["data"]
     topusers = []
     for i in range(len(tweets)):
-        topusers.append({"username": tweets[i]["username"], "img": tweets[i]["profile_image_url"], "followers": tweets[i]['public_metrics_user']["followers_count"], "verified": tweets[i]["verified"]})
-        if len(topusers) == 9:
-            break
+        if tweets[i]['username'] not in topusers:
+            topusers.append({"username": tweets[i]["username"], "img": tweets[i]["profile_image_url"], "followers": tweets[i]['public_metrics_user']["followers_count"], "verified": tweets[i]["verified"]})
+            if len(topusers) == 9:
+                break
     sorted_topusers = sorted(topusers, key = lambda i: i['followers'],reverse=True)
     return sorted_topusers
 
+#Function to extact the data displayed in the yellow header. Returning a dictionary with the total posts, users and engagement
+#Users is only users that is posting something not a user that is retweeting. Total posts is the total tweets, replies and quotes. 
+#Engangement is likes and retweets
 def create_activity(json_response):
+    activity = {}
     tweets = json_response["data"]
     user_ids = []
+    
+    engagement = 0 
+    total_posts = 0
     for i in range(len(tweets)):
-        user_ids.append(tweets[i]["author_id"])
-    print(len(user_ids))
-    list(dict.fromkeys(user_ids))
-    print(len(user_ids))
+        if "referenced_tweets" in tweets[i]:
+              if tweets[i]['referenced_tweets'][0]["type"] != "retweeted":
+                  engagement += tweets[i]['public_metrics']["retweet_count"]
+                  engagement += tweets[i]['public_metrics']["like_count"]
+                  total_posts += 1   
+                  if tweets[i]["author_id"] not in user_ids:
+                      user_ids.append(tweets[i]["author_id"])          
+        else:
+              engagement += tweets[i]['public_metrics']["retweet_count"]
+              engagement += tweets[i]['public_metrics']["like_count"]
+              total_posts += 1
+              if tweets[i]["author_id"] not in user_ids:
+                      user_ids.append(tweets[i]["author_id"])
+            
+    activity["posts"] = total_posts
+    activity["users"] = len(user_ids)
+    activity["engagement"] = engagement
 
-
-
+    return activity
 
 
 if __name__ == '__main__':
