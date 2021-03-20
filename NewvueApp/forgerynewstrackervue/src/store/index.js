@@ -9,7 +9,7 @@ export default createStore({
     LineChartList: [],
     TopPosts: [],
     TopUsers: [],
-    activity: {}
+    activity: {},
   },
   mutations: {
     SetTweets(state, response){
