@@ -95,9 +95,11 @@ def showinfo():
     linechart = create_linechart(json_response)
     topposts = create_topposts(json_response)
     topusers = create_topusers(json_response)
+    #all text
+    allText = all_text(json_response)
      
-    json_response["data"] = {d["query"]: {"barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers}}
-    
+    json_response["data"] = {d["query"]: {"barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, "alltext": allText}}
+    show_5_tweets(json_response)
     return json.dumps(json_response)
 
 def extract_usernames(json_response):
@@ -225,6 +227,14 @@ def create_topposts(json_response):
 
     return topposts
 
+def all_text(json_response):
+    tweets = json_response["data"]
+    allText = []
+    for i in range(len(tweets)):
+        allText.append({"tweets_text": tweets[i]["text"]})
+    return allText
+
+
 
 #Maybe add functionality that returns day and month like 13 Feb...
 def format_date(timestamp):
@@ -247,10 +257,35 @@ def create_activity(json_response):
     user_ids = []
     for i in range(len(tweets)):
         user_ids.append(tweets[i]["author_id"])
-    print(len(user_ids))
+    # print(len(user_ids))
     list(dict.fromkeys(user_ids))
-    print(len(user_ids))
+    # print(len(user_ids))
 
+# https://betterprogramming.pub/twitter-sentiment-analysis-15d8892c0082
+#####################################
+#########      SENTIMENT   ##########
+#########       TWEETS     ##########
+#####################################
+# 1) Get the text of every tweet. 
+# 2) put each tweet in a DataFrame
+# 3) remove "@", "#", "links" etc.
+# 4) Add subjectivity and polarity to the DataFrame
+# 5) 
+
+#  Print tweet text
+def show_5_tweets(json_response):
+    print("Show the 5 recent tweets:\n")
+    tweets = json_response["data"]
+    # print(tweets)
+    for i, (k,v) in enumerate(tweets.items()):
+        for i in range(len(tweets[k]["alltext"])):
+            print(i+1 ,') ', tweets[k]["alltext"][i]["tweets_text"], '\n')
+
+            i= i+1
+
+    
+
+    
 
 
 
