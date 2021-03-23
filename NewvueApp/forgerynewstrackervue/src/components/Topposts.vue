@@ -1,23 +1,55 @@
 <template>
-    <div class="influential-posts-container">
-    <div class="post-wrapper" v-for="(data,index) in topPosts" :key="index">
-      <div class="profile-info">
-          <img id="profile-picture" v-bind:src="data.img">
-          <p class="tweet-username">@{{data.username}}</p>
-          <p id="date">{{data.date}}</p>
-      </div>
-      <div class="tweet-stats">
-          <p id="retweets">{{data.retweets}}</p>
-          <img id="retweet-image" src="../assets/clipart2858379.png"> 
-          <p id="likes">{{data.likes}}</p>
-          <img id="like-image" src="../assets/PikPng.com_red-heart-emoji-png_1669725.png">
-      </div>
-          <p class="tweet-text">"{{data.text}}"</p>
-      </div>
+
+
+
+  <div class="toppostsbox">
       
+        <div class="toppostswrapper">
+          <div class="postrow" v-for="(post, index) in topPosts" v-bind:key="index">
+            <div class="profilepicture_container">
+                <img class="profilepicture" v-bind:src="topPosts[index].img">
+              </div>
+            
+            <div class="postrow_wrapper">
+              
+              <div class="postinfo_wrapper">
+                
+                <div class="postinfo_container">
+                  
+                  <p class="postinfo">
+                    <strong>@{{topPosts[index].username}}</strong>
+                  </p>
+  
+                  <p>{{topPosts[index]["date"]}}</p>
+                </div>
+
+                <div class="post_engagement">
+                  <fa class="retweets" icon="retweet"/>
+                    <p >{{topPosts[index].retweets}}</p>
+
+                  <fa class="likes" icon= "heart"/>
+                    <p >{{topPosts[index].likes}}</p>
+                </div>
+
+              </div>
+
+              <p class="post_texts">
+                {{topPosts[index].text}}
+              </p>
+            
+            </div>
+
+
+          </div>
+          
+    
     </div>
+
+
+  </div>
     
-    
+
+       
 </template>
 
 <script>
@@ -27,104 +59,118 @@ export default {
       topPosts(){
         return this.$store.state.TopPosts
       }
-    }
+    },
+    props:['listdata']
 
 }
 </script>
 
 <style scoped>
 
+.toppostsbox{
+  max-width: 50%;
+  display: flex;
+  justify-content:space-evenly;
+  flex-wrap: wrap;
+  border: 1px solid #dddfea;
+  padding: 20px;
+  width: 100%;
+  margin-right: 10px;
+}
 
 
-.influential-posts-container{  
-  width: 660px;
-  height: 528px;
-  position: relative;
+.toppostswrapper{
   
-  line-height: 1.4em;
-  margin-right: 0;
+}
+.postrow{
+  border: 1px solid grey;
+  width: 600px;
+  height: 150px;
+  margin-bottom: 10px;
+  display: flex;
+  padding: 30px;
+  
 }
 
-.post-wrapper{
-  border: 1px lightgrey solid;
-  padding: 10px 14px;
-  position: relative;
+.postrow:hover{
+  background-color: whitesmoke;
 }
-
-.profile-info{
-  display: inline-flex;
-  align-items: center;
-  font-size: 20px;
-}
-
-#headline{
-  padding: 8px;
-
-}
-#profile-picture{
+.profilepicture{
   width: 50px;
-  height: 50px;
-  border-radius: 50%;
+  height: 60px;
+  border-radius: 15px;
 }
 
-.tweet-text{
-  color: #8086AE;
-  font-size: .9em;
+.profilepicture_container{
+  margin: auto;
+  font-size: 1.25em;
+  margin-right: .75em;
+  margin-top: .25em;
+  
+}
+.postrow_wrapper{
+  margin: auto;
 }
 
-.tweet-username{
+.postinfo_wrapper{
+  display: flex;
+}
+
+.post_engagement{
+  display: flex;
+  
+  position: absolute;
+  left: 807px;
+}
+.retweets{
+color: #00acee;
+}
+
+.likes{
+  color: #cf2945;
+}
+
+.postinfo_container{
+  display: flex;
+  margin-right: 150px;
+  font-size: .85em;
+  color: #828282;
+  
+}
+.postinfo{
+  font-weight: 600;
+  font-size: 1.1em;
+  white-space: nowrap;
+  max-width: -webkit-calc(100% - .1em);
+  max-width: calc(100% - .1em);
+  overflow: hidden;
+  -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
   font-weight: 700;
   color: #44496b;
-  padding-left: 5px;
 }
 
-.tweet-stats{
-  position: absolute;
-  top: 0px;
-  right: 20px;
+.post_engagement{
+  font-size: .9em;
   display: inline-flex;
-  align-items: center;
-}
-
-#retweet-image{
-  
-  height: 12px;
-  padding-right: 7px; 
-}
-
-#like-image{
-  width: 15px;
-  height: 12px;
-}
-
-#date{
-  font-size: .7em;
-  padding-top: 1.1px;
-  padding-left: 7px;
-  color: #8086AE;
-}
-
-
-.user-wrapper{
-  border: 1px lightgrey solid;
-  width: 32%;
-  height: 10px;
-  padding-bottom: 18%; 
-  margin-bottom: 2%; 
-}
-
-.user-info{
-  display: inline-flex;
-  align-items: center;
-  font-size: 20px;
-  margin: 7px;
-}
-
-#follower-count{
-  padding-left: 50px;
-  color: #8086AE;
 
 }
+.post_engagement p{
+  margin-left: 5px;
+  margin-right: 10px;
+}
+
+.post_texts{
+  margin-top: .2em;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  font-size: .9em;
+  line-height: 1.5;
+  overflow: hidden;
+  font-weight: 500;
+  color: #8086ae;
+}
+
 
 </style>

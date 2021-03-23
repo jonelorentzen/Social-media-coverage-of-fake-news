@@ -268,7 +268,7 @@ def create_topusers(json_response):
     tweets = json_response["data"]
     topusers = []
     for i in range(len(tweets)):
-        if tweets[i]['username'] not in topusers:
+        if tweets[i] not in topusers:
             topusers.append({"username": tweets[i]["username"], "img": tweets[i]["profile_image_url"], "followers": tweets[i]['public_metrics_user']["followers_count"], "verified": tweets[i]["verified"]})
             if len(topusers) == 9:
                 break
