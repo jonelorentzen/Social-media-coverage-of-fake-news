@@ -4,7 +4,14 @@ import requests
 import json
 import os
 import time
+from textblob import TextBlob
+from wordcloud import WordCloud
+import pandas as pd
+import numpy as np
+import re
+import matplotlib.pyplot as plt
 
+plt.style.use('fivethirtyeight')
 # configuration
 DEBUG = True
 
@@ -97,9 +104,12 @@ def showinfo():
     topusers = create_topusers(json_response)
     #all text
     allText = all_text(json_response)
+    print(type(allText))
+    print(allText)
+
      
     json_response["data"] = {d["query"]: {"barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, "alltext": allText}}
-    show_5_tweets(json_response)
+    show_tweets_text_sentiment(json_response)
     return json.dumps(json_response)
 
 def extract_usernames(json_response):
@@ -273,17 +283,71 @@ def create_activity(json_response):
 # 5) 
 
 #  Print tweet text
-def show_5_tweets(json_response):
+def show_tweets_text_sentiment(json_response):
     print("Show the 5 recent tweets:\n")
     tweets = json_response["data"]
-    # print(tweets)
+    
+    textTweets=[]
     for i, (k,v) in enumerate(tweets.items()):
         for i in range(len(tweets[k]["alltext"])):
-            print(i+1 ,') ', tweets[k]["alltext"][i]["tweets_text"], '\n')
-
-            i= i+1
-
+            # print(i+1,') ', tweets[k]["alltext"][i]["tweets_text"], '\n')
+            textTweets.append(tweets[k]["alltext"][i]["tweets_text"])
     
+    # df = pd.DataFrame([tweet.full_text for tweet in posts], columns=['Tweets'])
+    print(textTweets)
+    print(" ____**________**____ ")
+
+    # Create a dataframe with a column called Tweets
+    df = pd.DataFrame(columns=['Tweets'])
+    for tweet in textTweets:
+        cleantweet = cleanTxt(tweet)
+        df = df.append({"Tweets": cleantweet}, ignore_index=True)
+    # Show  rows of data
+
+    # Create two new columns 'Subjectivity' & 'Polarity'
+    df['Subjectivity'] = df['Tweets'].apply(getSubjectivity)
+    df['Polarity'] = df['Tweets'].apply(getPolarity)
+    df['Analysis'] = df['Polarity'].apply(getAnalysis)
+    pd.set_option('display.max_rows', df.shape[0]+1)
+    print(df)
+    
+# Create a function to clean the tweets
+def cleanTxt(text):
+    text = re.sub('@[A-Za-z0–9]+', '', text) #Removing @mentions
+    text = re.sub('#', '', text) # Removing '#' hash tag
+    text = re.sub('RT[\s]+', '', text) # Removing RT
+    text = re.sub('https?:\/\/\S+', '', text) # Removing hyperlink
+    
+    return text
+
+# A function to get the subjectivity
+def getSubjectivity(text):
+   return TextBlob(text).sentiment.subjectivity
+
+# A function to get the polarity
+def getPolarity(text):
+   return  TextBlob(text).sentiment.polarity
+
+# function to compute negative (-1), neutral (0) and positive (+1) analysis
+
+def getAnalysis(score):
+    # create a dic that sends must be send to ourt json response
+    scoredict = {
+        "Negative": 0,
+        "Positive": 0,
+        "Neutral": 0,
+    }
+    if score < 0:
+        scoredict["Negative"] += 1
+        return 'Negative'
+    elif score == 0:
+        scoredict["Neutral"] += 1
+        return 'Neutral'
+    else:
+        scoredict["Positive"] += 1
+        return 'Positive'
+
+
 
     
 
