@@ -109,7 +109,8 @@ def showinfo():
 
      
     json_response["data"] = {d["query"]: {"barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, "alltext": allText}}
-    show_tweets_text_sentiment(json_response)
+    sentiment = show_tweets_text_sentiment(json_response)
+    json_response["data"][d["query"]]["sentiment"] = sentiment
     return json.dumps(json_response)
 
 def extract_usernames(json_response):
@@ -280,10 +281,16 @@ def create_activity(json_response):
 # 2) put each tweet in a DataFrame
 # 3) remove "@", "#", "links" etc.
 # 4) Add subjectivity and polarity to the DataFrame
-# 5) 
+# 5) Send data to json_response
 
 #  Print tweet text
 def show_tweets_text_sentiment(json_response):
+    scoreDictionary = {
+        "Tweets": "",
+        "Polarity": 0,
+        "Subjectivity": 0,
+        "Analysis": 0,
+    }
     print("Show the 5 recent tweets:\n")
     tweets = json_response["data"]
     
@@ -294,7 +301,7 @@ def show_tweets_text_sentiment(json_response):
             textTweets.append(tweets[k]["alltext"][i]["tweets_text"])
     
     # df = pd.DataFrame([tweet.full_text for tweet in posts], columns=['Tweets'])
-    print(textTweets)
+    # print(textTweets)
     print(" ____**________**____ ")
 
     # Create a dataframe with a column called Tweets
@@ -309,7 +316,25 @@ def show_tweets_text_sentiment(json_response):
     df['Polarity'] = df['Tweets'].apply(getPolarity)
     df['Analysis'] = df['Polarity'].apply(getAnalysis)
     pd.set_option('display.max_rows', df.shape[0]+1)
-    print(df)
+    dictionaryObject = df.to_dict()
+
+    sentiment = {"Positive": 0, "Negative": 0, "Neutral": 0}
+
+    anal = dictionaryObject["Analysis"]
+
+    print(anal)
+
+    for i in range(len(anal)):
+        if anal[i] == "Positive":
+            sentiment["Positive"] += 1
+        elif anal[i] == "Negative":
+            sentiment["Negative"] += 1
+        else:
+            sentiment["Neutral"] += 1
+        
+    print(sentiment)
+    
+    return sentiment
     
 # Create a function to clean the tweets
 def cleanTxt(text):
@@ -329,24 +354,14 @@ def getPolarity(text):
    return  TextBlob(text).sentiment.polarity
 
 # function to compute negative (-1), neutral (0) and positive (+1) analysis
-
 def getAnalysis(score):
-    # create a dic that sends must be send to ourt json response
-    scoredict = {
-        "Negative": 0,
-        "Positive": 0,
-        "Neutral": 0,
-    }
     if score < 0:
-        scoredict["Negative"] += 1
         return 'Negative'
     elif score == 0:
-        scoredict["Neutral"] += 1
         return 'Neutral'
     else:
-        scoredict["Positive"] += 1
         return 'Positive'
-
+    
 
 
     
