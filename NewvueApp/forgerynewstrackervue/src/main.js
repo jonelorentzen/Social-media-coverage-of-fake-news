@@ -7,7 +7,8 @@ import "bootstrap";
 import Chartkick from 'vue-chartkick';
 import Chart from 'chart.js';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faBullhorn, faComments, faHeart, faHome, faMicrophone, faUser, faUserSecret } from '@fortawesome/free-solid-svg-icons'
+import { faBullhorn, faComments, faHeart, faHome, faMicrophone, faUser, faUserSecret, faRetweet,  } from '@fortawesome/free-solid-svg-icons'
+import { faFontAwesome, faTwitterSquare, faTwitter} from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 
@@ -18,7 +19,11 @@ library.add(faUserSecret,
   faUser, 
   faBullhorn, 
   faMicrophone,
-  faHeart
+  faHeart,
+  faFontAwesome,
+  faTwitterSquare,
+  faTwitter,
+  faRetweet
   )
 
 

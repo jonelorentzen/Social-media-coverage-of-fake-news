@@ -1,25 +1,41 @@
 <template>
-    <div class="influential-users-with-headline">
-    <div class="influential-users-container">
+    
+    
+    <div class="mostinfluentialcontainer">
+       
+      <div class="influencercontainer" v-for="(user, index) in topUsers" v-bind:key="index">
+      <div class="influencerwrapper">
+        <div class="influencerusernamecontainer">
+          <p class="influencername"> <strong>{{user.username}}</strong></p>
+          <fa class="twitter-icon" :icon="['fab', 'twitter']"></fa>
+        </div>
+        <div class="influencerinfo_wrapper">
+                 
+          <div class="influencerfollowercount_container">
+            <p>{{user.followers}} Followers</p> 
+          </div>
+          
+          <div class="influencerfollowingcount_container">
+            <p> </p>
+          </div>
+        
+        </div>
+      </div>
+    </div>
 
-        <div class="user-wrapper" v-for="(data,index) in topUsers" :key="index">
-            <div class="user-info">
-            <img id="profile-picture" v-bind:src="data.img">
-            <p class="tweet-username">@{{data.username}}</p>
-        </div>
-        <div id="follower-count">
-            <p id>{{data.followers}} Followers</p>
-            </div>
-        </div>
+      
+
+    </div>
     
 
-        </div>
-    </div>
+   
+   
+ 
 </template>
 
 <script>
 export default {
-    name: "topusers",
+    name: "topUsers",
     computed: {
       topUsers(){
         return this.$store.state.TopUsers
@@ -31,12 +47,75 @@ export default {
 
 <style scoped>
 
+.mostinfluentialcontainer{
+  max-width: 50%;
+  display: flex;
+  justify-content:space-evenly;
+  flex-wrap: wrap;
+  border: 1px solid #dddfea;
+  padding: 20px;
+  margin-left: 10px;
+  
+}
+
+.influencercontainer{
+  border: 1px solid grey;
+  width: 150px;
+  height: 150px; 
+  display: grid;
+  
+  flex-basis: 33%;
+  
+}
+.influencerwrapper{
+  width: -webkit-calc(100% - 4em);
+  width: calc(100% - 4em);
+  margin: auto;
+}
+.influencercontainer:hover{
+  background-color: whitesmoke;
+}
+.influencerusernamecontainer{
+  display: inline-flex;
+}
+.influencername{
+  font-weight: 600;
+  font-size: .9em;
+  white-space: nowrap;
+  max-width: -webkit-calc(100% - .1em);
+  max-width: calc(100% - .1em);
+  overflow: hidden;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  font-weight: 700;
+  color: #44496b;
+
+}
+.influencerfollowercount_container{
+
+  font-size: .85em;
+  color: #828282;
+  color: #8086ae;
+}
+.influencerfollowingcount_container{
+  font-size: .85em;
+  color: #828282;
+  color: #8086ae;
+}
+
+img{
+  width: 20px;
+}
+
 .nav-bar {
   background: linear-gradient(-90deg, #84CF6A, #16C0B0);
   height: 60px;
   margin-bottom: 15px;
 }
 
+.twitter-icon{
+  color: #00acee;
+}
 
 
 .influential-posts-container{  

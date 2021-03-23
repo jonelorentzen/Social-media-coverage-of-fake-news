@@ -21,13 +21,13 @@
     </div>
     
     
-      <div class="Post_user_container">
+    <div class="Post_user_container">
         
 
-        <topPosts class="dashboard-comp"/>
+        <topPosts class="dashboard-comp insight" :listdata='TopPostsData'/>
        
         
-        <mostinfluentialusers class="dashboard-comp"/>
+        <mostinfluentialusers class="dashboard-comp insight" :listdata='TopUsersData'/>
 
   
     </div>
@@ -95,9 +95,10 @@ export default {
 
 
 <style scoped>
-    .dashboard-comp{
-      margin: 20px;
-
+    .insight{
+      
+      max-width: 50%;
+      
     }
     .container{
       margin: auto;
@@ -120,7 +121,7 @@ export default {
     }
     .Post_user_container{
       display: flex;
-      max-height: 80%;
+      justify-content: space-between;
     }
 
 

@@ -66,7 +66,12 @@ export default createStore({
         console.log(response.data[searchValue]["barchart"])
         console.log(response.data[searchValue]["linechart"])
         console.log(response.data[searchValue]["topposts"])
+        
+        console.log(response.data[searchValue]["topposts"][0]["username"])
+        
         console.log(response.data[searchValue]["topusers"])
+        console.log(response.data[searchValue]["topusers"][0])
+        
         console.log(response.data[searchValue]["activity"])
 
         state.commit("SetTweets", response);
