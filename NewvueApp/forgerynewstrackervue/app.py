@@ -285,12 +285,6 @@ def create_activity(json_response):
 
 #  Print tweet text
 def show_tweets_text_sentiment(json_response):
-    scoreDictionary = {
-        "Tweets": "",
-        "Polarity": 0,
-        "Subjectivity": 0,
-        "Analysis": 0,
-    }
     print("Show the 5 recent tweets:\n")
     tweets = json_response["data"]
     
@@ -316,18 +310,20 @@ def show_tweets_text_sentiment(json_response):
     df['Polarity'] = df['Tweets'].apply(getPolarity)
     df['Analysis'] = df['Polarity'].apply(getAnalysis)
     pd.set_option('display.max_rows', df.shape[0]+1)
+
+    # Turn DataFrame to Dictionary 
     dictionaryObject = df.to_dict()
 
     sentiment = {"Positive": 0, "Negative": 0, "Neutral": 0}
 
-    anal = dictionaryObject["Analysis"]
+    analysis = dictionaryObject["Analysis"]
 
-    print(anal)
+    print(analysis)
 
-    for i in range(len(anal)):
-        if anal[i] == "Positive":
+    for i in range(len(analysis)):
+        if analysis[i] == "Positive":
             sentiment["Positive"] += 1
-        elif anal[i] == "Negative":
+        elif analysis[i] == "Negative":
             sentiment["Negative"] += 1
         else:
             sentiment["Neutral"] += 1
@@ -344,6 +340,7 @@ def cleanTxt(text):
     text = re.sub('https?:\/\/\S+', '', text) # Removing hyperlink
     
     return text
+# I want to add the tweets’ subjectivity and polarity to the DataFrame. In order to do this, I’ll create two functions: one to get the tweets called Subjectivity (how subjective or opinionated the text is — a score of 0 is fact, and a score of +1 is very much an opinion) and the other to get the tweets called Polarity (how positive or negative the text is, — score of -1 is the highest negative score, and a score of +1 is the highest positive score).
 
 # A function to get the subjectivity
 def getSubjectivity(text):
