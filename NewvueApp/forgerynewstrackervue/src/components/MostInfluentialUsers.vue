@@ -1,16 +1,22 @@
 <template>
     <div class="influential-users-with-headline">
     <div class="influential-users-container">
+     
 
         <div class="user-wrapper" v-for="(data,index) in topUsers" :key="index">
+          
             <div class="user-info">
+            <a href="https://www.w3schools.com" target="_blank">
             <img id="profile-picture" v-bind:src="data.img">
             <p class="tweet-username">@{{data.username}}</p>
+            </a>
+            
         </div>
         <div id="follower-count">
             <p id>{{data.followers}} Followers</p>
             </div>
         </div>
+        
     
 
         </div>
@@ -31,21 +37,24 @@ export default {
 
 <style scoped>
 
+a{
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: black;
+}
+
+p{
+  font-size: small;
+}
 .nav-bar {
   background: linear-gradient(-90deg, #84CF6A, #16C0B0);
   height: 60px;
   margin-bottom: 15px;
 }
 
-
-
-.influential-posts-container{  
-  width: 660px;
-  height: 528px;
-  position: relative;
-  margin:0 auto;
-  line-height: 1.4em;
-}
 
 .post-wrapper{
   border: 1px lightgrey solid;

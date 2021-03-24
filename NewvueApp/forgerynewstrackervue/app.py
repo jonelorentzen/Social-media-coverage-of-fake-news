@@ -4,6 +4,8 @@ import requests
 import json
 import os
 import time
+import praw
+
 
 # configuration
 DEBUG = True
@@ -11,6 +13,8 @@ DEBUG = True
 # instantiate the app
 app = Flask(__name__)
 app.config.from_object(__name__)
+app.config['TESTING'] = True
+
 
 # enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
@@ -61,10 +65,24 @@ def connect_to_endpoint(url, headers):
 def showinfo():
     d = request.json
     print(d)
+
+    #Reddit API call, time displayed in unix
+
+    reddit = praw.Reddit(
+    client_id="UK5XRgvcO7C2cQ",
+    client_secret="9OIo7S6kOBLlQZadOlo5miG0A9OC4g",
+    user_agent="my user agent")
+
+    reddit_data = []
+
+    for submission in reddit.subreddit("all").search(d["query"], limit=100):
+       reddit_data.append({"title": str(submission.title), "update_ratio": str(submission.upvote_ratio), "upvotes": str(submission.ups),
+       "url": str(submission.url), "created_at": str(submission.created_utc), "subreddit": str(submission.subreddit), "number_of_comments": str(submission.num_comments)})
+    
+       
     #Create the token to get acess to the Twitter 
     bearer_token = auth()
     headers = create_headers(bearer_token)
-
 
 
     #API call to get back a dictionary with 10 api call without any duplicates
@@ -81,34 +99,26 @@ def showinfo():
 
     json_response["data"] = sorted(json_response["data"], key = lambda i: i['public_metrics']["retweet_count"],reverse=True)
 
-    user_ids = extract_usernames(json_response)
-    url_users_ids = create_users_url(user_ids)
-    json_response3 = connect_to_endpoint(url_users_ids, headers)
-        
-    for i in range(99):
-        json_response3["data"][i]["public_metrics_user"] = json_response3["data"][i].pop("public_metrics")
-        json_response["data"][i].update(json_response3["data"][i])
+    json_response3 = extract_usernames(json_response, headers)
     
-    
-    #Create Barchart and LineChart from json_response
+    for i in range(len(json_response["data"])):
+        json_response3[i]["public_metrics_user"] = json_response3[i].pop("public_metrics")
+        json_response["data"][i].update(json_response3[i])
+   
+
+    #Create all of the data that is going to be displayed in the frontend from the json_response
+    alldata = json_response["data"].copy()
     barchart = create_barchart(json_response)
     linechart = create_linechart(json_response)
     topposts = create_topposts(json_response)
     topusers = create_topusers(json_response)
     activity = create_activity(json_response)
+    geochart = create_geochart(json_response)
+    
      
-    json_response["data"] = {d["query"]: {"barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, "activity": activity}}
+    json_response["data"] = {d["query"]: {"alldata": alldata, "barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, "activity": activity, "geochart": geochart, "reddit": reddit_data}}
     
     return json.dumps(json_response)
-
-def extract_usernames(json_response):
-    author_id_list = []
-    tweet_dict = json_response["data"]
-    for i in range(99):
-        author_id_list.append(tweet_dict[i]["author_id"])
-
-    joined_string = ",".join(author_id_list)
-    return joined_string
 
 
 #The fuction api_caller is a fuction that is used to call the api 10 times and add the responses to the json_response
@@ -125,11 +135,11 @@ def api_caller(query, headers):
             if item["id"] not in json_response["data"]:
                 json_response["data"].append(item)
         
-        time.sleep(1)
+        time.sleep(2)
         count += 1
         print ("tick")
 
-        if count == 1:
+        if count == 2:
             count = 0
             break
 
@@ -168,6 +178,44 @@ def extract_retweets(json_response):
                         break
     joined_string = ",".join(id_list)
     return joined_string
+
+def extract_usernames(json_response, headers):
+    author_id_list = []
+    tweet_dict = json_response["data"]
+
+    for i in range(len(tweet_dict)):
+        author_id_list.append(tweet_dict[i]["author_id"])
+ 
+    url_list = []
+    for i in range(0, len(author_id_list), 100):
+        chunk = author_id_list[i:i + 100]
+        joined_string = ",".join(chunk)
+        url_users_ids = create_users_url(joined_string)
+        url_list.append(url_users_ids)
+
+    time.time()
+    count = 0
+    json_response2 = connect_to_endpoint(url_list[0], headers)
+    
+    while True: 
+        for i in range(len(url_list)-1):
+            api_call = connect_to_endpoint(url_list[i+1], headers)
+            for item in api_call["data"]:
+                json_response2["data"].append(item)
+
+        time.sleep(1)
+        count += 1
+        print("tiktok")
+        if count == len(url_list)-1:
+            count = 0
+            break
+        
+
+
+    return json_response2["data"]
+
+
+
 
 #Function to extract the total likes, retweets, replies and quotes. The API return the total retweets of the original tweet is a user has retweeted it.
 #So the function does not count the retweets of a retweet. Only the retweets of the orignal tweet
@@ -209,9 +257,7 @@ def create_linechart(json_response):
         allDates[i] = allDates[i].replace(".000Z", "")
 
     allDates.sort() 
-    print(len(allDates))
     allDates = allDates[6:]
-    print(len(allDates))
 
     for i in range(len(allDates)):
         finalDates.append([allDates[i],i+1])
@@ -268,7 +314,6 @@ def create_topusers(json_response):
     tweets = json_response["data"]
     topusers = []
     for i in range(len(tweets)):
-        if tweets[i]['username'] not in topusers:
             topusers.append({"username": tweets[i]["username"], "img": tweets[i]["profile_image_url"], "followers": tweets[i]['public_metrics_user']["followers_count"], "verified": tweets[i]["verified"]})
             if len(topusers) == 9:
                 break
@@ -306,6 +351,21 @@ def create_activity(json_response):
 
     return activity
 
+def create_geochart(json_response):
+    geochart = {}
+    tweets = json_response["data"]
+    for tweet in tweets:
+        if "location" in tweet:
+            if tweet["location"] not in geochart:
+                geochart[tweet["location"]]=1
+            else:
+                geochart[tweet["location"]] += 1
+    return geochart
+
+
+
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
+
+"export FLASK_DEBUG=ON"

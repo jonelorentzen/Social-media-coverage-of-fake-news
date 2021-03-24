@@ -6,7 +6,7 @@
         </div>
 
         <div class="chart-container">
-        <area-chart :data="listdata" :colors="['#l00']" xtitle="Tweeted at" ytitle="Cumulative Tweets"></area-chart>
+        <line-chart :data="listdata" :colors="['#000000']" xtitle="Tweeted at" ytitle="Cumulative Tweets"></line-chart>
         </div>
 
     </div>
@@ -16,8 +16,8 @@
 <script>
 
 export default {
-    name:"LineChart",
-    props: ['listdata']
+    props: ['listdata'],
+    
 }
 </script>
 
