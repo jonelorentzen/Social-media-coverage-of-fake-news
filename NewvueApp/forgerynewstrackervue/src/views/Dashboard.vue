@@ -20,6 +20,7 @@
     <BarChart class="dashboard-comp" id="Barchart" :listdata='BarChartData'/>
     </div>
     
+    <GeoChart/>
     
     <div class="Post_user_container">
         
@@ -29,13 +30,7 @@
         
         <mostinfluentialusers class="dashboard-comp insight" :listdata='TopUsersData'/>
 
-  
     </div>
-
-    
- 
-  
-
   </div>
 </template>
 
@@ -45,7 +40,7 @@
 //Alle delene på komponentene skal ha grid-column: span 12 / auto;
 
 import BarChart from '../components/BarChart'
-import LineChart from '../components/LineChart'
+import LineChart from '../components/LineChartComponent'
 
 import SearchList from '../components/SearchList.vue';
 
@@ -53,6 +48,7 @@ import topPosts from '../components/Topposts'
 import mostinfluentialusers from '../components/MostInfluentialUsers'
 import Trackerheader from "../components/Trackerheader"
 import Engagement from "../components/Engagement"
+import GeoChart from "../components/GeoChartComponent"
 
 
 
@@ -66,7 +62,9 @@ export default {
     topPosts,
     mostinfluentialusers,
     Trackerheader,
-    Engagement
+    Engagement,
+    GeoChart
+    
     
 
   },

@@ -1,6 +1,4 @@
 <template>
-    
-    
     <div class="mostinfluentialcontainer">
        
       <div class="influencercontainer" v-for="(user, index) in topUsers" v-bind:key="index">
@@ -22,15 +20,8 @@
         </div>
       </div>
     </div>
-
-      
-
     </div>
     
-
-   
-   
- 
 </template>
 
 <script>
@@ -115,15 +106,6 @@ img{
 
 .twitter-icon{
   color: #00acee;
-}
-
-
-.influential-posts-container{  
-  width: 660px;
-  height: 528px;
-  position: relative;
-  margin:0 auto;
-  line-height: 1.4em;
 }
 
 .post-wrapper{

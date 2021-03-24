@@ -14,7 +14,6 @@ export default createStore({
   mutations: {
     SetTweets(state, response){
       state.tweets = response
-
     },
 
     SetBarChartList(state, barchart) {
@@ -63,33 +62,18 @@ export default createStore({
         let response = await api.getMessages(searchValue);
         console.log(response.data)
 
-        console.log(response.data[searchValue]["barchart"])
-        console.log(response.data[searchValue]["linechart"])
-        console.log(response.data[searchValue]["topposts"])
-        
-        console.log(response.data[searchValue]["topposts"][0]["username"])
-        
-        console.log(response.data[searchValue]["topusers"])
-        console.log(response.data[searchValue]["topusers"][0])
-        
-        console.log(response.data[searchValue]["activity"])
-
         state.commit("SetTweets", response);
-
         state.commit("SetBarChartList", response);
         state.commit("SetLineChartList", response);
-        console.log("done")
-
+  
         state.commit("SetBarChartList", response.data[searchValue]["barchart"]);
         state.commit("SetLineChartList", response.data[searchValue]["linechart"]);
         state.commit("SetTopPosts", response.data[searchValue]["topposts"]);
         state.commit("SetTopUsers", response.data[searchValue]["topusers"]);
         state.commit("SetActivity", response.data[searchValue]["activity"]);
         
+        console.log("done")
         
-        
-        
-
       } catch (err){
         this.commit('error',err)
       }
