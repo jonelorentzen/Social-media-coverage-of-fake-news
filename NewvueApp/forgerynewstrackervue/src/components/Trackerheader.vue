@@ -8,7 +8,7 @@
         </h1>
         </div>
 
-        <div class="trackerheader_filters">
+        <!-- <div class="trackerheader_filters">
             <label class="platformbox">
                 <input type="checkbox" class="twitterchecbox">
                 <img src="../assets/logo.png" class="checkboxpic">
@@ -18,7 +18,7 @@
                 <img src="../assets/logo.png" class="checkboxpic">
             </label>
            
-        </div>
+        </div> -->
     
     </div>
 </template>

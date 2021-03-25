@@ -6,7 +6,6 @@
       Top Posts
     </div>
   <div class="toppostsbox">
-      
         <div class="toppostswrapper">
           <div class="postrow" v-for="(post, index) in topPosts" v-bind:key="index" @click="gotopost(topPosts[index].username, topPosts[index].id)">
             
@@ -46,11 +45,7 @@
 
             
           </div>
-          
-    
     </div>
-
-
   </div>
 
   </div>
@@ -105,9 +100,6 @@ export default {
 }
 
 
-.toppostswrapper{
-  
-}
 .postrow{
   border: 1px solid grey;
   width: 600px;
@@ -125,7 +117,7 @@ export default {
 .profilepicture{
   width: 50px;
   height: 60px;
-  border-radius: 15px;
+  border-radius: 50%;
 }
 
 .profilepicture_container{
@@ -149,8 +141,10 @@ export default {
   display: inline-flex;
  
 }
+
 .retweets{
-color: #00acee;
+  color: #00acee;
+
 }
 
 .likes{

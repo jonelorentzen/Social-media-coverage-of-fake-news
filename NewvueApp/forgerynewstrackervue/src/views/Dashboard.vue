@@ -6,16 +6,11 @@
     
     <Engagement class="dashboard-comp"/>
     
-
-    
     <div class="container_for_linechart">
-
     <LineChart class="dashboard-comp" id="linechart" :listdata='LineChartData'/>
-
     </div>
    
-    
-    
+  
     <div class="container_for_barchart">
     <BarChart class="dashboard-comp" id="Barchart" :listdata='BarChartData'/>
     </div>
@@ -24,10 +19,7 @@
     
     <div class="Post_user_container">
         
-
         <topPosts class="dashboard-comp insight" :listdata='TopPostsData'/>
-       
-        
         <mostinfluentialusers class="dashboard-comp insight" :listdata='TopUsersData'/>
 
     </div>
@@ -38,19 +30,14 @@
 //here we import other components
 
 //Alle delene på komponentene skal ha grid-column: span 12 / auto;
-
 import BarChart from '../components/BarChart'
 import LineChart from '../components/LineChartComponent'
-
 import SearchList from '../components/SearchList.vue';
-
 import topPosts from '../components/Topposts'
 import mostinfluentialusers from '../components/MostInfluentialUsers'
 import Trackerheader from "../components/Trackerheader"
 import Engagement from "../components/Engagement"
 import GeoChart from "../components/GeoChartComponent"
-
-
 
 
 export default {
@@ -65,9 +52,8 @@ export default {
     Engagement,
     GeoChart
     
-    
-
   },
+
    computed:{
     BarChartData() {
       return this.$store.getters.GetBarChartList;
@@ -85,9 +71,6 @@ export default {
       return this.$store.state.searches -1;
     },
   },
-  data(){
-
-  },
 };
 </script>
 
@@ -98,7 +81,6 @@ export default {
       margin-bottom: 20px;
     }
     .insight{
-      
       max-width: 50%;
       
     }
