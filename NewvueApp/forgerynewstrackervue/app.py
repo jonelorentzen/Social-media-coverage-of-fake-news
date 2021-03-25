@@ -179,6 +179,9 @@ def extract_retweets(json_response):
     joined_string = ",".join(id_list)
     return joined_string
 
+#Function for extracting all off the usernames and calling the API for every 100 tweet.
+#Returning all of the user data that is missing from the first API call.
+#With this function we get the location and stats like how many followers a user has.xz z
 def extract_usernames(json_response, headers):
     author_id_list = []
     tweet_dict = json_response["data"]
@@ -210,11 +213,7 @@ def extract_usernames(json_response, headers):
             count = 0
             break
         
-
-
     return json_response2["data"]
-
-
 
 
 #Function to extract the total likes, retweets, replies and quotes. The API return the total retweets of the original tweet is a user has retweeted it.
@@ -362,8 +361,6 @@ def create_geochart(json_response):
             else:
                 geochart[tweet["location"]] += 1
     return geochart
-
-
 
 
 if __name__ == '__main__':

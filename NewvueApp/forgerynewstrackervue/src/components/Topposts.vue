@@ -1,9 +1,5 @@
 <template>
-
-
-
   <div class="toppostsbox">
-      
         <div class="toppostswrapper">
           <div class="postrow" v-for="(post, index) in topPosts" v-bind:key="index">
             <div class="profilepicture_container">
@@ -20,7 +16,7 @@
                     <strong>@{{topPosts[index].username}}</strong>
                   </p>
   
-                  <p>{{topPosts[index]["date"]}}</p>
+                  <p class="date">{{topPosts[index]["date"]}}</p>
                 </div>
 
                 <div class="post_engagement">
@@ -38,14 +34,8 @@
               </p>
             
             </div>
-
-
           </div>
-          
-    
     </div>
-
-
   </div>
     
 
@@ -79,9 +69,6 @@ export default {
 }
 
 
-.toppostswrapper{
-  
-}
 .postrow{
   border: 1px solid grey;
   width: 600px;
@@ -98,7 +85,7 @@ export default {
 .profilepicture{
   width: 50px;
   height: 60px;
-  border-radius: 15px;
+  border-radius: 50%;
 }
 
 .profilepicture_container{
@@ -118,12 +105,12 @@ export default {
 
 .post_engagement{
   display: flex;
-  
-  position: absolute;
   left: 807px;
 }
+
 .retweets{
-color: #00acee;
+  color: #00acee;
+
 }
 
 .likes{
@@ -148,6 +135,12 @@ color: #00acee;
   text-overflow: ellipsis;
   font-weight: 700;
   color: #44496b;
+}
+
+
+
+.date{
+  padding-left: 10px;
 }
 
 .post_engagement{
