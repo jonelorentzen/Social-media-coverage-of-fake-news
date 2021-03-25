@@ -1,11 +1,16 @@
 <template>
 
 
-
+<div class="entire_container">
+  <div class="header">
+      Top Posts
+    </div>
   <div class="toppostsbox">
       
         <div class="toppostswrapper">
-          <div class="postrow" v-for="(post, index) in topPosts" v-bind:key="index">
+          <div class="postrow" v-for="(post, index) in topPosts" v-bind:key="index" @click="gotopost(topPosts[index].username, topPosts[index].id)">
+            
+           
             <div class="profilepicture_container">
                 <img class="profilepicture" v-bind:src="topPosts[index].img">
               </div>
@@ -20,7 +25,7 @@
                     <strong>@{{topPosts[index].username}}</strong>
                   </p>
   
-                  <p>{{topPosts[index]["date"]}}</p>
+                  <p class="date">{{topPosts[index]["date"]}}</p>
                 </div>
 
                 <div class="post_engagement">
@@ -39,12 +44,14 @@
             
             </div>
 
-
+            
           </div>
           
     
     </div>
 
+
+  </div>
 
   </div>
     
@@ -60,15 +67,34 @@ export default {
         return this.$store.state.TopPosts
       }
     },
-    props:['listdata']
+    props:['listdata'],
+    methods:{
+      gotopost(username, id){
+        window.open(`https://twitter.com/${username}/status/${id}`)
+      }
+    } 
+   
 
 }
 </script>
 
 <style scoped>
 
+.entire_container{
+  display: flex;
+  flex-direction: column;
+}
+.header{
+  display: flex;
+  padding: 10px;
+  font-family: Quicksand,Helvetica,Arial,sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: #26293c;
+}
+
 .toppostsbox{
-  max-width: 50%;
+  
   display: flex;
   justify-content:space-evenly;
   flex-wrap: wrap;
@@ -88,7 +114,8 @@ export default {
   height: 150px;
   margin-bottom: 10px;
   display: flex;
-  padding: 30px;
+  padding: 20px;
+  transition: all 0.3s;
   
 }
 
@@ -118,9 +145,9 @@ export default {
 
 .post_engagement{
   display: flex;
-  
-  position: absolute;
-  left: 807px;
+  font-size: .9em;
+  display: inline-flex;
+ 
 }
 .retweets{
 color: #00acee;
@@ -148,13 +175,13 @@ color: #00acee;
   text-overflow: ellipsis;
   font-weight: 700;
   color: #44496b;
-}
-
-.post_engagement{
-  font-size: .9em;
-  display: inline-flex;
+  margin-right: 10px;
 
 }
+.date{
+  padding-top: 1px;
+}
+
 .post_engagement p{
   margin-left: 5px;
   margin-right: 10px;
@@ -170,6 +197,7 @@ color: #00acee;
   overflow: hidden;
   font-weight: 500;
   color: #8086ae;
+  padding-right: 50px;
 }
 
 

@@ -93,6 +93,10 @@ export default {
 
 
 <style scoped>
+
+    .dashboard-comp{
+      margin-bottom: 20px;
+    }
     .insight{
       
       max-width: 50%;

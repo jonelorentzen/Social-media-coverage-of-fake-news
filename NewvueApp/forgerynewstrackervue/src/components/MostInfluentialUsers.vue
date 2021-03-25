@@ -1,7 +1,10 @@
 <template>
+    <div class="entire_container">
+    <div class="header">
+      Most Influential Users
+    </div>
     <div class="mostinfluentialcontainer">
-       
-      <div class="influencercontainer" v-for="(user, index) in topUsers" v-bind:key="index">
+      <div class="influencercontainer" v-for="(user, index) in topUsers" v-bind:key="index" @click="gotouser(topUsers[index].username)">  
       <div class="influencerwrapper">
         <div class="influencerusernamecontainer">
           <p class="influencername"> <strong>{{user.username}}</strong></p>
@@ -21,6 +24,8 @@
       </div>
     </div>
     </div>
+    </div>
+    
     
 </template>
 
@@ -31,15 +36,30 @@ export default {
       topUsers(){
         return this.$store.state.TopUsers
       }
+    },
+    methods:{
+      gotouser(username){
+        window.open(`https://www.twitter.com/${username}`)
+      }
     }
   
 }
 </script>
 
 <style scoped>
-
+.entire_container{
+  display: flex;
+  flex-direction: column;
+}
+.header{
+  display: flex;
+  padding: 10px;
+  font-family: Quicksand,Helvetica,Arial,sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: #26293c;
+}
 .mostinfluentialcontainer{
-  max-width: 50%;
   display: flex;
   justify-content:space-evenly;
   flex-wrap: wrap;
@@ -56,6 +76,10 @@ export default {
   display: grid;
   
   flex-basis: 33%;
+
+  margin-bottom: 10px;
+
+  transition: all 0.3s;
   
 }
 .influencerwrapper{
