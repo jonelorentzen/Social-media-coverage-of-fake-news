@@ -297,7 +297,7 @@ def create_topposts(json_response):
         if "referenced_tweets" not in tweets[i]:
             date = format_date(tweets[i]["created_at"])
             topposts.append({"author_id": tweets[i]["author_id"], "retweets": tweets[i]['public_metrics']["retweet_count"], "likes": tweets[i]['public_metrics']["like_count"], "text": tweets[i]['text'],
-            "username": tweets[i]["username"], "img": tweets[i]["profile_image_url"], "date": date, "followers": tweets[i]['public_metrics_user']["followers_count"], "verified": tweets[i]["verified"], "id": tweets[i]['id'] })
+            "username": tweets[i]["username"], "img": tweets[i]["profile_image_url"], "date": date, "followers": tweets[i]['public_metrics_user']["followers_count"], "verified": tweets[i]["verified"]})
             if len(topposts) == 3:
                 break
 
