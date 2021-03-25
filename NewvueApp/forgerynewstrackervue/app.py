@@ -25,7 +25,7 @@ def auth():
     return os.environ.get("BEARER_TOKEN")
 
 def create_url(query):
-    tweet_fields = "tweet.fields=public_metrics,created_at,geo,referenced_tweets,text,author_id"
+    tweet_fields = "tweet.fields=public_metrics,created_at,geo,referenced_tweets,text,author_id,id"
     max_results = "max_results=100"
     user_fields = "user.fields=profile_image_url"
     url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}&{}&{}".format(
@@ -44,7 +44,7 @@ def create_id_url(query):
 
 def create_users_url(query):
 
-    user_fields= "user.fields=id,location,name,profile_image_url,public_metrics,username,verified"
+    user_fields= "user.fields=location,name,profile_image_url,public_metrics,username,verified"
     url = "https://api.twitter.com/2/users?ids={}&{}".format(
         query, user_fields
     )
@@ -87,6 +87,7 @@ def showinfo():
 
     #API call to get back a dictionary with 10 api call without any duplicates
     json_response = api_caller(d["query"], headers)
+    print(json_response)
 
     # New call to the the Twitter API that uses the ID of the retweeted tweets and adds the data of the original tweets to the dictionary
     #The create_id_url creates the url that is used to call the api with.
@@ -103,6 +104,7 @@ def showinfo():
     
     for i in range(len(json_response["data"])):
         json_response3[i]["public_metrics_user"] = json_response3[i].pop("public_metrics")
+        json_response3[i]["author_id"] = json_response3[i].pop("id")
         json_response["data"][i].update(json_response3[i])
    
 
