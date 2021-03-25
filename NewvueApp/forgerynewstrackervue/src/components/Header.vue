@@ -21,7 +21,7 @@
                                 Help
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#">FAQ</a></li>
+                                <li><a class="dropdown-item" @click="gotoFAQ()">FAQ</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="#">Tutorial</a></li>
                             </ul>
@@ -44,6 +44,9 @@ export default {
       },
       gotoABOUTus(){
         this.$router.push('/about')
+      },
+       gotoFAQ(){
+        this.$router.push('/faq')
       },
     }
     

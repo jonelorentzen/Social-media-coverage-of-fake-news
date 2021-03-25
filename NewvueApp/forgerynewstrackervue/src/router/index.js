@@ -6,6 +6,7 @@ import { createRouter } from 'vue-router';
 // import Start from '../views/Start.vue';
 import Dashboard from '../views/Dashboard.vue';
 import About from '../views/About.vue';
+import FAQ from '../views/FAQ.vue';
 
 // here we create our routes
 export default createRouter({
@@ -34,6 +35,11 @@ export default createRouter({
     path: '/about',
     name: 'About',
     component: About
+  },
+  {
+   path: '/faq',
+    name: 'faq',
+    component: FAQ
   }
 
   ]
