@@ -1,13 +1,35 @@
 <template>
-    <div>
-        <geo-chart :data="{'Germany': 23, 'Brazil': 22, 'India': 100}"></geo-chart>
+    <div class="geochart-box">
+
+    <div class="geochart-container">
+        <geo-chart :data="barchart"></geo-chart>
+    </div>
     </div>
 </template>
 
 <script>
 
 export default {
+    name: "geochart",
+    computed: {
+      barchart(){
+        return this.$store.state.GeoChartDict
+      },}
     
 }
 </script>
+
+<style scoped>
+.geochart-box{
+    align-items: center;
+    
+    
+}
+.geochart-container{
+    border: 1px solid #dddfea;
+    
+
+}
+
+</style>
 

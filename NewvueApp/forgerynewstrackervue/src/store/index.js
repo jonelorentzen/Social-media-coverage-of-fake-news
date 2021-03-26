@@ -7,6 +7,7 @@ export default createStore({
     tweets: [],
     BarChartList: [],
     LineChartList: [],
+    GeoChartDict: {},
     TopPosts: [],
     TopUsers: [],
     activity: {},
@@ -23,6 +24,10 @@ export default createStore({
    
     SetLineChartList(state, linechart) {
       state.LineChartList = linechart;
+      },
+    
+    SetGeoChartDict(state, geochart) {
+      state.GeoChartDict = geochart;
       },
 
     SetTopPosts(state, topposts) {
@@ -74,6 +79,7 @@ export default createStore({
   
         state.commit("SetBarChartList", response.data[searchValue]["barchart"]);
         state.commit("SetLineChartList", response.data[searchValue]["linechart"]);
+        state.commit("SetGeoChartDict", response.data[searchValue]["geochart"]);
         state.commit("SetTopPosts", response.data[searchValue]["topposts"]);
         state.commit("SetTopUsers", response.data[searchValue]["topusers"]);
         state.commit("SetActivity", response.data[searchValue]["activity"]);
@@ -96,6 +102,7 @@ export default createStore({
   getters: {
     GetBarChartList: state => state.BarChartList,
     GetLineChartList: state => state.LineChartList,
+    GetGeoChartDict: state => state.GeoChartDict,
     getSearchByIndex: (state) => (index) => {return state.searches[index]},
     GetTopPosts: state => state.TopPosts,
     GetTopUsers: state => state.TopUsers,

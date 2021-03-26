@@ -21,6 +21,7 @@
     "chart.js": "^2.9.4",
     "ci": "^2.0.0",
     "core-js": "^3.6.5",
+    "geocoder": "^0.2.3",
     "graphology-types": "^0.19.2",
     "jquery": "^3.6.0",
     "popper.js": "^1.16.1",
