@@ -10,6 +10,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faBullhorn, faComments, faHeart, faHome, faMicrophone, faUser, faUserSecret, faRetweet,  } from '@fortawesome/free-solid-svg-icons'
 import { faFontAwesome, faTwitterSquare, faTwitter} from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import VTooltip from 'v-tooltip'
 
 
 
@@ -33,6 +34,7 @@ Chartkick.configure({language: "en", mapsApiKey: "AIzaSyBFMGWqY_cNwPHVeElwZAulhY
 createApp(App)
   .use(store)
   .use(router)
+  .use(VTooltip)
   .component("fa", FontAwesomeIcon)
   .use(Chartkick.use(Chart))
   .mount("#app");

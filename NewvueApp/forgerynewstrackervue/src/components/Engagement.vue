@@ -3,19 +3,21 @@
 
         <div class="engagement-container">
 
-            <div class="topstats">
+            <div class="topstats" data-bs-toggle="tooltip" data-bs-placement="top" title="The number of posts made with your tracked hashtag, keyword, URL and/or @mention." >
                 <fa icon="comments" size="2x"/>
                 <h1>{{activity.posts}}</h1>
                 <p>Posts</p>
             </div>
+            
+            
 
-            <div class="topstats">
+            <div class="topstats" data-bs-toggle="tooltip" data-bs-placement="top" title="The number of users who have posted with your tracked hashtag, keyword, URL and/or @mention.">
                 <fa icon="user" size="2x"/>
                 <h1>{{activity.users}}</h1>
                 <p>Users</p>
             </div>
 
-            <div class="topstats" >
+            <div class="topstats" data-bs-toggle="tooltip" data-bs-placement="top" title="When someone intentionally interacts with your post, that is considered an engagement. We factor in the following kinds of engagement:Twitter: Retweets + Likes Instagram Professional: Likes + Comments Facebook:  Likes + Comments + Shares" >
                 <fa icon="heart" size="2x"/>
                 <h1 class="display display-">{{activity.engagement}}</h1>
                 <p>Engagement</p>
@@ -70,5 +72,7 @@ export default {
     margin-right: 120px;
 
 }
+
+
 
 </style>
