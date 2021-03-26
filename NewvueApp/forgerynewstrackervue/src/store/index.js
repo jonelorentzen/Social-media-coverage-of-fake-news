@@ -9,7 +9,8 @@ export default createStore({
     LineChartList: [],
     TopPosts: [],
     TopUsers: [],
-    activity: {}
+    activity: {},
+    CurrentQuery: ""
   },
   mutations: {
     SetTweets(state, response){
@@ -36,6 +37,10 @@ export default createStore({
       state.activity = activity;
       },
 
+    SetCurrentQuery(state, query){
+      state.CurrentQuery = query
+    },
+
   
     NEW_SEARCH(state,SearchItem){
       state.searches.push({
@@ -61,6 +66,7 @@ export default createStore({
         let api = new Backendapi();
         let response = await api.getMessages(searchValue);
         console.log(response.data)
+        console.log(searchValue)
 
         state.commit("SetTweets", response);
         state.commit("SetBarChartList", response);
@@ -71,6 +77,8 @@ export default createStore({
         state.commit("SetTopPosts", response.data[searchValue]["topposts"]);
         state.commit("SetTopUsers", response.data[searchValue]["topusers"]);
         state.commit("SetActivity", response.data[searchValue]["activity"]);
+
+        state.commit("SetCurrentQuery", searchValue)
         
         console.log("done")
         

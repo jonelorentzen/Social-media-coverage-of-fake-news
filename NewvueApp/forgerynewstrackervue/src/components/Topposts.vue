@@ -7,7 +7,7 @@
     </div>
   <div class="toppostsbox">
         <div class="toppostswrapper">
-          <div class="postrow" v-for="(post, index) in topPosts" v-bind:key="index" @click="gotopost(topPosts[index].username, topPosts[index].id)">
+          <div class="postrow" v-for="(post, index) in topPosts" v-bind:key="index" @click="gotopost(topPosts[index].username, topPosts[index].tweet_id)">
             
            
             <div class="profilepicture_container">
@@ -83,8 +83,9 @@ export default {
   display: flex;
   padding: 10px;
   font-family: Quicksand,Helvetica,Arial,sans-serif;
-  font-weight: 500;
-  font-size: 16px;
+  font-weight: 900;
+  font-size: 1.25em;
+  line-height: 1.5;
   color: #26293c;
 }
 
