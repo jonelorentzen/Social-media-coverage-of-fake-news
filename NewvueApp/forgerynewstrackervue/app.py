@@ -5,6 +5,7 @@ import json
 import os
 import time
 import praw
+import geocoder
 
 
 # configuration
@@ -201,6 +202,8 @@ def extract_usernames(json_response, headers):
     json_response2 = connect_to_endpoint(url_list[0], headers)
     
     while True: 
+        if len(url_list) == 1:
+            break
         for i in range(len(url_list)-1):
             api_call = connect_to_endpoint(url_list[i+1], headers)
             for item in api_call["data"]:
@@ -208,7 +211,7 @@ def extract_usernames(json_response, headers):
 
         time.sleep(1)
         count += 1
-        print("tiktok")
+        print("tick")
         if count == len(url_list)-1:
             count = 0
             break
@@ -295,7 +298,7 @@ def create_topposts(json_response):
         if "referenced_tweets" not in tweets[i]:
             date = format_date(tweets[i]["created_at"])
             topposts.append({"author_id": tweets[i]["author_id"], "retweets": tweets[i]['public_metrics']["retweet_count"], "likes": tweets[i]['public_metrics']["like_count"], "text": tweets[i]['text'],
-            "username": tweets[i]["username"], "img": tweets[i]["profile_image_url"], "date": date, "followers": tweets[i]['public_metrics_user']["followers_count"], "verified": tweets[i]["verified"]})
+            "username": tweets[i]["username"], "img": tweets[i]["profile_image_url"], "date": date, "followers": tweets[i]['public_metrics_user']["followers_count"], "verified": tweets[i]["verified"], "id": tweets[i]["id"]})
             if len(topposts) == 3:
                 break
 
@@ -352,14 +355,30 @@ def create_activity(json_response):
     return activity
 
 def create_geochart(json_response):
-    geochart = {}
+    all_locations = []
     tweets = json_response["data"]
     for tweet in tweets:
         if "location" in tweet:
-            if tweet["location"] not in geochart:
-                geochart[tweet["location"]]=1
-            else:
-                geochart[tweet["location"]] += 1
+            all_locations.append(tweet["location"])
+            if len(all_locations) == 99:
+                break
+ 
+    all_countries = []
+    g = geocoder.mapquest(all_locations, method='batch', key="Ff3PLy45wynCccYccou0rfAAPICKkznC")
+    for result in g:
+        all_countries.append(str(result.country))
+        
+    
+    geochart = dict((x,all_countries.count(x)) for x in set(all_countries))
+
+    # all_countries = []
+    # g = geocoder.bing(all_locations, method='batch_reverse', key="AqcxdNzZ8kzbAdu6-q3McqsTRC3qsc2CjNAkwIxfVMPj8mhEqppdBE7GUL3OKS0n")
+    # for result in g:
+    #     all_countries.append(str(result.country))
+    #     print(result.country)
+
+    # geochart = dict((x,all_countries.count(x)) for x in set(all_countries))
+
     return geochart
 
 

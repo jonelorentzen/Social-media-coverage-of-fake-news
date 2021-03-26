@@ -15,8 +15,10 @@
     <BarChart class="dashboard-comp" id="Barchart" :listdata='BarChartData'/>
     </div>
     
-    <GeoChart/>
-    
+    <div class="container_for_geochart">
+    <GeoChart id="Geochart" :listdata='GeoChartData'/>
+    </div>
+
     <div class="Post_user_container">
         
         <topPosts class="dashboard-comp insight" :listdata='TopPostsData'/>
@@ -61,6 +63,9 @@ export default {
     LineChartData() {
       return this.$store.getters.GetLineChartList;
     },
+    GeoChartData() {
+      return this.$store.getters.GetBarChartDict;
+    },
     TopPostsData() {
       return this.$store.getters.GetTopPosts;
     },
@@ -103,6 +108,8 @@ export default {
       display: flex;
       justify-content: space-between;
     }
+
+
 
 
 </style>
