@@ -33,8 +33,9 @@ export default {
     display: flex;
 }
 .chartheader h3{
-    font-size: 1.1em;
-    line-height: 1.25;
+    font-weight: 900;
+    font-size: 1.25em;
+    line-height: 1.5;
 }
 .chart-container{
     border: 1px solid #dddfea;

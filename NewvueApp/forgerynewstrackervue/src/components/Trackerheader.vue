@@ -2,9 +2,10 @@
     <div class="trackerheader_wrapper">
         
         <div class="trackerheader_title">
-        <p>Real Time Tracker:</p>     
+          
         <h1 class="display-1">
-            <strong>"TRACKER"</strong>
+            Real Time Tracker:
+            <strong>{{query}}</strong>
         </h1>
         </div>
 
@@ -27,14 +28,50 @@
 
 
 export default {
-    name: "Trackerheader"
+    name: "Trackerheader",
+
+    computed: {
+        query(){
+            return this.$store.state.CurrentQuery;
+        }
+    }
 
 }
 </script>
 
 <style scoped>
 
+.display-1{
+margin: 0;
+max-width: 100%;
+overflow: hidden;
+-o-text-overflow: ellipsis;
+text-overflow: ellipsis;
+white-space: nowrap;
+padding-right: .5em;
+font-size: .8rem;
+color: #bec1d6;
+font-family: Quicksand,Helvetica,Arial,sans-serif;
+font-weight: 700;
+text-transform: uppercase;
+line-height: 1.25;
+margin-top: .35em;
+}
 
+
+.display-1 strong{
+font-weight: 900;
+display: block;
+font-size: 2.75rem;
+line-height: 1.25;
+color: #26293c;
+text-transform: none;
+font-family: tiempos headline,Georgia,times new roman,Times,serif;
+overflow: hidden;
+-o-text-overflow: ellipsis;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
 
 .trackerheader_title{
     float: left;
