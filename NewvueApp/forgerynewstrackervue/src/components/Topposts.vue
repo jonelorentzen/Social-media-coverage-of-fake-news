@@ -7,7 +7,7 @@
     </div>
   <div class="toppostsbox">
         <div class="toppostswrapper">
-          <div class="postrow" v-for="(post, index) in topPosts" v-bind:key="index" @click="gotopost(topPosts[index].username, topPosts[index].tweet_id)">
+          <div class="postrow" v-for="(post, index) in topPosts" v-bind:key="index" @click="gotopost(topPosts[index].username, topPosts[index].id)">
             
            
             <div class="profilepicture_container">

@@ -74,9 +74,6 @@ export default createStore({
         console.log(searchValue)
 
         state.commit("SetTweets", response);
-        state.commit("SetBarChartList", response);
-        state.commit("SetLineChartList", response);
-  
         state.commit("SetBarChartList", response.data[searchValue]["barchart"]);
         state.commit("SetLineChartList", response.data[searchValue]["linechart"]);
         state.commit("SetGeoChartDict", response.data[searchValue]["geochart"]);
@@ -85,7 +82,7 @@ export default createStore({
         state.commit("SetActivity", response.data[searchValue]["activity"]);
 
         state.commit("SetCurrentQuery", searchValue)
-        
+         
         console.log("done")
         
       } catch (err){
