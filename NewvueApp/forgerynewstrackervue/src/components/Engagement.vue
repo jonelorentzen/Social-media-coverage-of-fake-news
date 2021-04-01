@@ -1,30 +1,63 @@
 <template>
-    <div class="engagement-wrapper">
-
+    <div>
+    <div class="engagement-wrapper" v-show="listdata1.query != '' && listdata2.query == ''">
         <div class="engagement-container">
 
             <div class="topstats" data-bs-toggle="tooltip" data-bs-placement="top" title="The number of posts made with your tracked hashtag, keyword, URL and/or @mention." >
                 <fa icon="comments" size="2x"/>
-                <h1>{{activity.posts}}</h1>
+                    <h1>{{listdata1.activity.posts}}</h1>
                 <p>Posts</p>
             </div>
             
-            
-
             <div class="topstats" data-bs-toggle="tooltip" data-bs-placement="top" title="The number of users who have posted with your tracked hashtag, keyword, URL and/or @mention.">
                 <fa icon="user" size="2x"/>
-                <h1>{{activity.users}}</h1>
+                <h1>{{listdata1.activity.users}}</h1>
                 <p>Users</p>
             </div>
 
-            <div class="topstats" data-bs-toggle="tooltip" data-bs-placement="top" title="When someone intentionally interacts with your post, that is considered an engagement. We factor in the following kinds of engagement:Twitter: Retweets + Likes Instagram Professional: Likes + Comments Facebook:  Likes + Comments + Shares" >
+            <div class="topstats" data-bs-toggle="tooltip" data-bs-placement="top" title="When someone intentionally interacts with your post, that is considered an engagement. We factor in the following kinds of engagement:Twitter: Retweets + Likes" >
                 <fa icon="heart" size="2x"/>
-                <h1 class="display display-">{{activity.engagement}}</h1>
+                <h1 class="display display-">{{listdata1.activity.engagement}}</h1>
                 <p>Engagement</p>
             </div>
-
         </div>
+    </div>
 
+    <div class="engagement-wrapper" v-show="listdata1.query != '' && listdata2.query != ''">
+        <div class="engagement-container">
+
+            <div class="topstats" data-bs-toggle="tooltip" data-bs-placement="top" title="The number of posts made with your tracked hashtag, keyword, URL and/or @mention." >
+                <fa icon="comments" size="2x"/>
+            <div class="stats">
+                    <h3>{{listdata1.activity.posts}}</h3>
+                    <h5>&nbsp;vs&nbsp;</h5> 
+                    <h3>{{listdata2.activity.posts}}</h3>
+            </div>
+                
+                <p>Posts</p>
+            </div>
+            
+            <div class="topstats" data-bs-toggle="tooltip" data-bs-placement="top" title="The number of users who have posted with your tracked hashtag, keyword, URL and/or @mention.">
+                <fa icon="user" size="2x"/>
+                 <div class="stats">
+                    <h3>{{listdata1.activity.users}}</h3>
+                    <h5>&nbsp;vs&nbsp;</h5> 
+                    <h3>{{listdata2.activity.users}}</h3>
+                </div>
+                <p>Users</p>
+            </div>
+
+            <div class="topstats" data-bs-toggle="tooltip" data-bs-placement="top" title="When someone intentionally interacts with your post, that is considered an engagement. We factor in the following kinds of engagement:Twitter: Retweets + Likes" >
+                <fa icon="heart" size="2x"/>
+                 <div class="stats">
+                    <h3>{{listdata1.activity.engagement}}</h3>
+                    <h5>&nbsp;vs&nbsp;</h5> 
+                    <h3>{{listdata2.activity.engagement}}</h3>
+                </div>
+                <p>Engagement</p>
+            </div>
+        </div>
+    </div>
     </div>
 </template>
 
@@ -32,11 +65,8 @@
 
 export default {
     name: "activity",
-    computed: {
-      activity(){
-        return this.$store.state.activity
-      },
-    }
+    props:['listdata1', 'listdata2'],
+    
 }
 </script>
 
@@ -63,6 +93,8 @@ export default {
 
 }
 
+
+
 .topstats{
     width: 100px;
     height: 70px;
@@ -72,7 +104,14 @@ export default {
     margin-right: 120px;
 
 }
-
+.stats{
+    
+    width: 100px;
+    display: inline-flex;
+    align-items: center;
+    line-height: 10px; 
+    
+}
 
 
 </style>

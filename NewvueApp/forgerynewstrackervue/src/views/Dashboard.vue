@@ -13,6 +13,7 @@
   
     <div class="container_for_barchart">
     <BarChart class="dashboard-comp" id="Barchart" :listdata='BarChartData'/>
+  
     </div>
     
     <div class="container_for_geochart">
@@ -58,7 +59,8 @@ export default {
 
    computed:{
     BarChartData() {
-      return this.$store.getters.GetBarChartList;
+      return this.$store.getters.GetBarChartList[0];
+    
     },
     LineChartData() {
       return this.$store.getters.GetLineChartList;

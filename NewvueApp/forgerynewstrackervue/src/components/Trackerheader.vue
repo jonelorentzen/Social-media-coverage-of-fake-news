@@ -5,7 +5,7 @@
           
         <h1 class="display-1">
             Real Time Tracker:
-            <strong>{{query}}</strong>
+            <strong>{{listdata}} <span v-show="listdata2.length !== 0"> vs </span> {{listdata2}}</strong>
         </h1>
         </div>
 
@@ -29,13 +29,7 @@
 
 export default {
     name: "Trackerheader",
-
-    computed: {
-        query(){
-            return this.$store.state.CurrentQuery;
-        }
-    }
-
+    props:['listdata', 'listdata2'],
 }
 </script>
 

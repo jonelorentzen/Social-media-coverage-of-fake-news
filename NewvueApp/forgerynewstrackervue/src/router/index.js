@@ -5,6 +5,7 @@ import Yourtrackers from '../views/Yourtrackers.vue';
 import { createRouter } from 'vue-router';
 // import Start from '../views/Start.vue';
 import Dashboard from '../views/Dashboard.vue';
+import Dashboard2 from '../views/Dashboard2.vue';
 import About from '../views/About.vue';
 import FAQ from '../views/FAQ.vue';
 
@@ -27,9 +28,14 @@ export default createRouter({
     component: Yourtrackers
   },
   {
-    path: '/dashboard',
+    path: '/dashboardONHOLD',
     name: 'Dashboard',
     component: Dashboard
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard2',
+    component: Dashboard2
   },
   {
     path: '/about',

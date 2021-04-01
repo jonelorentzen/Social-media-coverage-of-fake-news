@@ -7,7 +7,7 @@
                 <td>{{title.title}}</td> 
                 <br>
                 <div :class="{'active': title.active}" class="toggle_container">
-                    <toggle-switch :searchIndex="index" @change="triggerToggleEvent"/>
+                    <toggle-switch :searchIndex="index"/>
                 </div>
             </tr>
         </table>
@@ -28,18 +28,7 @@ export default {
         titles(){
             return this.$store.state.searches;
         }
-    },
-    data(){
-        return{
-            toggleActive: false
-        }
-    },
-    methods: {
-        triggerToggleEvent(value) {
-            this.toggleActive = value;
-        }
-    },
-    
+    },  
 };
 </script>
 

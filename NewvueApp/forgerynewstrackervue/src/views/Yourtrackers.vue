@@ -24,22 +24,18 @@
             <button class="btn btn-primary" @click="gotoPage();">See results on DashBoard</button>
             
         </div>
-
+ 
     </div>
 </template>
 
 <script>
 //here we import other components
-// import SearchBox from '../components/SearchBox.vue';
-// import store from '../store/index.js';
 import SearchList from '../components/SearchList.vue';
-
 
 export default {
     name: 'Home',
     components: {
         SearchList,
-
     },
     data() {
         return {
@@ -56,16 +52,15 @@ export default {
             if (text == "") {
                 var option = dropValueElement.options[dropValueElement.selectedIndex].text
                 this.$store.dispatch('addNewSearch',option)
-                // this.$store.dispatch("getResult", option, this.active)
+                this.$store.dispatch("getResult", option)
                 this.searchValue = "";
                 option = "";
 
             } else {
                 text = this.searchValue
                 this.$store.dispatch('addNewSearch',text)
-                // this.$store.dispatch("getResult", text, this.active)
+                this.$store.dispatch("getResult", text)
                 this.searchValue = "";
-
             }
         },
         getResult(){
@@ -74,11 +69,7 @@ export default {
         gotoPage() {
         this.$router.push('/Dashboard');
         },
-
     },
-
-
-
   };
 
 </script>

@@ -4,16 +4,16 @@
       Most Influential Users
     </div>
     <div class="mostinfluentialcontainer">
-      <div class="influencercontainer" v-for="(user, index) in topUsers" v-bind:key="index" @click="gotouser(topUsers[index].username)">  
+      <div class="influencercontainer" v-for="(user, index) in listdata" v-bind:key="index" @click="gotouser(listdata[index].username)">  
       <div class="influencerwrapper">
         <div class="influencerusernamecontainer">
-          <p class="influencername"> <strong>{{user.username}}</strong></p>
+          <p class="influencername"> <strong>{{listdata[index].username}}</strong></p>
           <fa class="twitter-icon" :icon="['fab', 'twitter']"></fa>
         </div>
         <div class="influencerinfo_wrapper">
                  
           <div class="influencerfollowercount_container">
-            <p>{{user.followers}} Followers</p> 
+            <p>{{listdata[index].followers}} Followers</p> 
           </div>
           
           <div class="influencerfollowingcount_container">
@@ -32,11 +32,7 @@
 <script>
 export default {
     name: "topUsers",
-    computed: {
-      topUsers(){
-        return this.$store.state.TopUsers
-      }
-    },
+    props:['listdata'],
     methods:{
       gotouser(username){
         window.open(`https://www.twitter.com/${username}`)

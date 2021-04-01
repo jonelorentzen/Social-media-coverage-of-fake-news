@@ -23,6 +23,7 @@
     "core-js": "^3.6.5",
     "geocoder": "^0.2.3",
     "graphology-types": "^0.19.2",
+    "highcharts": "^9.0.1",
     "jquery": "^3.6.0",
     "popper.js": "^1.16.1",
     "postcss": "^8.2.8",

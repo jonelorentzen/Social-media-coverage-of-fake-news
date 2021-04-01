@@ -6,6 +6,7 @@ import os
 import time
 import praw
 import geocoder
+from datetime import datetime
 
 
 # configuration
@@ -26,7 +27,7 @@ def auth():
     return os.environ.get("BEARER_TOKEN")
 
 def create_url(query):
-    tweet_fields = "tweet.fields=public_metrics,created_at,geo,referenced_tweets,text,author_id,id"
+    tweet_fields = "tweet.fields=public_metrics,created_at,geo,referenced_tweets,text,author_id,id,in_reply_to_user_id"
     max_results = "max_results=100"
     user_fields = "user.fields=profile_image_url"
     url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}&{}&{}".format(
@@ -36,7 +37,7 @@ def create_url(query):
 
 def create_id_url(query):
    
-    tweet_fields = "tweet.fields=public_metrics,created_at,geo,lang,referenced_tweets,text,author_id"
+    tweet_fields = "tweet.fields=public_metrics,created_at,geo,lang,referenced_tweets,text,author_id,in_reply_to_user_id"
     user_fields = "user.fields=profile_image_url"
     url = "https://api.twitter.com/2/tweets?ids={}&{}&{}".format(
         query, tweet_fields, user_fields
@@ -88,8 +89,6 @@ def showinfo():
 
     #API call to get back a dictionary with 10 api call without any duplicates
     json_response = api_caller(d["query"], headers)
-    print(json_response)
-
     # New call to the the Twitter API that uses the ID of the retweeted tweets and adds the data of the original tweets to the dictionary
     #The create_id_url creates the url that is used to call the api with.
     ids = extract_retweets(json_response)
@@ -117,9 +116,14 @@ def showinfo():
     topusers = create_topusers(json_response)
     activity = create_activity(json_response)
     geochart = create_geochart(json_response)
+    links = create_links(json_response)
+    nodes = create_nodes(links)
+
+    
     
      
-    json_response["data"] = {d["query"]: {"alldata": alldata, "barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, "activity": activity, "geochart": geochart, "reddit": reddit_data}}
+    json_response["data"] = {d["query"]: {"alldata": alldata, "barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, 
+    "activity": activity, "geochart": geochart, "reddit": reddit_data, "query": d["query"], "nodes": nodes, "links": links }}
     
     return json.dumps(json_response)
 
@@ -251,7 +255,8 @@ def create_barchart(json_response):
 def create_linechart(json_response):
     tweets = json_response["data"]
     allDates = []
-    finalDates = []
+    finalDates = {}
+    
       
     for i in range(len(tweets)):
         element = tweets[i]["created_at"]
@@ -261,10 +266,12 @@ def create_linechart(json_response):
         allDates[i] = allDates[i].replace(".000Z", "")
 
     allDates.sort() 
-    allDates = allDates[6:]
+    allDates = allDates[7:]
 
     for i in range(len(allDates)):
-        finalDates.append([allDates[i],i+1])
+        finalDates[allDates[i]]=i+1
+
+    
           
     return finalDates
 
@@ -356,6 +363,37 @@ def create_activity(json_response):
 
     return activity
 
+def create_links(json_response):
+    nodes = []
+    tweets = json_response["data"]
+    for i in range(len(tweets)):
+        if "referenced_tweets" in tweets[i]:
+            if tweets[i]['referenced_tweets'][0]["type"] == "retweeted":
+                text = tweets[i]['text']
+                idxAt = text.find('@')
+                idxCo = text.find(':')
+                nodes.append({'source': text[idxAt+1:idxCo], 'target': tweets[i]['username']})
+
+            elif tweets[i]['referenced_tweets'][0]["type"] == "replied_to":
+                text = tweets[i]['text']
+                idxAt = text.find('@')
+                idxS = text.find(' ')
+                nodes.append({'source': text[idxAt+1:idxS], 'target': tweets[i]['username']})
+                     
+    return nodes
+
+def create_nodes(links):
+    nodes = []
+    for i in range(len(links)):
+        if links[i]['source'] not in nodes:
+            nodes.append(links[i]['source'])
+        if links[i]['target'] not in nodes:
+            nodes.append(links[i]['target'])
+
+    return nodes
+        
+
+
 def create_geochart(json_response):
     all_locations = []
     tweets = json_response["data"]
@@ -366,7 +404,8 @@ def create_geochart(json_response):
                 break
  
     all_countries = []
-    g = geocoder.mapquest(all_locations, method='batch', key="Ff3PLy45wynCccYccou0rfAAPICKkznC")
+   
+    g = geocoder.mapquest(all_locations, method='batch', key="DW8AsY8QcWjfHn5wzHK769LT4LwAK0l6")
     for result in g:
         all_countries.append(str(result.country))
         
