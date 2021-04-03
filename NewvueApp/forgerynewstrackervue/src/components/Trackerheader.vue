@@ -5,7 +5,7 @@
           
         <h1 class="display-1">
             Real Time Tracker:
-            <strong>{{listdata}} <span v-show="listdata2.length !== 0"> vs </span> {{listdata2}}</strong>
+            <strong><span style="float:left">{{listdata}}</span> <span v-show="listdata2.length !== 0"> vs </span> <span style="float:right">{{listdata2}}</span></strong>
         </h1>
         </div>
 

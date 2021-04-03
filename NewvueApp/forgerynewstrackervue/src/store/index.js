@@ -22,6 +22,7 @@ export default createStore({
     DisplayTweet(state, index){
       state.tweets.push(state.allTweets[index]);
       state.searchesIndexInTweets[index] = state.tweets.length-1
+      console.log(state.tweets)
     },
 
     RemoveTweets(state, index){
@@ -37,11 +38,12 @@ export default createStore({
       state.searches.push({
         title: SearchItem,
         active: false,
+        loaded: false,
       })
     },
 
-    loading(){
-      console.log("loading")
+    loading(state,index){
+      state.searches[index].loaded = true
     },
 
     searchItemActive(state, index){
@@ -54,9 +56,11 @@ export default createStore({
     addNewSearch({commit}, SearchItem){
       commit("NewSearch",SearchItem);
     },
-
-    async getResult(state, searchValue) {
-      this.commit('loading')
+    loading({commit},index){
+      commit('loading',index)
+    },
+    async getResult(state, searchValue,) {
+      
       try{
         let api = new Backendapi();
         let response = await api.getMessages(searchValue);
@@ -64,7 +68,7 @@ export default createStore({
         
         state.commit("SetTweets", response.data[searchValue]);
         
-        console.log("done")
+        //set loading screen
         
       } catch (err){
         this.commit('error',err)

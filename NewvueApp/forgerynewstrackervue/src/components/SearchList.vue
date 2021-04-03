@@ -6,6 +6,7 @@
 
                 <td>{{title.title}}</td> 
                 <br>
+                    <div v-if="title.loaded">DONE!</div>
                 <div :class="{'active': title.active}" class="toggle_container">
                     <toggle-switch :searchIndex="index"/>
                 </div>
