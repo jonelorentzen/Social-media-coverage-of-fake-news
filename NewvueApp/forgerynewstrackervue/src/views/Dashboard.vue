@@ -6,36 +6,31 @@
     
     <Engagement class="dashboard-comp"/>
     
-
-    
     <div class="container_for_linechart">
-
     <LineChart class="dashboard-comp" id="linechart" :listdata='LineChartData'/>
-
     </div>
    
-    
-    
+  
     <div class="container_for_barchart">
     <BarChart class="dashboard-comp" id="Barchart" :listdata='BarChartData'/>
-    </div>
-    
-    
-      <div class="Post_user_container">
-        
-
-        <topPosts class="dashboard-comp"/>
-       
-        
-        <mostinfluentialusers class="dashboard-comp"/>
-
   
     </div>
-
     
- 
-  
 
+
+    <div class="container_for_geochart">
+    <GeoChart id="Geochart" :listdata='GeoChartData'/>
+    </div>
+    
+    <Sigmagraph/>
+
+
+    <div class="Post_user_container">
+        
+        <topPosts class="dashboard-comp insight" :listdata='TopPostsData'/>
+        <mostinfluentialusers class="dashboard-comp insight" :listdata='TopUsersData'/>
+
+    </div>
   </div>
 </template>
 
@@ -43,18 +38,15 @@
 //here we import other components
 
 //Alle delene på komponentene skal ha grid-column: span 12 / auto;
-
 import BarChart from '../components/BarChart'
-import LineChart from '../components/LineChart'
-
+import LineChart from '../components/LineChartComponent'
 import SearchList from '../components/SearchList.vue';
-
 import topPosts from '../components/Topposts'
 import mostinfluentialusers from '../components/MostInfluentialUsers'
 import Trackerheader from "../components/Trackerheader"
 import Engagement from "../components/Engagement"
-
-
+import GeoChart from "../components/GeoChartComponent"
+import Sigmagraph from "../components/Sigmagraph"
 
 
 export default {
@@ -66,16 +58,22 @@ export default {
     topPosts,
     mostinfluentialusers,
     Trackerheader,
-    Engagement
+    Engagement,
+    GeoChart,
+    Sigmagraph
     
-
   },
+
    computed:{
     BarChartData() {
-      return this.$store.getters.GetBarChartList;
+      return this.$store.getters.GetBarChartList[0];
+    
     },
     LineChartData() {
       return this.$store.getters.GetLineChartList;
+    },
+    GeoChartData() {
+      return this.$store.getters.GetBarChartDict;
     },
     TopPostsData() {
       return this.$store.getters.GetTopPosts;
@@ -86,20 +84,19 @@ export default {
     yourTrackers(){
       return this.$store.state.searches -1;
     },
-
-
-  },
-  data(){
-
   },
 };
 </script>
 
 
 <style scoped>
-    .dashboard-comp{
-      margin: 20px;
 
+    .dashboard-comp{
+      margin-bottom: 20px;
+    }
+    .insight{
+      max-width: 50%;
+      
     }
     .container{
       margin: auto;
@@ -116,15 +113,16 @@ export default {
     }
 
     #linechart{
-
         padding-bottom: 50px;
         
 
     }
     .Post_user_container{
       display: flex;
-      max-height: 80%;
+      justify-content: space-between;
     }
+
+
 
 
 </style>

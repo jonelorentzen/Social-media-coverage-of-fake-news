@@ -4,20 +4,19 @@ import requests
 import json
 import os
 import time
-from textblob import TextBlob
-from wordcloud import WordCloud
-import pandas as pd
-import numpy as np
-import re
-import matplotlib.pyplot as plt
+import praw
+import geocoder
+from datetime import datetime
 
-plt.style.use('fivethirtyeight')
+
 # configuration
 DEBUG = True
 
 # instantiate the app
 app = Flask(__name__)
 app.config.from_object(__name__)
+app.config['TESTING'] = True
+
 
 # enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
@@ -28,7 +27,7 @@ def auth():
     return os.environ.get("BEARER_TOKEN")
 
 def create_url(query):
-    tweet_fields = "tweet.fields=public_metrics,created_at,geo,referenced_tweets,text,author_id"
+    tweet_fields = "tweet.fields=public_metrics,created_at,geo,referenced_tweets,text,author_id,id,in_reply_to_user_id"
     max_results = "max_results=100"
     user_fields = "user.fields=profile_image_url"
     url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}&{}&{}".format(
@@ -38,7 +37,7 @@ def create_url(query):
 
 def create_id_url(query):
    
-    tweet_fields = "tweet.fields=public_metrics,created_at,geo,lang,referenced_tweets,text,author_id"
+    tweet_fields = "tweet.fields=public_metrics,created_at,geo,lang,referenced_tweets,text,author_id,in_reply_to_user_id"
     user_fields = "user.fields=profile_image_url"
     url = "https://api.twitter.com/2/tweets?ids={}&{}&{}".format(
         query, tweet_fields, user_fields
@@ -47,7 +46,7 @@ def create_id_url(query):
 
 def create_users_url(query):
 
-    user_fields= "user.fields=id,location,name,profile_image_url,public_metrics,username,verified"
+    user_fields= "user.fields=location,name,profile_image_url,public_metrics,username,verified"
     url = "https://api.twitter.com/2/users?ids={}&{}".format(
         query, user_fields
     )
@@ -68,15 +67,28 @@ def connect_to_endpoint(url, headers):
 def showinfo():
     d = request.json
     print(d)
+
+    #Reddit API call, time displayed in unix
+
+    reddit = praw.Reddit(
+    client_id="UK5XRgvcO7C2cQ",
+    client_secret="9OIo7S6kOBLlQZadOlo5miG0A9OC4g",
+    user_agent="my user agent")
+
+    reddit_data = []
+
+    for submission in reddit.subreddit("all").search(d["query"], limit=100):
+       reddit_data.append({"title": str(submission.title), "update_ratio": str(submission.upvote_ratio), "upvotes": str(submission.ups),
+       "url": str(submission.url), "created_at": str(submission.created_utc), "subreddit": str(submission.subreddit), "number_of_comments": str(submission.num_comments)})
+    
+       
     #Create the token to get acess to the Twitter 
     bearer_token = auth()
     headers = create_headers(bearer_token)
 
 
-
     #API call to get back a dictionary with 10 api call without any duplicates
     json_response = api_caller(d["query"], headers)
-
     # New call to the the Twitter API that uses the ID of the retweeted tweets and adds the data of the original tweets to the dictionary
     #The create_id_url creates the url that is used to call the api with.
     ids = extract_retweets(json_response)
@@ -88,39 +100,37 @@ def showinfo():
 
     json_response["data"] = sorted(json_response["data"], key = lambda i: i['public_metrics']["retweet_count"],reverse=True)
 
-    user_ids = extract_usernames(json_response)
-    url_users_ids = create_users_url(user_ids)
-    json_response3 = connect_to_endpoint(url_users_ids, headers)
-        
-    for i in range(99):
-        json_response3["data"][i]["public_metrics_user"] = json_response3["data"][i].pop("public_metrics")
-        json_response["data"][i].update(json_response3["data"][i])
+    json_response3 = extract_usernames(json_response, headers)
     
-    
-    #Create Barchart and LineChart from json_response
+    for i in range(len(json_response["data"])):
+        json_response3[i]["public_metrics_user"] = json_response3[i].pop("public_metrics")
+        json_response3[i]["author_id"] = json_response3[i].pop("id")
+        json_response["data"][i].update(json_response3[i])
+   
+
+    #Create all of the data that is going to be displayed in the frontend from the json_response
+    alldata = json_response["data"].copy()
     barchart = create_barchart(json_response)
     linechart = create_linechart(json_response)
     topposts = create_topposts(json_response)
     topusers = create_topusers(json_response)
-    #all text
-    allText = all_text(json_response)
-    print(type(allText))
-    print(allText)
+    activity = create_activity(json_response)
+    links = create_links(json_response)
+    nodes = create_nodes(links)
+    geochart = create_geochart(json_response)
+    links = create_links(json_response)
+    nodes = create_nodes(links)
 
+    
+    
+    
      
-    json_response["data"] = {d["query"]: {"barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, "alltext": allText}}
-    sentiment = show_tweets_text_sentiment(json_response)
-    json_response["data"][d["query"]]["sentiment"] = sentiment
+
+    json_response["data"] = {d["query"]: {"alldata": alldata, "barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, 
+    "activity": activity, "geochart": geochart, "reddit": reddit_data, "query": d["query"], "nodes": nodes, "links": links }}
+
+    
     return json.dumps(json_response)
-
-def extract_usernames(json_response):
-    author_id_list = []
-    tweet_dict = json_response["data"]
-    for i in range(99):
-        author_id_list.append(tweet_dict[i]["author_id"])
-
-    joined_string = ",".join(author_id_list)
-    return joined_string
 
 
 #The fuction api_caller is a fuction that is used to call the api 10 times and add the responses to the json_response
@@ -137,11 +147,11 @@ def api_caller(query, headers):
             if item["id"] not in json_response["data"]:
                 json_response["data"].append(item)
         
-        time.sleep(1)
+        time.sleep(2)
         count += 1
         print ("tick")
 
-        if count == 1:
+        if count == 2:
             count = 0
             break
 
@@ -181,6 +191,47 @@ def extract_retweets(json_response):
     joined_string = ",".join(id_list)
     return joined_string
 
+#Function for extracting all off the usernames and calling the API for every 100 tweet.
+#Returning all of the user data that is missing from the first API call.
+#With this function we get the location and stats like how many followers a user has.xz z
+def extract_usernames(json_response, headers):
+    author_id_list = []
+    tweet_dict = json_response["data"]
+
+    for i in range(len(tweet_dict)):
+        author_id_list.append(tweet_dict[i]["author_id"])
+ 
+    url_list = []
+    for i in range(0, len(author_id_list), 100):
+        chunk = author_id_list[i:i + 100]
+        joined_string = ",".join(chunk)
+        url_users_ids = create_users_url(joined_string)
+        url_list.append(url_users_ids)
+
+    time.time()
+    count = 0
+    json_response2 = connect_to_endpoint(url_list[0], headers)
+    
+    while True: 
+        if len(url_list) == 1:
+            break
+        for i in range(len(url_list)-1):
+            api_call = connect_to_endpoint(url_list[i+1], headers)
+            for item in api_call["data"]:
+                json_response2["data"].append(item)
+
+        time.sleep(1)
+        count += 1
+        print("tick")
+        if count == len(url_list)-1:
+            count = 0
+            break
+        
+    return json_response2["data"]
+
+
+#Function to extract the total likes, retweets, replies and quotes. The API return the total retweets of the original tweet is a user has retweeted it.
+#So the function does not count the retweets of a retweet. Only the retweets of the orignal tweet
 def create_barchart(json_response):
     tweets = json_response["data"]
     total_retweets = 0
@@ -204,11 +255,13 @@ def create_barchart(json_response):
     barchartlist = [['Likes', total_likes], ['Retweeets', total_retweets],['Replies', total_replies],['Quotes',total_quotes]]
 
     return barchartlist
-    
+
+#Function to make a list that is needed to display the areachart   
 def create_linechart(json_response):
     tweets = json_response["data"]
     allDates = []
-    finalDates = []
+    finalDates = {}
+    
       
     for i in range(len(tweets)):
         element = tweets[i]["created_at"]
@@ -217,34 +270,53 @@ def create_linechart(json_response):
     for i in range(len(tweets)):
         allDates[i] = allDates[i].replace(".000Z", "")
 
-    allDates.sort()
+    allDates.sort() 
+    allDates = allDates[7:]
+
+    for i in range(len(allDates)):
+        finalDates[allDates[i]]=i+1
+
+    
+          
+    return finalDates
+
+#Function that returns the dates from when a person retweets a tweet
+def create_retweet_linechart(json_response):
+    tweets = json_response["data"]
+    allDates = []
+    finalDates = []
+      
+    for i in range(len(tweets)):
+        if "referenced_tweets" in tweets[i]:
+              if tweets[i]['referenced_tweets'][0]["type"] == "retweeted":
+                    element = tweets[i]["created_at"]
+                    allDates.append(element)
+ 
 
     for i in range(len(tweets)):
+        allDates[i] = allDates[i].replace(".000Z", "")
+
+    allDates.sort() 
+    allDates = allDates[5:]
+    
+    for i in range(len(allDates)):
         finalDates.append([allDates[i],i+1])
           
     return finalDates
 
+#Function the extract the top 3 post and returns a dictonary with all the data needed to display as a tweet
 def create_topposts(json_response):
     tweets = json_response["data"]
     topposts = []
     for i in range(len(tweets)):
         if "referenced_tweets" not in tweets[i]:
             date = format_date(tweets[i]["created_at"])
-
             topposts.append({"author_id": tweets[i]["author_id"], "retweets": tweets[i]['public_metrics']["retweet_count"], "likes": tweets[i]['public_metrics']["like_count"], "text": tweets[i]['text'],
-            "username": tweets[i]["username"], "img": tweets[i]["profile_image_url"], "date": date, "followers": tweets[i]['public_metrics_user']["followers_count"], "verified": tweets[i]["verified"]})
+            "username": tweets[i]["username"], "img": tweets[i]["profile_image_url"], "date": date, "followers": tweets[i]['public_metrics_user']["followers_count"], "verified": tweets[i]["verified"], "id": tweets[i]["id"]})
             if len(topposts) == 3:
                 break
 
     return topposts
-
-def all_text(json_response):
-    tweets = json_response["data"]
-    allText = []
-    for i in range(len(tweets)):
-        allText.append({"tweets_text": tweets[i]["text"]})
-    return allText
-
 
 
 #Maybe add functionality that returns day and month like 13 Feb...
@@ -253,118 +325,119 @@ def format_date(timestamp):
     s = time.strftime("%m/%d/%Y", ts)
     return s
 
+#Function for extracting the top 9 users with the most followers with a check that is not added 
 def create_topusers(json_response):
     tweets = json_response["data"]
     topusers = []
     for i in range(len(tweets)):
-        topusers.append({"username": tweets[i]["username"], "img": tweets[i]["profile_image_url"], "followers": tweets[i]['public_metrics_user']["followers_count"], "verified": tweets[i]["verified"]})
-        if len(topusers) == 9:
-            break
+        if tweets[i] not in topusers:
+            topusers.append({"username": tweets[i]["username"], "img": tweets[i]["profile_image_url"], "followers": tweets[i]['public_metrics_user']["followers_count"], "verified": tweets[i]["verified"]})
+            if len(topusers) == 9:
+                break
     sorted_topusers = sorted(topusers, key = lambda i: i['followers'],reverse=True)
     return sorted_topusers
 
+#Function to extact the data displayed in the yellow header. Returning a dictionary with the total posts, users and engagement
+#Users is only users that is posting something not a user that is retweeting. Total posts is the total tweets, replies and quotes. 
+#Engangement is likes and retweets
 def create_activity(json_response):
+    activity = {}
     tweets = json_response["data"]
     user_ids = []
+    
+    engagement = 0 
+    total_posts = 0
     for i in range(len(tweets)):
-        user_ids.append(tweets[i]["author_id"])
-    # print(len(user_ids))
-    list(dict.fromkeys(user_ids))
-    # print(len(user_ids))
-
-# https://betterprogramming.pub/twitter-sentiment-analysis-15d8892c0082
-#####################################
-#########      SENTIMENT   ##########
-#########       TWEETS     ##########
-#####################################
-# 1) Get the text of every tweet. 
-# 2) put each tweet in a DataFrame
-# 3) remove "@", "#", "links" etc.
-# 4) Add subjectivity and polarity to the DataFrame
-# 5) Send data to json_response
-
-#  Print tweet text
-def show_tweets_text_sentiment(json_response):
-    print("Show the 5 recent tweets:\n")
-    tweets = json_response["data"]
-    
-    textTweets=[]
-    for i, (k,v) in enumerate(tweets.items()):
-        for i in range(len(tweets[k]["alltext"])):
-            # print(i+1,') ', tweets[k]["alltext"][i]["tweets_text"], '\n')
-            textTweets.append(tweets[k]["alltext"][i]["tweets_text"])
-    
-    # df = pd.DataFrame([tweet.full_text for tweet in posts], columns=['Tweets'])
-    # print(textTweets)
-    print(" ____**________**____ ")
-
-    # Create a dataframe with a column called Tweets
-    df = pd.DataFrame(columns=['Tweets'])
-    for tweet in textTweets:
-        cleantweet = cleanTxt(tweet)
-        df = df.append({"Tweets": cleantweet}, ignore_index=True)
-    # Show  rows of data
-
-    # Create two new columns 'Subjectivity' & 'Polarity'
-    df['Subjectivity'] = df['Tweets'].apply(getSubjectivity)
-    df['Polarity'] = df['Tweets'].apply(getPolarity)
-    df['Analysis'] = df['Polarity'].apply(getAnalysis)
-    pd.set_option('display.max_rows', df.shape[0]+1)
-
-    # Turn DataFrame to Dictionary 
-    dictionaryObject = df.to_dict()
-
-    sentiment = {"Positive": 0, "Negative": 0, "Neutral": 0}
-
-    analysis = dictionaryObject["Analysis"]
-
-    print(analysis)
-
-    for i in range(len(analysis)):
-        if analysis[i] == "Positive":
-            sentiment["Positive"] += 1
-        elif analysis[i] == "Negative":
-            sentiment["Negative"] += 1
+        if "referenced_tweets" in tweets[i]:
+              if tweets[i]['referenced_tweets'][0]["type"] != "retweeted":
+                  engagement += tweets[i]['public_metrics']["retweet_count"]
+                  engagement += tweets[i]['public_metrics']["like_count"]
+                  total_posts += 1   
+                  if tweets[i]["author_id"] not in user_ids:
+                      user_ids.append(tweets[i]["author_id"])          
         else:
-            sentiment["Neutral"] += 1
+              engagement += tweets[i]['public_metrics']["retweet_count"]
+              engagement += tweets[i]['public_metrics']["like_count"]
+              total_posts += 1
+              if tweets[i]["author_id"] not in user_ids:
+                      user_ids.append(tweets[i]["author_id"])
+            
+    activity["posts"] = total_posts
+    activity["users"] = len(user_ids)
+    activity["engagement"] = engagement
+
+    return activity
+
+def create_links(json_response):
+
+    links = []
+
+    tweets = json_response["data"]
+    for i in range(len(tweets)):
+        if "referenced_tweets" in tweets[i]:
+            if tweets[i]['referenced_tweets'][0]["type"] == "retweeted":
+                text = tweets[i]['text']
+                idxAt = text.find('@')
+                idxCo = text.find(':')
+
+                print(text[idxAt+1:idxCo])
+                links.append({'source': text[idxAt+1:idxCo], 'target': tweets[i]['username']})
+
+
+            elif tweets[i]['referenced_tweets'][0]["type"] == "replied_to":
+                text = tweets[i]['text']
+                idxAt = text.find('@')
+                idxS = text.find(' ')
+
+                print(text[idxAt:idxS])
+                links.append({'source': text[idxAt+1:idxS], 'target': tweets[i]['username']})
+
+    return links
+
+
+def create_nodes(links):
+    nodes = []
+    for i in range(len(links)):
+        if links[i]['source'] not in nodes:
+
+            nodes.append({"id":links[i]['source']})
         
-    print(sentiment)
+        if links[i]['target'] not in nodes:
+            nodes.append({"id":links[i]['target']})
+    print(nodes)
+    return nodes
+
+
+def create_geochart(json_response):
+    all_locations = []
+    tweets = json_response["data"]
+    for tweet in tweets:
+        if "location" in tweet:
+            all_locations.append(tweet["location"])
+            if len(all_locations) == 99:
+                break
+ 
+    all_countries = []
+   
+    g = geocoder.mapquest(all_locations, method='batch', key="DW8AsY8QcWjfHn5wzHK769LT4LwAK0l6")
+    for result in g:
+        all_countries.append(str(result.country))
+        
     
-    return sentiment
-    
-# Create a function to clean the tweets
-def cleanTxt(text):
-    text = re.sub('@[A-Za-z0–9]+', '', text) #Removing @mentions
-    text = re.sub('#', '', text) # Removing '#' hash tag
-    text = re.sub('RT[\s]+', '', text) # Removing RT
-    text = re.sub('https?:\/\/\S+', '', text) # Removing hyperlink
-    
-    return text
-# I want to add the tweets’ subjectivity and polarity to the DataFrame. In order to do this, I’ll create two functions: one to get the tweets called Subjectivity (how subjective or opinionated the text is — a score of 0 is fact, and a score of +1 is very much an opinion) and the other to get the tweets called Polarity (how positive or negative the text is, — score of -1 is the highest negative score, and a score of +1 is the highest positive score).
+    geochart = dict((x,all_countries.count(x)) for x in set(all_countries))
 
-# A function to get the subjectivity
-def getSubjectivity(text):
-   return TextBlob(text).sentiment.subjectivity
+    # all_countries = []
+    # g = geocoder.bing(all_locations, method='batch_reverse', key="AqcxdNzZ8kzbAdu6-q3McqsTRC3qsc2CjNAkwIxfVMPj8mhEqppdBE7GUL3OKS0n")
+    # for result in g:
+    #     all_countries.append(str(result.country))
+    #     print(result.country)
 
-# A function to get the polarity
-def getPolarity(text):
-   return  TextBlob(text).sentiment.polarity
+    # geochart = dict((x,all_countries.count(x)) for x in set(all_countries))
 
-# function to compute negative (-1), neutral (0) and positive (+1) analysis
-def getAnalysis(score):
-    if score < 0:
-        return 'Negative'
-    elif score == 0:
-        return 'Neutral'
-    else:
-        return 'Positive'
-    
-
-
-    
-
-
+    return geochart
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
+
+"export FLASK_DEBUG=ON"

@@ -1,49 +1,72 @@
 <template>
-    <div class="engagement-wrapper">
-
+    <div>
+    <div class="engagement-wrapper" v-show="listdata1.query != '' && listdata2.query == ''">
         <div class="engagement-container">
 
-            <div class="topstats">
+            <div class="topstats" data-bs-toggle="tooltip" data-bs-placement="top" title="The number of posts made with your tracked hashtag, keyword, URL and/or @mention." >
                 <fa icon="comments" size="2x"/>
-                <h1>1,049</h1>
+                    <h1>{{listdata1.activity.posts}}</h1>
                 <p>Posts</p>
             </div>
-
-            <div class="topstats">
+            
+            <div class="topstats" data-bs-toggle="tooltip" data-bs-placement="top" title="The number of users who have posted with your tracked hashtag, keyword, URL and/or @mention.">
                 <fa icon="user" size="2x"/>
-                <h1>801</h1>
+                <h1>{{listdata1.activity.users}}</h1>
                 <p>Users</p>
             </div>
 
-            <div class="topstats" >
+            <div class="topstats" data-bs-toggle="tooltip" data-bs-placement="top" title="When someone intentionally interacts with your post, that is considered an engagement. We factor in the following kinds of engagement:Twitter: Retweets + Likes" >
                 <fa icon="heart" size="2x"/>
-                <h1 class="display display-">158,589</h1>
+                <h1 class="display display-">{{listdata1.activity.engagement}}</h1>
                 <p>Engagement</p>
             </div>
+        </div>
+    </div>
 
-            <!-- <div class="topstats">
-                <fa icon="bullhorn" size="2x"/>
-                <h1>7,659,796</h1>
-                <p>Reach</p>
+    <div class="engagement-wrapper" v-show="listdata1.query != '' && listdata2.query != ''">
+        <div class="engagement-container">
+
+            <div class="topstats" data-bs-toggle="tooltip" data-bs-placement="top" title="The number of posts made with your tracked hashtag, keyword, URL and/or @mention." >
+                <fa icon="comments" size="2x"/>
+            <div class="stats">
+                    <h3>{{listdata1.activity.posts}}</h3>
+                    <h5>&nbsp;vs&nbsp;</h5> 
+                    <h3>{{listdata2.activity.posts}}</h3>
+            </div>
+                
+                <p>Posts</p>
+            </div>
+            
+            <div class="topstats" data-bs-toggle="tooltip" data-bs-placement="top" title="The number of users who have posted with your tracked hashtag, keyword, URL and/or @mention.">
+                <fa icon="user" size="2x"/>
+                 <div class="stats">
+                    <h3>{{listdata1.activity.users}}</h3>
+                    <h5>&nbsp;vs&nbsp;</h5> 
+                    <h3>{{listdata2.activity.users}}</h3>
+                </div>
+                <p>Users</p>
             </div>
 
-            <div class="topstats">
-                <fa icon="microphone" size="2x"/>
-                <h1>7,783,086</h1>
-                <p>Impression</p>
-            </div> -->
-
+            <div class="topstats" data-bs-toggle="tooltip" data-bs-placement="top" title="When someone intentionally interacts with your post, that is considered an engagement. We factor in the following kinds of engagement:Twitter: Retweets + Likes" >
+                <fa icon="heart" size="2x"/>
+                 <div class="stats">
+                    <h3>{{listdata1.activity.engagement}}</h3>
+                    <h5>&nbsp;vs&nbsp;</h5> 
+                    <h3>{{listdata2.activity.engagement}}</h3>
+                </div>
+                <p>Engagement</p>
+            </div>
         </div>
-
+    </div>
     </div>
 </template>
 
 <script>
 
 export default {
-    components:{
-        
-    }
+    name: "activity",
+    props:['listdata1', 'listdata2'],
+    
 }
 </script>
 
@@ -70,6 +93,8 @@ export default {
 
 }
 
+
+
 .topstats{
     width: 100px;
     height: 70px;
@@ -79,5 +104,14 @@ export default {
     margin-right: 120px;
 
 }
+.stats{
+    
+    width: 100px;
+    display: inline-flex;
+    align-items: center;
+    line-height: 10px; 
+    
+}
+
 
 </style>
