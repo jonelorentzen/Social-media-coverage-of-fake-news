@@ -9,12 +9,20 @@ export default createStore({
     searchesIndexInTweets: {},
     //The tweets that is displayed MAX 2 queries
     tweets: [],
+
     //List that contains all of the data the user has added to the search list
     allTweets: []
   
   
+
   },
   mutations: {
+    SetLinks(state, response){
+      state.links = response
+    },
+    SetNodes(state, response){
+      state.nodes = response 
+    },
     SetTweets(state, response){
       state.allTweets.push(response)
     },
@@ -65,6 +73,7 @@ export default createStore({
         let api = new Backendapi();
         let response = await api.getMessages(searchValue);
         console.log(response.data)
+
         
         state.commit("SetTweets", response.data[searchValue]);
         

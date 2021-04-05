@@ -15,6 +15,7 @@ import Highcharts from 'highcharts'
 
 
 
+
 library.add(faUserSecret, 
   faHome, 
   faComments,
