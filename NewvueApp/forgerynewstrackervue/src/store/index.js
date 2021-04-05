@@ -51,7 +51,7 @@ export default createStore({
     },
 
     loading(state,index){
-      state.searches[index].loaded = true
+      state.searches[index].loaded = !state.searches[index].loaded
     },
 
     searchItemActive(state, index){
@@ -67,7 +67,7 @@ export default createStore({
     loading({commit},index){
       commit('loading',index)
     },
-    async getResult(state, searchValue,) {
+    async getResult(state, searchValue, index) {
       
       try{
         let api = new Backendapi();
@@ -77,8 +77,9 @@ export default createStore({
         
         state.commit("SetTweets", response.data[searchValue]);
         
-        //set loading screen
-        
+        //set loading screen to true
+        state.commit('loading',index);
+
       } catch (err){
         this.commit('error',err)
       }
