@@ -25,9 +25,18 @@ export default {
 .geochart-box{
     align-items: center;
     border: 1px solid #dddfea;
-    padding: 20px;
-   
+    padding: 10px;   
+    height: 400px;
+    padding-top: 25px;
 }
+
+.geochart-container{
+    align-items: center;
+    width: 650px;
+    margin: auto;
+    
+}
+
 .header{
   display: flex;
   padding: 10px;
@@ -37,7 +46,6 @@ export default {
   line-height: 1.5;
   color: #26293c;
 }
-
 
 </style>
 

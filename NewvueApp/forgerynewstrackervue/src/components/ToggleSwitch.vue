@@ -3,11 +3,12 @@
         <span v-if="isActive" class="toggle__label">On</span>
         <span v-if="!isActive" class="toggle__label">Off</span>
 
-        <input type="checkbox" id="toggle_button" v-model="checkedValue">
+        <input type="checkbox" id="toggle_button"  v-model="checkedValue"  @change="check($event)">
         <span class="toggle__switch"></span>
     </label>
 </template>
 <script>
+
 export default {
     props: {
         defaultState: {
@@ -23,7 +24,9 @@ export default {
     data() {
         return {
             currentState: this.defaultState,
-            firstTime: false 
+            checked: [],
+            max: 2
+            
         }
     },
     computed: {
@@ -36,15 +39,29 @@ export default {
                 return this.$store.getters.getSearchByIndex(this.searchIndex).active
             },
             set() {
-                // hit api only ones, not reapeded api call if toggle swithed on again. 
-    
+                this.checked.push(this.searchIndex)
                 this.$store.dispatch("searchItemActive",this.searchIndex) 
-                this.$emit('change', this.$store.getters.getSearchByIndex(this.searchIndex).active);
-                if (this.firstTime == false){
-                    this.$store.dispatch("getResult", this.$store.getters.getSearchByIndex(this.searchIndex).title)
-                    this.firstTime = true
-                }
             }
+        }
+    },
+    methods: {
+        //Want to call this function with the index of query in the searchlist. Then connect it with the dictionary that stores the index in the tweets list to the index
+        //in the search list. Dont know how to get the index of the query that is untoggled. 
+        //The idea is if the checkbox is untoggled, it calls this function with the index, for ex: the searchlist=[0, 1X, 2, 3X], tweets=[1,3] and index= {1:0, 3:1}.
+        //
+        //You untoggle 3, here and the function check with the parameter 3. In the store it checks the index dict first to find the index for tweets.
+        //With index[3] you get back 1, then you pop(1) from the tweet list to remove the data also remove the key 3 from the index dict.
+        //
+        //When you toggle on there should be a check if the API has been called, if not the index of the searchlist should be sent to a function in
+        //the store, that adds the 
+
+        check: function(event){
+            if (event.target.checked == true){
+               this.$store.dispatch("addTweetToDisplay", this.searchIndex)
+               this.$store.dispatch('loading', this.searchIndex)
+            } else{
+                this.$store.dispatch("removeFromTweets", this.searchIndex);
+            }  
         }
     },
 

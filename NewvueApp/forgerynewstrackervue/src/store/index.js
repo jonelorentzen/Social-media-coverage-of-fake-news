@@ -3,16 +3,18 @@ import Backendapi from '../backend_api/api.js';
 
 export default createStore({
   state: {
+    //List with objects that contain the title and if the title is active or not 
     searches: [],
+    //State to keep control over the indexes in tweets and searches. {"Index in the searchlist": "Index in the tweets list"}, {5:0, 1:1}
+    searchesIndexInTweets: {},
+    //The tweets that is displayed MAX 2 queries
     tweets: [],
-    BarChartList: [],
-    LineChartList: [],
-    TopPosts: [],
-    TopUsers: [],
-    activity: {},
-    CurrentQuery: "",
-    nodes:[],
-    links:[]
+
+    //List that contains all of the data the user has added to the search list
+    allTweets: []
+  
+  
+
   },
   mutations: {
     SetLinks(state, response){
@@ -22,95 +24,84 @@ export default createStore({
       state.nodes = response 
     },
     SetTweets(state, response){
-      state.tweets = response
+      state.allTweets.push(response)
     },
 
-    SetBarChartList(state, barchart) {
-      state.BarChartList = barchart;
-      },
-   
-    SetLineChartList(state, linechart) {
-      state.LineChartList = linechart;
-      },
+    DisplayTweet(state, index){
+      state.tweets.push(state.allTweets[index]);
+      state.searchesIndexInTweets[index] = state.tweets.length-1
+      console.log(state.tweets)
+    },
 
-    SetTopPosts(state, topposts) {
-      state.TopPosts = topposts;
-      },
-
-    SetTopUsers(state, topusers) {
-      state.TopUsers = topusers;
-      },
+    RemoveTweets(state, index){
+      state.tweets.splice(state.searchesIndexInTweets[index], 1);
+      
+      delete state.searchesIndexInTweets[index]
     
-    SetActivity(state, activity) {
-      state.activity = activity;
-      },
-
-    SetCurrentQuery(state, query){
-      state.CurrentQuery = query
+      console.log(state.searchesIndexInTweets)
+      
     },
 
-  
-    NEW_SEARCH(state,SearchItem){
+    NewSearch(state,SearchItem){
       state.searches.push({
         title: SearchItem,
         active: false,
+        loaded: false,
       })
     },
-    loading(){
-      console.log("loading")
+
+    loading(state,index){
+      state.searches[index].loaded = true
     },
+
     searchItemActive(state, index){
       state.searches[index].active = !state.searches[index].active
+      console.log(state.searches)
     }
   },
 
   actions: {
     addNewSearch({commit}, SearchItem){
-      commit("NEW_SEARCH",SearchItem, );
+      commit("NewSearch",SearchItem);
     },
-    async getResult(state, searchValue) {
-      this.commit('loading')
+    loading({commit},index){
+      commit('loading',index)
+    },
+    async getResult(state, searchValue,) {
+      
       try{
         let api = new Backendapi();
         let response = await api.getMessages(searchValue);
         console.log(response.data)
-        console.log(searchValue)
 
-        state.commit("SetTweets", response);
-        state.commit("SetBarChartList", response);
-        state.commit("SetLineChartList", response);
-  
-        state.commit("SetBarChartList", response.data[searchValue]["barchart"]);
-        state.commit("SetLineChartList", response.data[searchValue]["linechart"]);
-        state.commit("SetTopPosts", response.data[searchValue]["topposts"]);
-        state.commit("SetTopUsers", response.data[searchValue]["topusers"]);
-        state.commit("SetActivity", response.data[searchValue]["activity"]);
-
-        state.commit("SetCurrentQuery", searchValue);
-
-        state.commit("SetNodes", response.data[searchValue]["nodes"]);
-        state.commit("SetLinks", response.data[searchValue]["links"]);
         
-        console.log("done")
+        state.commit("SetTweets", response.data[searchValue]);
+        
+        //set loading screen
         
       } catch (err){
         this.commit('error',err)
       }
     },
-    searchItemActive(commit, index){
-      this.commit("searchItemActive", index)
+    addTweetToDisplay(state, index){
+      state.commit("DisplayTweet", index);
+    },
+
+    removeFromTweets(state, index){
+      state.commit("RemoveTweets", index);
+    },
+
+    searchItemActive(state, index){
+      state.commit("searchItemActive", index)
     }
   },
   modules: {
 
   },
   getters: {
-    GetBarChartList: state => state.BarChartList,
-    GetLineChartList: state => state.LineChartList,
+    GetTweets: state => state.tweets,
     getSearchByIndex: (state) => (index) => {return state.searches[index]},
-    GetTopPosts: state => state.TopPosts,
-    GetTopUsers: state => state.TopUsers,
-    GetActivity: state => state.activity,
+    
 
   }
 });

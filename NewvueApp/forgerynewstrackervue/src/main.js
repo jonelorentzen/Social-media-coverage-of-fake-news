@@ -5,12 +5,13 @@ import store from "./store";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
 import Chartkick from 'vue-chartkick';
-import Chart from 'chart.js';
-import { library } from '@fortawesome/fontawesome-svg-core'
+import { library } from '@fortawesome/fontawesome-svg-core';
 import { faBullhorn, faComments, faHeart, faHome, faMicrophone, faUser, faUserSecret, faRetweet,  } from '@fortawesome/free-solid-svg-icons'
 import { faFontAwesome, faTwitterSquare, faTwitter} from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import VTooltip from 'v-tooltip'
+import Highcharts from 'highcharts'
+
 
 
 
@@ -29,13 +30,11 @@ library.add(faUserSecret,
   )
 
 
-Chartkick.configure({language: "en", mapsApiKey: "AIzaSyBFMGWqY_cNwPHVeElwZAulhY7DL2cTIEA"});
-
 
 createApp(App)
   .use(store)
   .use(router)
   .use(VTooltip)
   .component("fa", FontAwesomeIcon)
-  .use(Chartkick.use(Chart))
+  .use(Chartkick.use(Highcharts))
   .mount("#app");

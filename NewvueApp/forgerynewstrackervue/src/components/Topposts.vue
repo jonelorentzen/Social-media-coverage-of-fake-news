@@ -7,11 +7,11 @@
     </div>
   <div class="toppostsbox">
         <div class="toppostswrapper">
-          <div class="postrow" v-for="(post, index) in topPosts" v-bind:key="index" @click="gotopost(topPosts[index].username, topPosts[index].tweet_id)">
+          <div class="postrow" v-for="(post, index) in listdata" v-bind:key="index" @click="gotopost(listdata[index].username, listdata[index].id)">
             
            
             <div class="profilepicture_container">
-                <img class="profilepicture" v-bind:src="topPosts[index].img">
+                <img class="profilepicture" v-bind:src="listdata[index].img">
               </div>
             
             <div class="postrow_wrapper">
@@ -21,24 +21,24 @@
                 <div class="postinfo_container">
                   
                   <p class="postinfo">
-                    <strong>@{{topPosts[index].username}}</strong>
+                    <strong>@{{listdata[index].username}}</strong>
                   </p>
   
-                  <p class="date">{{topPosts[index]["date"]}}</p>
+                  <p class="date">{{listdata[index]["date"]}}</p>
                 </div>
 
                 <div class="post_engagement">
                   <fa class="retweets" icon="retweet"/>
-                    <p >{{topPosts[index].retweets}}</p>
+                    <p >{{listdata[index].retweets}}</p>
 
                   <fa class="likes" icon= "heart"/>
-                    <p >{{topPosts[index].likes}}</p>
+                    <p >{{listdata[index].likes}}</p>
                 </div>
 
               </div>
 
               <p class="post_texts">
-                {{topPosts[index].text}}
+                {{listdata[index].text}}
               </p>
             
             </div>
@@ -57,11 +57,6 @@
 <script>
 export default {
     name: "topPosts",
-    computed: {
-      topPosts(){
-        return this.$store.state.TopPosts
-      }
-    },
     props:['listdata'],
     methods:{
       gotopost(username, id){
@@ -96,7 +91,7 @@ export default {
   flex-wrap: wrap;
   border: 1px solid #dddfea;
   padding: 20px;
-  width: 100%;
+  width: 99%;
   margin-right: 10px;
 }
 

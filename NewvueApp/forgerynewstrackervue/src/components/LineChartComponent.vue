@@ -5,8 +5,11 @@
             <h3><span>Timeline</span></h3>
         </div>
 
-        <div class="chart-container">
-        <line-chart :data="listdata" :colors="['#000000']" xtitle="Tweeted at" ytitle="Cumulative Tweets"></line-chart>
+        <div class="chart-container" v-show="listdata2.query != ''">
+        <line-chart :data="[{'name': listdata1.query, 'data': listdata1.linechart }, {'name': listdata2.query, 'data': listdata2.linechart }]" :colors="['#000', '#666']" :dataset="{borderWidth: 2}" xtitle="Tweeted at" ytitle="Cumulative Tweets" :messages="{empty: 'No data'}"></line-chart>
+        </div>
+        <div class="chart-container" v-show="listdata2.query == ''">
+        <line-chart :data="[{'name': listdata1.query, 'data': listdata1.linechart }]" :colors="['#000', '#0000FF']" :dataset="{borderWidth: 2}" xtitle="Tweeted at" ytitle="Cumulative Tweets" :messages="{empty: 'No data'}"></line-chart>
         </div>
 
     </div>
@@ -16,7 +19,8 @@
 <script>
 
 export default {
-    props: ['listdata'],
+    props: ['listdata1', 'listdata2'],
+    
     
 }
 </script>
