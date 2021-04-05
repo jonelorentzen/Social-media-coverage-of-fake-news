@@ -16,6 +16,8 @@
     </div>
     
     <GeoChart/>
+
+    <Sigmagraph/>
     
     <div class="Post_user_container">
         
@@ -38,6 +40,7 @@ import mostinfluentialusers from '../components/MostInfluentialUsers'
 import Trackerheader from "../components/Trackerheader"
 import Engagement from "../components/Engagement"
 import GeoChart from "../components/GeoChartComponent"
+import Sigmagraph from "../components/Sigmagraph"
 
 
 export default {
@@ -50,7 +53,8 @@ export default {
     mostinfluentialusers,
     Trackerheader,
     Engagement,
-    GeoChart
+    GeoChart,
+    Sigmagraph
     
   },
 

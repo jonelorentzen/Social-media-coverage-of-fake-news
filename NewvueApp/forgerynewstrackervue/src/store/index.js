@@ -10,9 +10,17 @@ export default createStore({
     TopPosts: [],
     TopUsers: [],
     activity: {},
-    CurrentQuery: ""
+    CurrentQuery: "",
+    nodes:[],
+    links:[]
   },
   mutations: {
+    SetLinks(state, response){
+      state.links = response
+    },
+    SetNodes(state, response){
+      state.nodes = response 
+    },
     SetTweets(state, response){
       state.tweets = response
     },
@@ -78,7 +86,10 @@ export default createStore({
         state.commit("SetTopUsers", response.data[searchValue]["topusers"]);
         state.commit("SetActivity", response.data[searchValue]["activity"]);
 
-        state.commit("SetCurrentQuery", searchValue)
+        state.commit("SetCurrentQuery", searchValue);
+
+        state.commit("SetNodes", response.data[searchValue]["nodes"]);
+        state.commit("SetLinks", response.data[searchValue]["links"]);
         
         console.log("done")
         
