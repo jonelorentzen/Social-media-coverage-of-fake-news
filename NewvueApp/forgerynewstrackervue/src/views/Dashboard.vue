@@ -16,7 +16,7 @@
   
     </div>
     
-
+ 
 
     <div class="container_for_geochart">
     <GeoChart id="Geochart" :listdata='GeoChartData'/>
