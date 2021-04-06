@@ -102,12 +102,17 @@ def showinfo():
     topposts = create_topposts(json_response)
     topusers = create_topusers(json_response)
     activity = create_activity(json_response)
+    links = create_links(json_response)
+    nodes = create_nodes(links)
     geochart = create_geochart(json_response)
     links = create_links(json_response)
     nodes = create_nodes(links)
      
+
     json_response["data"] = {d["query"]: {"alldata": alldata, "barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, 
     "activity": activity, "geochart": geochart, "reddit": reddit_data, "query": d["query"], "nodes": nodes, "links": links }}
+
+    
     
     return json.dumps(json_response)
 
@@ -363,7 +368,9 @@ def create_activity(json_response):
     return activity
 
 def create_links(json_response):
-    nodes = []
+
+    links = []
+
     tweets = json_response["data"]
     for i in range(len(tweets)):
         if "referenced_tweets" in tweets[i]:
@@ -371,26 +378,33 @@ def create_links(json_response):
                 text = tweets[i]['text']
                 idxAt = text.find('@')
                 idxCo = text.find(':')
-                nodes.append({'source': text[idxAt+1:idxCo], 'target': tweets[i]['username']})
+
+                print(text[idxAt+1:idxCo])
+                links.append({'source': text[idxAt+1:idxCo], 'target': tweets[i]['username']})
+
 
             elif tweets[i]['referenced_tweets'][0]["type"] == "replied_to":
                 text = tweets[i]['text']
                 idxAt = text.find('@')
                 idxS = text.find(' ')
-                nodes.append({'source': text[idxAt+1:idxS], 'target': tweets[i]['username']})
-                     
-    return nodes
+
+                print(text[idxAt:idxS])
+                links.append({'source': text[idxAt+1:idxS], 'target': tweets[i]['username']})
+
+    return links
+
 
 def create_nodes(links):
     nodes = []
     for i in range(len(links)):
         if links[i]['source'] not in nodes:
-            nodes.append(links[i]['source'])
-        if links[i]['target'] not in nodes:
-            nodes.append(links[i]['target'])
 
-    return nodes
+            nodes.append({"id":links[i]['source']})
         
+        if links[i]['target'] not in nodes:
+            nodes.append({"id":links[i]['target']})
+    print(nodes)
+    return nodes
 
 #Legg inn en error catcher her for geochart kommer ofte feil når det er en query med lite resultater
 def create_geochart(json_response):

@@ -90,14 +90,14 @@ export default {
     computed:{
     Display1(){
         if(this.$store.getters.GetTweets[0] === undefined){
-            return {"barchart": [], "topposts": {}, "topusers": {}, "geochart": {}, "query": '', "activity": {}, "linechart": {}}
+            return {"barchart": [], "topposts": {}, "topusers": {}, "geochart": {}, "query": '', "activity": {"posts":null,"users":null,"engagement":null,}, "linechart": {}}
         }else{
             return this.$store.getters.GetTweets[0];
         }   
     },
     Display2(){
         if(this.$store.getters.GetTweets[1] === undefined){
-            return {"barchart": [], "topposts": {}, "topusers": {}, "geochart": {}, "query": '', "activity": {}, "linechart": {}}
+            return {"barchart": [], "topposts": {}, "topusers": {}, "geochart": {}, "query": '', "activity": {"posts":null,"users":null,"engagement":null,}, "linechart": {}}
         }else{
             return this.$store.getters.GetTweets[1];
         }
