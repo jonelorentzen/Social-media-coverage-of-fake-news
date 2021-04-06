@@ -1,5 +1,12 @@
 <template>
-<div class="container">
+
+<div class="node_box">
+
+<div class="header">
+Node network
+</div>
+
+<div class="node_container">
 <div id="graph">
   <svg xmlns="http://www.w3.org/2000/svg" 
        :width="width+'px'"
@@ -21,7 +28,7 @@
       <circle class="node circle-node" 
               :cx="coords[i].x"
               :cy="coords[i].y"
-              :r="5" :fill="colors[Math.ceil(Math.sqrt(node.index))]"
+              :r="graph.nodes[i].size" :fill="colors[Math.ceil(Math.sqrt(node.index))]"
               stroke="white" stroke-width="1"
               @mousedown="currentMove = {x: $event.screenX, y: $event.screenY, node: node}" v-bind:key="i"
             
@@ -38,6 +45,8 @@
   </svg>
 </div>
 </div>
+
+</div>
 </template>
 
 
@@ -49,16 +58,17 @@ console.log(nodes_dummy)
 console.log(edges)
 export default {
   el: "#graph",
+  props:['listdata'],
   data: function(){
     return{
     graph: {
-      nodes: "",
-      links: ""
+      nodes: this.listdata.nodes,
+      links: this.listdata.links
     },
     width: 500,
     height: 400,
     padding: 20,
-    colors: ['#2196F3', '#E91E63', '#7E57C2', '#009688', '#00BCD4', '#EF6C00', '#4CAF50', '#FF9800', '#F44336', '#CDDC39', '#9C27B0'],
+    colors: ['#696969','#696969','#696969','#696969','#696969','#696969','#696969','#696969', '#696969', '#696969', '#696969', '#696969', '#696969', '#696969', '#696969', '#696969'],
     simulation: null,
     currentMove: null,
     label: null,
@@ -67,14 +77,16 @@ export default {
   },
   computed: {
     nodes(){
-      console.log(this.$store.state.nodes)
-      console.log(this.$store.state.links)
-      this.changenodes(this.$store.state.nodes)
-      return this.$store.state.nodes
+      console.log(this.listdata.nodes)
+      console.log(this.listdata.links)
+      //this.changenodes(this.$store.state.nodes)
+      //return this.$store.state.nodes
+      return {}
     },
     links(){
-      this.changelinks(this.$store.state.links)
-      return this.$store.state.links
+      //this.changelinks(this.$store.state.links)
+      //return this.$store.state.links
+      return {}
     },
     bounds() {
       return {
@@ -94,9 +106,9 @@ export default {
     }   
   },
   created(){
-     this.simulation = d3.forceSimulation(this.nodes)
+     this.simulation = d3.forceSimulation(this.graph.nodes)
         .force('charge', d3.forceManyBody().strength(-100))
-        .force('link', d3.forceLink(this.links).id(function(d) { return d.id;}))
+        .force('link', d3.forceLink(this.graph.links).id(function(d) { return d.id;}))
         .force('x', d3.forceX())
         .force('y', d3.forceY())
     this.createTextNodes() 
@@ -158,19 +170,36 @@ export default {
 </script>
 
 <style scoped>
+.node_box{
+  
+}
 .node-text {
   opacity: 0;
 }
 .text-active {
   opacity: 1;
 }
-.container{
-  min-height: 400px;
+.node_container{
+  
   border: 1px solid #dddfea;
+  align-items: center;
+  height: 400px;
+  
 }
 
 .graph{
-border: 1px solid #dddfea;
+padding-left: 30px;
+
+}
+
+.header{
+  display: flex;
+  padding: 10px;
+  font-family: Quicksand,Helvetica,Arial,sans-serif;
+  font-weight: 900;
+  font-size: 1.25em;
+  line-height: 1.5;
+  color: #26293c;
 }
 
 </style>

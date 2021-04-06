@@ -21,14 +21,11 @@
     "chart.js": "^2.9.4",
     "ci": "^2.0.0",
     "core-js": "^3.6.5",
-
     "d3": "^6.6.2",
-    "imports-loader": "^2.0.0",
-
     "geocoder": "^0.2.3",
     "graphology-types": "^0.19.2",
     "highcharts": "^9.0.1",
-
+    "imports-loader": "^2.0.0",
     "jquery": "^3.6.0",
     "popper.js": "^1.16.1",
     "postcss": "^8.2.8",

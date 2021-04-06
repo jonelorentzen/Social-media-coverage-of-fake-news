@@ -379,18 +379,43 @@ def create_links(json_response):
                 text = tweets[i]['text']
                 idxAt = text.find('@')
                 idxCo = text.find(':')
+                tweet_id = tweets[i]['id']
+                followers = tweets[i]['public_metrics_user']['followers_count']
+
+                if followers <= 10000:
+                    size = 3
+                elif followers <= 50000:
+                    size = 5
+                elif followers <= 100000:
+                    size = 7
+                elif followers <= 1000000:
+                    size = 10
+                elif followers > 1000000:
+                    size = 13
 
                 print(text[idxAt+1:idxCo])
-                links.append({'source': text[idxAt+1:idxCo], 'target': tweets[i]['username']})
+                links.append({'source': text[idxAt+1:idxCo], 'target': tweets[i]['username'], 'size':size})
 
 
             elif tweets[i]['referenced_tweets'][0]["type"] == "replied_to":
                 text = tweets[i]['text']
                 idxAt = text.find('@')
                 idxS = text.find(' ')
+                followers = tweets[i]['public_metrics_user']['followers_count']
+
+                if followers <= 10000:
+                    size = 3
+                elif followers <= 50000:
+                    size = 5
+                elif followers <= 100000:
+                    size = 7
+                elif followers <= 1000000:
+                    size = 10
+                elif followers > 1000000:
+                    size = 13
 
                 print(text[idxAt:idxS])
-                links.append({'source': text[idxAt+1:idxS], 'target': tweets[i]['username']})
+                links.append({'source': text[idxAt+1:idxS], 'target': tweets[i]['username'], 'size':size})
 
     return links
 
@@ -400,10 +425,10 @@ def create_nodes(links):
     for i in range(len(links)):
         if links[i]['source'] not in nodes:
 
-            nodes.append({"id":links[i]['source']})
+            nodes.append({"id":links[i]['source'], 'size':links[i]['size']})
         
         if links[i]['target'] not in nodes:
-            nodes.append({"id":links[i]['target']})
+            nodes.append({"id":links[i]['target'], 'size':links[i]['size'] })
     print(nodes)
     return nodes
 

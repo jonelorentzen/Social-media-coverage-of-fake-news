@@ -25,6 +25,11 @@
             <GeoChart id="Geochart" :listdata='Display2.geochart'/>
         </div>
 
+        <div class="container_for_nodenetwork">
+            <Sigmagraph class="nodenetwork_double_comp" :listdata='Display1'/>
+            <Sigmagraph class="nodenetwork_double_comp" :listdata='Display2'/>
+        </div>
+
         <div class="Post_container">
             <topPosts class="dashboard-comp insight" :listdata='Display1.topposts'/>
             <topPosts class="dashboard-comp insight" :listdata='Display2.topposts'/> 
@@ -41,15 +46,28 @@
         <div class="container_for_barchart_single">
             <BarChartBig  class="dashboard-comp" id="Barchart" :listdata='Display1.barchart'/>
         </div>
-        
-        <div class="container_for_geochart_single" >
+
+        <div class="container_for_geochart_and_node">
+
+            <div class="container_for_geochart_single" >
             <GeoChartSingle id="Geochart" :listdata='Display1.geochart'/>
+            </div>
+
+            <div class="container_for_nodegraph_single">
+            <Sigmagraph :listdata='Display1'/>
+            </div>
+        
+
         </div>
+        
+        
 
         <div class="Post_user_container">
             <topPosts class="dashboard-comp insight" :listdata='Display1.topposts'/>
             <mostinfluentialusers class="dashboard-comp insight" :listdata='Display1.topusers' />
         </div>
+
+        
 
     </div>
 
@@ -69,6 +87,7 @@ import Trackerheader from "../components/Trackerheader"
 import Engagement from "../components/Engagement"
 import GeoChart from "../components/GeoChartComponent"
 import GeoChartSingle from "../components/GeoChartSingle"
+import Sigmagraph from "../components/Sigmagraph"
 
 
 export default {
@@ -83,7 +102,8 @@ export default {
     Trackerheader,
     Engagement,
     GeoChart,
-    GeoChartSingle
+    GeoChartSingle,
+    Sigmagraph
     
     },
     
@@ -163,14 +183,33 @@ export default {
         justify-content: space-between;
         padding-bottom: 25px;
 
+
     }
+
+    .container_for_nodenetwork{
+        display: flex;
+        justify-content: space-between;
+    }
+    .nodenetwork_double_comp{
+        width: 50%;
+    }
+
+
     .container_for_geochart_single{
         padding-bottom: 50px;
+        width: 50%;
 
     }
 
+    .container_for_nodegraph_single{
+        width: 50%;
+    }
+
    
-   
+   .container_for_geochart_and_node{
+       display: flex;
+       justify-content: space-between;
+   }
 
 
 
