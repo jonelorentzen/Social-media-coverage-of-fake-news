@@ -68,24 +68,12 @@ def showinfo():
     d = request.json
     print(d)
 
-    #Reddit API call, time displayed in unix
 
-    reddit = praw.Reddit(
-    client_id="UK5XRgvcO7C2cQ",
-    client_secret="9OIo7S6kOBLlQZadOlo5miG0A9OC4g",
-    user_agent="my user agent")
-
-    reddit_data = []
-
-    for submission in reddit.subreddit("all").search(d["query"], limit=100):
-       reddit_data.append({"title": str(submission.title), "update_ratio": str(submission.upvote_ratio), "upvotes": str(submission.ups),
-       "url": str(submission.url), "created_at": str(submission.created_utc), "subreddit": str(submission.subreddit), "number_of_comments": str(submission.num_comments)})
+    reddit_data = reddit_api(d["query"])
     
-       
     #Create the token to get acess to the Twitter 
     bearer_token = auth()
     headers = create_headers(bearer_token)
-
 
     #API call to get back a dictionary with 10 api call without any duplicates
     json_response = api_caller(d["query"], headers)
@@ -107,7 +95,6 @@ def showinfo():
         json_response3[i]["author_id"] = json_response3[i].pop("id")
         json_response["data"][i].update(json_response3[i])
    
-
     #Create all of the data that is going to be displayed in the frontend from the json_response
     alldata = json_response["data"].copy()
     barchart = create_barchart(json_response)
@@ -118,14 +105,28 @@ def showinfo():
     geochart = create_geochart(json_response)
     links = create_links(json_response)
     nodes = create_nodes(links)
-
-    
-    
      
     json_response["data"] = {d["query"]: {"alldata": alldata, "barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, 
     "activity": activity, "geochart": geochart, "reddit": reddit_data, "query": d["query"], "nodes": nodes, "links": links }}
     
     return json.dumps(json_response)
+
+
+def reddit_api(query):
+    reddit_data = []
+    #Reddit API call, time displayed in unix
+    reddit = praw.Reddit(
+    client_id="UK5XRgvcO7C2cQ",
+    client_secret="9OIo7S6kOBLlQZadOlo5miG0A9OC4g",
+    user_agent="my user agent")
+
+    for submission in reddit.subreddit("all").search(query, limit=100):
+       reddit_data.append({"title": str(submission.title), "update_ratio": str(submission.upvote_ratio), "upvotes": str(submission.ups),
+       "url": str(submission.url), "created_at": str(submission.created_utc), "subreddit": str(submission.subreddit), "number_of_comments": str(submission.num_comments)})
+    
+    return reddit_data
+
+
 
 
 #The fuction api_caller is a fuction that is used to call the api 10 times and add the responses to the json_response
@@ -270,9 +271,7 @@ def create_linechart(json_response):
 
     for i in range(len(allDates)):
         finalDates[allDates[i]]=i+1
-
     
-          
     return finalDates
 
 #Function that returns the dates from when a person retweets a tweet
@@ -393,7 +392,7 @@ def create_nodes(links):
     return nodes
         
 
-
+#Legg inn en error catcher her for geochart kommer ofte feil når det er en query med lite resultater
 def create_geochart(json_response):
     all_locations = []
     tweets = json_response["data"]
@@ -408,17 +407,8 @@ def create_geochart(json_response):
     g = geocoder.mapquest(all_locations, method='batch', key="DW8AsY8QcWjfHn5wzHK769LT4LwAK0l6")
     for result in g:
         all_countries.append(str(result.country))
-        
-    
+          
     geochart = dict((x,all_countries.count(x)) for x in set(all_countries))
-
-    # all_countries = []
-    # g = geocoder.bing(all_locations, method='batch_reverse', key="AqcxdNzZ8kzbAdu6-q3McqsTRC3qsc2CjNAkwIxfVMPj8mhEqppdBE7GUL3OKS0n")
-    # for result in g:
-    #     all_countries.append(str(result.country))
-    #     print(result.country)
-
-    # geochart = dict((x,all_countries.count(x)) for x in set(all_countries))
 
     return geochart
 

@@ -1,15 +1,18 @@
 <template>
 
-
 <div class="entire_container">
-  <div class="header">
-      Top Posts
+  <div class="chartheader">
+      <h3>Top Posts</h3>
+      <div class="help-tip-container">
+                <div class="help-tip">
+                    <p>The top posts is the 3 tweets with the most retweets. The reason it is sorted by retweets and not likes is because more retweets means a wider reach.</p>
+                </div>
+            </div>
     </div>
   <div class="toppostsbox">
         <div class="toppostswrapper">
           <div class="postrow" v-for="(post, index) in listdata" v-bind:key="index" @click="gotopost(listdata[index].username, listdata[index].id)">
             
-           
             <div class="profilepicture_container">
                 <img class="profilepicture" v-bind:src="listdata[index].img">
               </div>
@@ -74,18 +77,8 @@ export default {
   display: flex;
   flex-direction: column;
 }
-.header{
-  display: flex;
-  padding: 10px;
-  font-family: Quicksand,Helvetica,Arial,sans-serif;
-  font-weight: 900;
-  font-size: 1.25em;
-  line-height: 1.5;
-  color: #26293c;
-}
 
 .toppostsbox{
-  
   display: flex;
   justify-content:space-evenly;
   flex-wrap: wrap;
@@ -190,5 +183,98 @@ export default {
   padding-right: 50px;
 }
 
+.chartheader{
+    height: 45px;
+    display: flex;
+}
+.chartheader h3{
+    font-weight: 900;
+    font-size: 1.25em;
+    line-height: 1.5;
+}
+.chart-container{
+    border: 1px solid #dddfea;
+    padding: 3em;
+    padding-top: 4em;
+}
+
+
+.help-tip-container{
+    z-index: 100;
+    padding: 2.5px 0px 0px 5px;
+}
+.help-tip{
+    text-align: center;
+    background-color: #BCDBEA;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+    line-height: 25px;
+    cursor: default;
+}
+
+.help-tip:before{
+    content:'?';
+    font-weight: bold;
+    color:#fff;
+}
+
+.help-tip:hover p{
+    display:block;
+    transform-origin: 100% 0%;
+    -webkit-animation: fadeIn 0.3s ease-in-out;
+    animation: fadeIn 0.3s ease-in-out;
+
+}
+
+.help-tip p{    /* The tooltip */
+    display: none;
+    text-align: left;
+    background-color: #1E2021;
+    padding: 20px;
+    width: 300px;
+    border-radius: 3px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    right: -4px;
+    color: #FFF;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.help-tip p:before{ /* The pointer of the tooltip */
+    content: '';
+    width:0;
+    height: 0;
+    border:6px solid transparent;
+    border-bottom-color:#1E2021;
+
+}
+
+.help-tip p:after{ /* Prevents the tooltip from being hidden */
+    width:100%;
+    height:40px;
+    content:'';
+   
+}
+
+/* CSS animation */
+
+@-webkit-keyframes fadeIn {
+    0% { 
+        opacity:0; 
+        transform: scale(0.6);
+    }
+
+    100% {
+        opacity:100%;
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeIn {
+    0% { opacity:0; }
+    100% { opacity:100%; }
+}
 
 </style>

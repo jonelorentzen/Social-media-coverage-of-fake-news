@@ -78,18 +78,15 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    
+ 
 }
 
 .engagement-container{
     justify-content: space-evenly;
     margin: auto;
     display: flex;
-   
     width: 100%;
-
     min-width: none;
-    
 
 }
 
@@ -104,13 +101,11 @@ export default {
     margin-right: 120px;
 
 }
-.stats{
-    
+.stats{ 
     width: 100px;
     display: inline-flex;
     align-items: center;
-    line-height: 10px; 
-    
+    line-height: 10px;  
 }
 
 
