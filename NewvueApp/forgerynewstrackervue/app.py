@@ -121,7 +121,7 @@ def showinfo():
     alltext = all_text(json_response)
     
     json_response["data"] = {d["query"]: {"alldata": alldata, "barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, 
-    "activity": activity, "geochart": geochart, "reddit": reddit_data, "query": d["query"], "nodes": nodes, "links": links, "alltext": alltext}}
+    "activity": activity, "geochart": geochart, "reddit": reddit_data, "query": d["query"], "nodes": nodes, "links": links, "alltext": alltext, "piechartreddit": piechartreddit}}
 
     sentiment = show_tweets_text_sentiment(json_response)
     
@@ -148,7 +148,6 @@ def reddit_api(query):
 def reddit_piechart(reddit_data):
     ratio_sum = 0
     for i in range(len(reddit_data)):
-        print(reddit_data[i]["upvote_ratio"])
         ratio_sum += reddit_data[i]["upvote_ratio"]
     
     upvote_ratio = round(ratio_sum/len(reddit_data),2)
@@ -512,7 +511,6 @@ def show_tweets_text_sentiment(json_response):
     textTweets=[]
     for i, (k,v) in enumerate(tweets.items()):
         for i in range(len(tweets[k]["alltext"])):
-            # print(i+1,') ', tweets[k]["alltext"][i]["tweets_text"], '\n')
             textTweets.append(tweets[k]["alltext"][i]["tweets_text"])
       
     # Create a dataframe with a column called Tweets

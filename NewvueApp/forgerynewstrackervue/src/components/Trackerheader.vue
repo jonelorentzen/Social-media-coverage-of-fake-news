@@ -5,7 +5,7 @@
           
         <h1 class="display-1">
             Real Time Tracker:
-            <strong><span style="float:left">{{listdata}}</span> <span v-show="listdata2.length !== 0"> vs </span> <span style="float:right">{{listdata2}}</span></strong>
+            <strong><span style="float:left">{{listdata}}&nbsp;</span> <span v-show="listdata2.length !== 0"> vs </span> <span style="float:right">&nbsp;{{listdata2}}</span></strong>
         </h1>
         </div>
 
@@ -19,7 +19,7 @@
                 <img src="../assets/logo.png" class="checkboxpic">
             </label>
            
-        </div> -->
+        </div> --> 
     
     </div>
 </template>
