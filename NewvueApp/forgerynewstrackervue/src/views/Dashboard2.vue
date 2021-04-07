@@ -5,6 +5,10 @@
     <Trackerheader class="dashboard-comp" :listdata='Display1.query' :listdata2='Display2.query'/>
     
     <Engagement class="dashboard-comp" :listdata1='Display1' :listdata2='Display2' />
+
+    <!-- <PieChartReddit :listdata='Display1.piechartreddit'/> -->
+
+
     
     <div class="container_for_linechart">
         <LineChart class="dashboard-comp" id="linechart" :listdata1='Display1' :listdata2='Display2' v-show="Display1.query && Display2.query !== {}"/>
@@ -71,6 +75,7 @@ import GeoChart from "../components/GeoChartComponent"
 import GeoChartSingle from "../components/GeoChartSingle"
 
 
+
 export default {
   name: 'Dashboard',
   components: {
@@ -83,14 +88,14 @@ export default {
     Trackerheader,
     Engagement,
     GeoChart,
-    GeoChartSingle
-    
+    GeoChartSingle,
+   
     },
     
     computed:{
     Display1(){
         if(this.$store.getters.GetTweets[0] === undefined){
-            return {"barchart": [], "topposts": {}, "topusers": {}, "geochart": {}, "query": '', "activity": {}, "linechart": {}}
+            return {"barchart": [], "topposts": {}, "topusers": {}, "geochart": {}, "query": '', "activity": {}, "linechart": {}, "piechartreddit": []}
         }else{
             return this.$store.getters.GetTweets[0];
         }   

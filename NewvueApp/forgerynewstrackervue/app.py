@@ -70,16 +70,13 @@ def showinfo():
 
     #Reddit API call, time displayed in unix
 
-    reddit = praw.Reddit(
-    client_id="UK5XRgvcO7C2cQ",
-    client_secret="9OIo7S6kOBLlQZadOlo5miG0A9OC4g",
-    user_agent="my user agent")
+   
+    reddit_data = reddit_api(d["query"])
 
-    reddit_data = []
+    piechartreddit = reddit_piechart(reddit_data)
+    wordcloud = reddit_wordcloud(reddit_data)
 
-    for submission in reddit.subreddit("all").search(d["query"], limit=100):
-       reddit_data.append({"title": str(submission.title), "update_ratio": str(submission.upvote_ratio), "upvotes": str(submission.ups),
-       "url": str(submission.url), "created_at": str(submission.created_utc), "subreddit": str(submission.subreddit), "number_of_comments": str(submission.num_comments)})
+
     
        
     #Create the token to get acess to the Twitter 
@@ -123,9 +120,52 @@ def showinfo():
     
      
     json_response["data"] = {d["query"]: {"alldata": alldata, "barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, 
-    "activity": activity, "geochart": geochart, "reddit": reddit_data, "query": d["query"], "nodes": nodes, "links": links }}
+    "activity": activity, "geochart": geochart, "query": d["query"], "nodes": nodes, "links": links, "piechartreddit": piechartreddit, "wordcloud": wordcloud}}
     
     return json.dumps(json_response)
+
+
+def reddit_api(query):
+    reddit = praw.Reddit(
+    client_id="UK5XRgvcO7C2cQ",
+    client_secret="9OIo7S6kOBLlQZadOlo5miG0A9OC4g",
+    user_agent="my user agent")
+
+    reddit_data = []
+
+    for submission in reddit.subreddit("all").search(query, limit=100):
+       reddit_data.append({"title": str(submission.title), "upvote_ratio": submission.upvote_ratio, "upvotes": str(submission.ups),
+       "url": str(submission.url), "created_at": str(submission.created_utc), "subreddit": str(submission.subreddit), "number_of_comments": str(submission.num_comments)})
+
+    return reddit_data
+
+
+def reddit_piechart(reddit_data):
+    ratio_sum = 0
+    for i in range(len(reddit_data)):
+        print(reddit_data[i]["upvote_ratio"])
+        ratio_sum += reddit_data[i]["upvote_ratio"]
+    
+    upvote_ratio = round(ratio_sum/len(reddit_data),2)
+
+    downvote_ratio = round(1-upvote_ratio,2)
+
+    ratio = [["Upvote Percentage", upvote_ratio*100], ["Downvote Percentage", downvote_ratio*100]] 
+
+    return ratio
+
+def reddit_wordcloud(reddit_data):
+    wordcloud = {}
+    for i in range(len(reddit_data)):
+        subreddit = reddit_data[i]["subreddit"]
+        if subreddit not in wordcloud:
+            wordcloud[subreddit] = 1
+        else:
+            wordcloud[subreddit] += 1
+    return wordcloud
+            
+            
+
 
 
 #The fuction api_caller is a fuction that is used to call the api 10 times and add the responses to the json_response
