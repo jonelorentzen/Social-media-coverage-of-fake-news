@@ -4,6 +4,12 @@ import requests
 import json
 import os
 import time
+from textblob import TextBlob
+import pandas as pd
+import numpy as np
+import re
+import matplotlib.pyplot as plt
+plt.style.use('fivethirtyeight')
 import praw
 import geocoder
 from datetime import datetime
@@ -68,7 +74,6 @@ def showinfo():
     d = request.json
     print(d)
 
-
     reddit_data = reddit_api(d["query"])
     
     #Create the token to get acess to the Twitter 
@@ -94,7 +99,7 @@ def showinfo():
         json_response3[i]["public_metrics_user"] = json_response3[i].pop("public_metrics")
         json_response3[i]["author_id"] = json_response3[i].pop("id")
         json_response["data"][i].update(json_response3[i])
-   
+     
     #Create all of the data that is going to be displayed in the frontend from the json_response
     alldata = json_response["data"].copy()
     barchart = create_barchart(json_response)
@@ -107,13 +112,15 @@ def showinfo():
     geochart = create_geochart(json_response)
     links = create_links(json_response)
     nodes = create_nodes(links)
-     
-
+    alltext = all_text(json_response)
+    
     json_response["data"] = {d["query"]: {"alldata": alldata, "barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, 
-    "activity": activity, "geochart": geochart, "reddit": reddit_data, "query": d["query"], "nodes": nodes, "links": links }}
+    "activity": activity, "geochart": geochart, "reddit": reddit_data, "query": d["query"], "nodes": nodes, "links": links, "alltext": alltext}}
 
+    sentiment = show_tweets_text_sentiment(json_response)
     
-    
+    json_response["data"][d["query"]]["sentiment"] = sentiment
+
     return json.dumps(json_response)
 
 
@@ -130,9 +137,6 @@ def reddit_api(query):
        "url": str(submission.url), "created_at": str(submission.created_utc), "subreddit": str(submission.subreddit), "number_of_comments": str(submission.num_comments)})
     
     return reddit_data
-
-
-
 
 #The fuction api_caller is a fuction that is used to call the api 10 times and add the responses to the json_response
 #We use the time libery to avoid getting the same json response back from the api, so it waits 1 second between every api call
@@ -378,7 +382,6 @@ def create_links(json_response):
                 text = tweets[i]['text']
                 idxAt = text.find('@')
                 idxCo = text.find(':')
-                tweet_id = tweets[i]['id']
                 followers = tweets[i]['public_metrics_user']['followers_count']
 
                 if followers <= 10000:
@@ -391,8 +394,7 @@ def create_links(json_response):
                     size = 10
                 elif followers > 1000000:
                     size = 13
-
-                print(text[idxAt+1:idxCo])
+            
                 links.append({'source': text[idxAt+1:idxCo], 'target': tweets[i]['username'], 'size':size})
 
 
@@ -413,7 +415,6 @@ def create_links(json_response):
                 elif followers > 1000000:
                     size = 13
 
-                print(text[idxAt:idxS])
                 links.append({'source': text[idxAt+1:idxS], 'target': tweets[i]['username'], 'size':size})
 
     return links
@@ -423,12 +424,10 @@ def create_nodes(links):
     nodes = []
     for i in range(len(links)):
         if links[i]['source'] not in nodes:
-
             nodes.append({"id":links[i]['source'], 'size':links[i]['size']})
         
         if links[i]['target'] not in nodes:
             nodes.append({"id":links[i]['target'], 'size':links[i]['size'] })
-    print(nodes)
     return nodes
 
 #Legg inn en error catcher her for geochart kommer ofte feil når det er en query med lite resultater
@@ -451,7 +450,91 @@ def create_geochart(json_response):
 
     return geochart
 
+def all_text(json_response):
+    tweets = json_response["data"]
+    allText = []
+    for i in range(len(tweets)):
+        allText.append({"tweets_text": tweets[i]["text"]})
+    return allText
 
+
+# https://betterprogramming.pub/twitter-sentiment-analysis-15d8892c0082
+#####################################
+#########      SENTIMENT   ##########
+#########       TWEETS     ##########
+#####################################
+# 1) Get the text of every tweet. 
+# 2) put each tweet in a DataFrame
+# 3) remove "@", "#", "links" etc.
+# 4) Add subjectivity and polarity to the DataFrame
+# 5) Send data to json_response
+
+#  Print tweet text
+def show_tweets_text_sentiment(json_response):
+   
+    tweets = json_response["data"]
+    
+    textTweets=[]
+    for i, (k,v) in enumerate(tweets.items()):
+        for i in range(len(tweets[k]["alltext"])):
+            # print(i+1,') ', tweets[k]["alltext"][i]["tweets_text"], '\n')
+            textTweets.append(tweets[k]["alltext"][i]["tweets_text"])
+      
+    # Create a dataframe with a column called Tweets
+    df = pd.DataFrame(columns=['Tweets'])
+    for tweet in textTweets:
+        cleantweet = cleanTxt(tweet)
+        df = df.append({"Tweets": cleantweet}, ignore_index=True)
+    # Show  rows of data
+
+    # Create two new columns 'Subjectivity' & 'Polarity'
+    df['Subjectivity'] = df['Tweets'].apply(getSubjectivity)
+    df['Polarity'] = df['Tweets'].apply(getPolarity)
+    df['Analysis'] = df['Polarity'].apply(getAnalysis)
+    pd.set_option('display.max_rows', df.shape[0]+1)
+    dictionaryObject = df.to_dict()
+
+    sentiment = {"Positive": 0, "Negative": 0, "Neutral": 0}
+
+    analysis = dictionaryObject["Analysis"]
+
+
+    for i in range(len(analysis)):
+        if analysis[i] == "Positive":
+            sentiment["Positive"] += 1
+        elif analysis[i] == "Negative":
+            sentiment["Negative"] += 1
+        else:
+            sentiment["Neutral"] += 1
+          
+    return sentiment
+    
+# Create a function to clean the tweets
+def cleanTxt(text):
+    text = re.sub('@[A-Za-z0–9]+', '', text) #Removing @mentions
+    text = re.sub('#', '', text) # Removing '#' hash tag
+    text = re.sub('RT[\s]+', '', text) # Removing RT
+    text = re.sub('https?:\/\/\S+', '', text) # Removing hyperlink
+    
+    return text
+
+# A function to get the subjectivity
+def getSubjectivity(text):
+   return TextBlob(text).sentiment.subjectivity
+
+# A function to get the polarity
+def getPolarity(text):
+   return  TextBlob(text).sentiment.polarity
+
+# function to compute negative (-1), neutral (0) and positive (+1) analysis
+def getAnalysis(score):
+    if score < 0:
+        return 'Negative'
+    elif score == 0:
+        return 'Neutral'
+    else:
+        return 'Positive'
+    
 if __name__ == '__main__':
     app.run(debug=True)
 
