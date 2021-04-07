@@ -74,7 +74,13 @@ def showinfo():
     d = request.json
     print(d)
 
+    #Reddit API call, time displayed in unix
+
+   
     reddit_data = reddit_api(d["query"])
+
+    piechartreddit = reddit_piechart(reddit_data)
+
     
     #Create the token to get acess to the Twitter 
     bearer_token = auth()
@@ -133,10 +139,39 @@ def reddit_api(query):
     user_agent="my user agent")
 
     for submission in reddit.subreddit("all").search(query, limit=100):
-       reddit_data.append({"title": str(submission.title), "update_ratio": str(submission.upvote_ratio), "upvotes": str(submission.ups),
+       reddit_data.append({"title": str(submission.title), "upvote_ratio": submission.upvote_ratio, "upvotes": str(submission.ups),
        "url": str(submission.url), "created_at": str(submission.created_utc), "subreddit": str(submission.subreddit), "number_of_comments": str(submission.num_comments)})
-    
+
     return reddit_data
+
+
+def reddit_piechart(reddit_data):
+    ratio_sum = 0
+    for i in range(len(reddit_data)):
+        print(reddit_data[i]["upvote_ratio"])
+        ratio_sum += reddit_data[i]["upvote_ratio"]
+    
+    upvote_ratio = round(ratio_sum/len(reddit_data),2)
+
+    downvote_ratio = round(1-upvote_ratio,2)
+
+    ratio = [["Upvote Percentage", upvote_ratio*100], ["Downvote Percentage", downvote_ratio*100]] 
+
+    return ratio
+
+def reddit_wordcloud(reddit_data):
+    wordcloud = {}
+    for i in range(len(reddit_data)):
+        subreddit = reddit_data[i]["subreddit"]
+        if subreddit not in wordcloud:
+            wordcloud[subreddit] = 1
+        else:
+            wordcloud[subreddit] += 1
+    return wordcloud
+            
+            
+
+
 
 #The fuction api_caller is a fuction that is used to call the api 10 times and add the responses to the json_response
 #We use the time libery to avoid getting the same json response back from the api, so it waits 1 second between every api call
