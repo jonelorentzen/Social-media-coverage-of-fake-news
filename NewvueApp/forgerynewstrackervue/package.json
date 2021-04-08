@@ -37,6 +37,7 @@
     "vue-burger-menu": "^2.0.5",
     "vue-chartkick": "^1.0.0",
     "vue-d3-network": "^0.1.28",
+    "vue-plugin-load-script": "^2.0.1",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
   },

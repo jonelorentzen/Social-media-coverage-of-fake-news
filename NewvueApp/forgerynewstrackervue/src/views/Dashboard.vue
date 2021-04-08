@@ -26,8 +26,8 @@
         </div>
 
         <div class="container_for_nodenetwork">
-            <Sigmagraph class="nodenetwork_double_comp" :listdata='Display1'/>
-            <Sigmagraph class="nodenetwork_double_comp" :listdata='Display2'/>
+            <!-- <Sigmagraph class="nodenetwork_double_comp" :listdata='Display1'/>
+            <Sigmagraph class="nodenetwork_double_comp" :listdata='Display2'/> -->
         </div>
 
         <div class="Post_container">
@@ -54,7 +54,7 @@
             </div>
 
             <div class="container_for_nodegraph_single">
-            <Sigmagraph :listdata='Display1'/>
+                <!-- <Sigmagraph :listdata='Display1'/> -->
             </div>
         
 
@@ -66,7 +66,11 @@
             <topPosts class="dashboard-comp insight" :listdata='Display1.topposts'/>
             <mostinfluentialusers class="dashboard-comp insight" :listdata='Display1.topusers' />
         </div>
-
+        <div class="Post_user_container">
+            <Sentiment :listdata='Display1.sentiment'/>
+            <PieChartReddit :listdata='Display1.piechartreddit'/>
+        </div>
+        <LineChartReddit :listdata='Display1' v-show="Display1.query && Display2.query !== {}"/>
         
 
     </div>
@@ -87,7 +91,10 @@ import Trackerheader from "../components/Trackerheader"
 import Engagement from "../components/Engagement"
 import GeoChart from "../components/GeoChartComponent"
 import GeoChartSingle from "../components/GeoChartSingle"
-import Sigmagraph from "../components/Sigmagraph"
+// import Sigmagraph from "../components/Sigmagraph"
+import Sentiment from "../components/Sentiment"
+import PieChartReddit from "../components/PieChartReddit"
+import LineChartReddit from '../components/LineChartReddit'
 
 
 export default {
@@ -103,7 +110,10 @@ export default {
     Engagement,
     GeoChart,
     GeoChartSingle,
-    Sigmagraph
+    // Sigmagraph,
+    Sentiment,
+    PieChartReddit,
+    LineChartReddit
     
     },
     

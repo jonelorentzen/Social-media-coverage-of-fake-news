@@ -11,6 +11,7 @@ import { faFontAwesome, faTwitterSquare, faTwitter} from '@fortawesome/free-bran
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import VTooltip from 'v-tooltip'
 import Highcharts from 'highcharts'
+import LoadScript from "vue-plugin-load-script";
 
 
 
@@ -37,4 +38,5 @@ createApp(App)
   .use(VTooltip)
   .component("fa", FontAwesomeIcon)
   .use(Chartkick.use(Highcharts))
+  .use(LoadScript)
   .mount("#app");

@@ -1,7 +1,7 @@
 <template>
      <div class="chart-box">
         <div class="chartheader">
-            <h3><span>Ratio Votes Reddit</span></h3>
+            <h3><span>Percent of Upvotes/Downvotes Reddit</span></h3>
         </div>
         <div class="chart-container">
             <pie-chart :data="listdata" :messages="{empty: 'No data'}"></pie-chart>

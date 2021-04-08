@@ -80,6 +80,7 @@ def showinfo():
     reddit_data = reddit_api(d["query"])
 
     piechartreddit = reddit_piechart(reddit_data)
+    timelinereddit = reddit_linechart(reddit_data)
 
     
     #Create the token to get acess to the Twitter 
@@ -121,7 +122,8 @@ def showinfo():
     alltext = all_text(json_response)
     
     json_response["data"] = {d["query"]: {"alldata": alldata, "barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, 
-    "activity": activity, "geochart": geochart, "reddit": reddit_data, "query": d["query"], "nodes": nodes, "links": links, "alltext": alltext, "piechartreddit": piechartreddit}}
+    "activity": activity, "geochart": geochart, "reddit": reddit_data, "query": d["query"], "nodes": nodes, "links": links, "alltext": alltext, "piechartreddit": piechartreddit,
+    "timelinereddit": timelinereddit}}
 
     sentiment = show_tweets_text_sentiment(json_response)
     
@@ -141,6 +143,8 @@ def reddit_api(query):
     for submission in reddit.subreddit("all").search(query, limit=100):
        reddit_data.append({"title": str(submission.title), "upvote_ratio": submission.upvote_ratio, "upvotes": str(submission.ups),
        "url": str(submission.url), "created_at": str(submission.created_utc), "subreddit": str(submission.subreddit), "number_of_comments": str(submission.num_comments)})
+       for comment in submission.comments.list():
+            print(comment.body)
 
     return reddit_data
 
@@ -168,7 +172,26 @@ def reddit_wordcloud(reddit_data):
             wordcloud[subreddit] += 1
     return wordcloud
             
-            
+def reddit_linechart(reddit_data):
+    allDates = []
+    finalDates = {}
+
+    for i in range(len(reddit_data)):
+        timestamp = reddit_data[i]["created_at"]
+        print(timestamp)
+        timestamp = timestamp.replace(".0", "")
+        print(timestamp)
+        allDates.append(datetime.utcfromtimestamp(int(timestamp)).strftime('%Y-%m-%d %H:%M:%S'))
+        
+    allDates.sort() 
+   
+
+    for i in range(len(allDates)):
+        finalDates[allDates[i]]=i+1
+    print(finalDates)
+    
+    return finalDates
+
 
 
 

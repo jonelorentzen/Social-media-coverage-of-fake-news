@@ -77,7 +77,6 @@ export default createStore({
         
         state.commit("SetTweets", response.data[searchValue]);
         
-        //set loading screen
         
       } catch (err){
         this.commit('error',err)

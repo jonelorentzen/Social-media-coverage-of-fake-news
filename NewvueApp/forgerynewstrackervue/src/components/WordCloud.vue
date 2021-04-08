@@ -1,23 +1,47 @@
 <template>
-     <div class="chart-box">
+
+    <div class="chart-box">
         <div class="chartheader">
-            <h3><span>Sentiment</span></h3>
+            <h3><span>Timeline Reddit Posts</span></h3>
             <div class="help-tip-container">
                 <div class="help-tip">
-                    <p>The sentiment pie chart displays the sentiment of the tweets returned. Showing how many of the tweets are positive to the query or negative/neutral.</p>
+                    <p>The line chart shows the total tweets, retweets, replies and quotes over time. For every tweet, retweet, reply and quote the line increments by one. </p>
                 </div>
             </div>
         </div>
-        <div class="chart-container">
-            <pie-chart :data="listdata" :messages="{empty: 'No data'}"></pie-chart>
-        </div>
+
+        <div id='wordcloud'></div>
+
     </div>
+
 </template>
 
 <script>
+
 export default {
-    name:"PieChartReddit",
-    props: ['listdata']
+    props: ['listdata'],
+    methods(){
+       function wordcloud(){
+         this.$loadScript("lib/d3/d3.js").
+         this.$loadScript("lib/d3/d3.layout.cloud.js".
+         this.$loadScript("d3.wordcloud.js")
+        .then(() => {
+        // Script is loaded, do something
+            d3.wordcloud()
+            .size([800, 400])
+            .selector('#wordcloud')
+            .words([{text: 'word', size: 5}, {text: 'cloud', size: 15}])
+            .start();
+
+        })
+        .catch(() => {
+        // Failed to fetch script
+            console.log("failed")
+        })
+        
+    }}
+    
+    
 }
 </script>
 
@@ -27,7 +51,6 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    width: 49.5%;
 }
 .chartheader{
     height: 45px;
@@ -43,6 +66,7 @@ export default {
     padding: 3em;
     padding-top: 4em;
 }
+
 
 .help-tip-container{
     z-index: 100;
@@ -121,5 +145,10 @@ export default {
     0% { opacity:0; }
     100% { opacity:100%; }
 }
-
 </style>
+
+
+
+
+
+
