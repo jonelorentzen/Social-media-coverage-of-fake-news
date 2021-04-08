@@ -4,7 +4,18 @@
     
         <div class="row justify-content-md-center">
 
+                <transition name="fade">
+                <p v-if="show" class="show-info-txt">
+                     Two options
+                </p>
+
+            </transition>
            <div class="col-sm">
+                           <transition name="slide-fade">
+                <p v-if="show">
+                    Use our premade searches.<br>
+                </p>
+            </transition>
                 <div class="select">
 
                     <select id="selected" v-model="selected">
@@ -22,7 +33,11 @@
 
            </div>
            <div class="col-sm">
-
+               <transition name="slide-fade">
+                <p v-if="show">
+                    Write your own search.
+                </p>
+            </transition>
             <input v-model="searchValue" class="form-control" type="text" placeholder="Search here">
            </div>
            <div class="col-">
@@ -40,20 +55,8 @@
         <button @click="show = !show" class="btn btn-dark">
             show tutorial
         </button>
-            <transition name="fade">
-                <p v-if="show">
-                    You have two options <br>
+           
 
-                </p>
-
-            </transition>
-            <transition name="slide-fade">
-                <p v-if="show">
-                    Use our premade searches.<br>
-                    Write your own search. <br>
-                    Click Add search.
-                </p>
-            </transition>
         </div>
  
     
@@ -109,7 +112,15 @@ export default {
 </script>
 
 <style scoped>
-
+h2{
+    margin-bottom: 30px;
+}
+p{
+    text-align: left;
+}
+.show-info-txt{
+    text-align: center;
+}
 .container{
     color: black;
 }

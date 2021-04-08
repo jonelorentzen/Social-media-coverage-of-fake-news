@@ -74,10 +74,14 @@ export default createStore({
         let response = await api.getMessages(searchValue);
         console.log(response.data)
 
+        console.log("now its loading");
+
         
         state.commit("SetTweets", response.data[searchValue]);
         
         //set loading screen to true
+        console.log('====================================');
+       
         state.commit('loading',index);
 
       } catch (err){

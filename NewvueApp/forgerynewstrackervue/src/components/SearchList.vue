@@ -6,7 +6,7 @@
 
                 <td>{{title.title}}</td> 
                 <br>
-                    <div v-if="title.loaded">DONE!</div>
+                    <div v-if="title.loaded"><img class="loadingspin" src="../assets/loading-spinnr.gif" alt=""></div>
                 <div :class="{'active': title.active}" class="toggle_container">
                     <toggle-switch :searchIndex="index"/>
                 </div>
@@ -51,6 +51,8 @@ table tr{
 .toggle_container.active {
     background: #009427;
 }
-   
+.loadingspin{
+    width: 60px;
+}
 
 </style>
