@@ -25,21 +25,31 @@ export default createStore({
     },
     SetTweets(state, response){
       state.allTweets.push(response)
+      state.searches[state.allTweets.length-1].loaded = true
     },
 
-    DisplayTweet(state, index){
-      state.tweets.push(state.allTweets[index]);
-      state.searchesIndexInTweets[index] = state.tweets.length-1
-      console.log(state.tweets)
+    DisplayTweet(state, idx){
+      console.log(idx)
+      console.log(state)
+      for (let i in state.allTweets){
+        if (state.searches[idx]["title"] == state.allTweets[i]["query"]){
+          state.tweets.push(state.allTweets[i]);
+        }
+      }
+      
+      state.searches[idx].active = true
+      state.searches[idx].index = state.tweets.length -1
+      console.log(state.searches)
+  
     },
 
-    RemoveTweets(state, index){
-      state.tweets.splice(state.searchesIndexInTweets[index], 1);
-      
-      delete state.searchesIndexInTweets[index]
-    
-      console.log(state.searchesIndexInTweets)
-      
+    RemoveTweets(state, idx){
+      state.searches[idx].active = false 
+      state.tweets.splice(state.searches[idx].index, 1);
+      state.searches[idx].index = null
+      console.log(state.searches)
+   
+     
     },
 
     NewSearch(state,SearchItem){
@@ -47,47 +57,40 @@ export default createStore({
         title: SearchItem,
         active: false,
         loaded: false,
-      })
-    },
+        index: null
 
-    loading(state,index){
-      state.searches[index].loaded = !state.searches[index].loaded
+      })
     },
 
     searchItemActive(state, index){
       state.searches[index].active = !state.searches[index].active
-      console.log(state.searches)
+    
     }
   },
 
   actions: {
-    addNewSearch({commit}, SearchItem){
-      commit("NewSearch",SearchItem);
-    },
-    loading({commit},index){
-      commit('loading',index)
-    },
-    async getResult(state, searchValue, index) {
+    async getResult(state, searchValue) {
       
       try{
         let api = new Backendapi();
+        console.log("now its loading");
+        
         let response = await api.getMessages(searchValue);
         console.log(response.data)
-
-        console.log("now its loading");
-
-        
+    
         state.commit("SetTweets", response.data[searchValue]);
         
-        //set loading screen to true
-        console.log('====================================');
-       
-        state.commit('loading',index);
+      
 
       } catch (err){
         this.commit('error',err)
       }
     },
+     addNewSearch({commit}, SearchItem){
+      commit("NewSearch",SearchItem);
+  
+    },
+
     addTweetToDisplay(state, index){
       state.commit("DisplayTweet", index);
     },

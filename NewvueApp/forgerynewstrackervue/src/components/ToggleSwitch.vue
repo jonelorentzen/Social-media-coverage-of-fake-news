@@ -58,7 +58,6 @@ export default {
         check: function(event){
             if (event.target.checked == true){
                this.$store.dispatch("addTweetToDisplay", this.searchIndex)
-               this.$store.dispatch('loading', this.searchIndex)
             } else{
                 this.$store.dispatch("removeFromTweets", this.searchIndex);
             }  

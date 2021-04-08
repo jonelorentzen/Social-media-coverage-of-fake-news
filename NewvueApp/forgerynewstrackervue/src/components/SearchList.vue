@@ -6,9 +6,9 @@
 
                 <td>{{title.title}}</td> 
                 <br>
-                    <div v-if="title.loaded"><img class="loadingspin" src="../assets/loading-spinnr.gif" alt=""></div>
+                    <div v-show="title.loaded == false"><img class="loadingspin" src="../assets/loading-spinnr.gif" alt=""></div>
                 <div :class="{'active': title.active}" class="toggle_container">
-                    <toggle-switch :searchIndex="index"/>
+                    <toggle-switch v-show="title.loaded" :searchIndex="index"/>
                 </div>
             </tr>
         </table>

@@ -78,7 +78,8 @@ export default {
             twitteruser: 'Dönerkebab123',
             searchValue: '',
             selected: '',
-            show: true
+            show: true,
+        
             };
     },
     methods: {
@@ -101,12 +102,12 @@ export default {
             }
         },
         getResult(){
-            this.$store.dispatch("getResult", this.$store.state.searches.active)
+            this.$store.dispatch("getResult", this.$store.state.searches.active, )
         },
         gotoPage() {
         this.$router.push('/Dashboard');
         },
-    },
+    }
   };
 
 </script>
