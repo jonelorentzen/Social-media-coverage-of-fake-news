@@ -5,7 +5,6 @@
             v-on:click="check(index)">
                 
                 <td v-show="title.loaded == true">{{title.title}}</td> 
-                
                 <br>
                     <div v-show="title.loaded == false"><img class="loadingspin" src="../assets/spinner-transparent.gif" alt=""></div>
             </tr>
@@ -51,6 +50,19 @@ export default {
 </script>
 
 <style>
+.slide-fade-enter-active {
+  transition: all 1.2 ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 1.2s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}
 
 .query-container{
     width: 100%;
