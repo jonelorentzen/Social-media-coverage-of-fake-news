@@ -46,18 +46,9 @@
         <div class="container_for_barchart_single">
             <BarChartBig  class="dashboard-comp" id="Barchart" :listdata='Display1.barchart'/>
         </div>
-
-        <div class="container_for_geochart_and_node">
-
-            <div class="container_for_geochart_single" >
-            <GeoChartSingle id="Geochart" :listdata='Display1.geochart'/>
-            </div>
-
-            <div v-if="Display1.query != ''"  class="container_for_nodegraph_single">
-            <Sigmagraph :listdata='Display1'/>
-            </div>
         
-
+        <div class="container_for_geochart_single" >
+            <GeoChartSingle id="Geochart" :listdata='{"US": 69}'/>
         </div>
         
         

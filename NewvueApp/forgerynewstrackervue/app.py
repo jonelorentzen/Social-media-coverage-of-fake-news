@@ -13,6 +13,7 @@ plt.style.use('fivethirtyeight')
 import praw
 import geocoder
 from datetime import datetime
+import urllib
 
 
 # configuration
@@ -74,20 +75,30 @@ def showinfo():
     d = request.json
     print(d)
 
+    unencoded_query = str(d["query"])
+    query = urllib.parse.quote(unencoded_query)
+
+
+
     #Reddit API call, time displayed in unix
 
    
-    reddit_data = reddit_api(d["query"])
+    reddit_data = reddit_api(query)
 
     piechartreddit = reddit_piechart(reddit_data)
 
+    for submission in reddit.subreddit("all").search(query, limit=100):
+       reddit_data.append({"title": str(submission.title), "update_ratio": str(submission.upvote_ratio), "upvotes": str(submission.ups),
+       "url": str(submission.url), "created_at": str(submission.created_utc), "subreddit": str(submission.subreddit), "number_of_comments": str(submission.num_comments)})
     
     #Create the token to get acess to the Twitter 
     bearer_token = auth()
     headers = create_headers(bearer_token)
 
+   
+
     #API call to get back a dictionary with 10 api call without any duplicates
-    json_response = api_caller(d["query"], headers)
+    json_response = api_caller(query, headers)
     # New call to the the Twitter API that uses the ID of the retweeted tweets and adds the data of the original tweets to the dictionary
     #The create_id_url creates the url that is used to call the api with.
     ids = extract_retweets(json_response)
@@ -115,13 +126,14 @@ def showinfo():
     activity = create_activity(json_response)
     links = create_links(json_response)
     nodes = create_nodes(links)
-    geochart = create_geochart(json_response)
+    # geochart = create_geochart(json_response)
     links = create_links(json_response)
     nodes = create_nodes(links)
     alltext = all_text(json_response)
     
     json_response["data"] = {d["query"]: {"alldata": alldata, "barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, 
     "activity": activity, "geochart": geochart, "reddit": reddit_data, "query": d["query"], "nodes": nodes, "links": links, "alltext": alltext, "piechartreddit": piechartreddit}}
+    
 
     sentiment = show_tweets_text_sentiment(json_response)
     
@@ -430,6 +442,8 @@ def create_links(json_response):
                     size = 13
             
                 links.append({'source': text[idxAt+1:idxCo], 'target': tweets[i]['username'], 'size':size})
+
+            
 
 
             elif tweets[i]['referenced_tweets'][0]["type"] == "replied_to":
