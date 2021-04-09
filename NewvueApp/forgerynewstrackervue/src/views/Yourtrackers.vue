@@ -1,17 +1,14 @@
 <template>
+            <h4>Your Recent Searches</h4>
+            <search-list class="container"/> <br>
     <div class="container">
-        <h2>Welcome @{{twitteruser}}</h2><br>
-    
+
+
+
         <div class="row justify-content-md-center">
 
-                <transition name="fade">
-                <p v-if="show" class="show-info-txt">
-                     Two options
-                </p>
-
-            </transition>
            <div class="col-sm">
-                           <transition name="slide-fade">
+            <transition name="slide-fade">
                 <p v-if="show">
                     Use our premade searches.<br>
                 </p>
@@ -44,22 +41,23 @@
                <br><br>
            </div>
 
+            <div class=".col-">
             <button class="btn btn-primary" @click="addSearch();">Add search</button><br><br>
-        </div>
-    
 
-            <h4>Your Recent Searches</h4>
-            <search-list/> <br>
+            </div>
+        </div>
+
+
             <button class="btn btn-primary" @click="gotoPage();">See results on DashBoard</button>
-            
-        <button @click="show = !show" class="btn btn-dark">
+
+        <button @click="showTut()" style="display: none">
             show tutorial
         </button>
-           
 
-        </div>
- 
-    
+
+    </div>
+
+
 </template>
 
 <script>
@@ -78,11 +76,15 @@ export default {
             twitteruser: 'Dönerkebab123',
             searchValue: '',
             selected: '',
-            show: true,
-        
+            show: false,
+
             };
     },
     methods: {
+        showTut(){
+            this.show = true
+        },
+
         addSearch(){
             var dropValueElement = document.getElementById("selected");
             var text = this.searchValue
@@ -107,6 +109,9 @@ export default {
         gotoPage() {
         this.$router.push('/Dashboard');
         },
+    },
+    mounted(){
+        this.showTut()
     }
   };
 
@@ -184,7 +189,7 @@ select {
 }
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s ease;
+  transition: opacity 2.5s ease;
 }
 
 .fade-enter-from,
@@ -192,16 +197,16 @@ select {
   opacity: 0;
 }
 .slide-fade-enter-active {
-  transition: all 0.3s ease-out;
+  transition: all 2.5s ease-out;
 }
 
 .slide-fade-leave-active {
-  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+  transition: all 2.5s cubic-bezier(1, 0.5, 0.8, 1);
 }
 
 .slide-fade-enter-from,
 .slide-fade-leave-to {
-  transform: translateX(20px);
+  transform: translateX(40px);
   opacity: 0;
 }
 </style>
