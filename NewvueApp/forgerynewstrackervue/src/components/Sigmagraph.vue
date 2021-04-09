@@ -13,7 +13,9 @@ Node network
        :height="height+'px'"
        @mousemove="drag($event)"
        @mouseup="drop()"
-       v-if="bounds.minX">
+       v-if="bounds.minX"
+       :messages="{empty: 'No data'}"
+       >
     
     <line v-for="link in graph.links"
           :x1="coords[link.source.index].x"

@@ -25,7 +25,7 @@
             <GeoChart id="Geochart" :listdata='Display2.geochart'/>
         </div>
 
-        <div class="container_for_nodenetwork">
+        <div v-if="Display1.query != '' && Display2.query != ''" class="container_for_nodenetwork">
             <Sigmagraph class="nodenetwork_double_comp" :listdata='Display1'/>
             <Sigmagraph class="nodenetwork_double_comp" :listdata='Display2'/>
         </div>
@@ -53,7 +53,7 @@
             <GeoChartSingle id="Geochart" :listdata='Display1.geochart'/>
             </div>
 
-            <div class="container_for_nodegraph_single">
+            <div v-if="Display1.query != ''"  class="container_for_nodegraph_single">
             <Sigmagraph :listdata='Display1'/>
             </div>
         
