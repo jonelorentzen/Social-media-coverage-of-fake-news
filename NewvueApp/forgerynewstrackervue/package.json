@@ -38,6 +38,7 @@
     "vue-chartkick": "^1.0.0",
     "vue-d3-network": "^0.1.28",
     "vue-router": "^4.0.0-0",
+    "vuewordcloud": "^18.7.12",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {
