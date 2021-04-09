@@ -117,7 +117,7 @@ def showinfo():
     activity = create_activity(json_response)
     links = create_links(json_response)
     nodes = create_nodes(links)
-    geochart = create_geochart(json_response)
+    # geochart = create_geochart(json_response)
     links = create_links(json_response)
     nodes = create_nodes(links)
 
@@ -127,7 +127,7 @@ def showinfo():
      
 
     json_response["data"] = {d["query"]: {"alldata": alldata, "barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, 
-    "activity": activity, "geochart": geochart, "reddit": reddit_data, "query": d["query"], "nodes": nodes, "links": links }}
+    "activity": activity, "reddit": reddit_data, "query": d["query"], "nodes": nodes, "links": links }}
 
     
     return json.dumps(json_response)

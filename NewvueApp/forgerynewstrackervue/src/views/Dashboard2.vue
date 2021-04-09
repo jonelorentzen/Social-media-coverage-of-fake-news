@@ -43,7 +43,7 @@
         </div>
         
         <div class="container_for_geochart_single" >
-            <GeoChartSingle id="Geochart" :listdata='Display1.geochart'/>
+            <GeoChartSingle id="Geochart" :listdata='{"US": 69}'/>
         </div>
 
         <div class="Post_user_container">

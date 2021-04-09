@@ -5,51 +5,37 @@ export default createStore({
   state: {
     //List with objects that contain the title and if the title is active or not 
     searches: [],
-    //State to keep control over the indexes in tweets and searches. {"Index in the searchlist": "Index in the tweets list"}, {5:0, 1:1}
-    searchesIndexInTweets: {},
+   
     //The tweets that is displayed MAX 2 queries
     tweets: [],
 
     //List that contains all of the data the user has added to the search list
     allTweets: []
-  
-  
 
   },
   mutations: {
-    SetLinks(state, response){
-      state.links = response
-    },
-    SetNodes(state, response){
-      state.nodes = response 
-    },
+  
     SetTweets(state, response){
       state.allTweets.push(response)
       state.searches[state.allTweets.length-1].loaded = true
     },
 
     DisplayTweet(state, idx){
-      console.log(idx)
-      console.log(state)
       for (let i in state.allTweets){
         if (state.searches[idx]["title"] == state.allTweets[i]["query"]){
           state.tweets.push(state.allTweets[i]);
         }
       }
-      
       state.searches[idx].active = true
       state.searches[idx].index = state.tweets.length -1
-      console.log(state.searches)
-  
+    
     },
 
     RemoveTweets(state, idx){
       state.searches[idx].active = false 
       state.tweets.splice(state.searches[idx].index, 1);
       state.searches[idx].index = null
-      console.log(state.searches)
-   
-     
+    
     },
 
     NewSearch(state,SearchItem){
@@ -61,11 +47,6 @@ export default createStore({
 
       })
     },
-
-    searchItemActive(state, index){
-      state.searches[index].active = !state.searches[index].active
-    
-    }
   },
 
   actions: {
@@ -81,7 +62,6 @@ export default createStore({
         state.commit("SetTweets", response.data[searchValue]);
         
       
-
       } catch (err){
         this.commit('error',err)
       }
@@ -98,17 +78,13 @@ export default createStore({
     removeFromTweets(state, index){
       state.commit("RemoveTweets", index);
     },
-
-    searchItemActive(state, index){
-      state.commit("searchItemActive", index)
-    }
   },
   modules: {
 
   },
   getters: {
     GetTweets: state => state.tweets,
-    getSearchByIndex: (state) => (index) => {return state.searches[index]},
+  
     
 
   }
