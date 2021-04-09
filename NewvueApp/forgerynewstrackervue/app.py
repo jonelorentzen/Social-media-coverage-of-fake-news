@@ -7,6 +7,7 @@ import time
 import praw
 import geocoder
 from datetime import datetime
+import urllib
 
 
 # configuration
@@ -68,6 +69,11 @@ def showinfo():
     d = request.json
     print(d)
 
+    unencoded_query = str(d["query"])
+    query = urllib.parse.quote(unencoded_query)
+
+
+
     #Reddit API call, time displayed in unix
 
     reddit = praw.Reddit(
@@ -77,7 +83,7 @@ def showinfo():
 
     reddit_data = []
 
-    for submission in reddit.subreddit("all").search(d["query"], limit=100):
+    for submission in reddit.subreddit("all").search(query, limit=100):
        reddit_data.append({"title": str(submission.title), "update_ratio": str(submission.upvote_ratio), "upvotes": str(submission.ups),
        "url": str(submission.url), "created_at": str(submission.created_utc), "subreddit": str(submission.subreddit), "number_of_comments": str(submission.num_comments)})
     
@@ -86,9 +92,16 @@ def showinfo():
     bearer_token = auth()
     headers = create_headers(bearer_token)
 
+    url = "https://api.twitter.com/1.1/trends/place.json?id=1"
+
+
+    trending = connect_to_endpoint(url, headers)
+
+    print(trending)
+
 
     #API call to get back a dictionary with 10 api call without any duplicates
-    json_response = api_caller(d["query"], headers)
+    json_response = api_caller(query, headers)
     # New call to the the Twitter API that uses the ID of the retweeted tweets and adds the data of the original tweets to the dictionary
     #The create_id_url creates the url that is used to call the api with.
     ids = extract_retweets(json_response)
@@ -127,7 +140,7 @@ def showinfo():
      
 
     json_response["data"] = {d["query"]: {"alldata": alldata, "barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, 
-    "activity": activity, "reddit": reddit_data, "query": d["query"], "nodes": nodes, "links": links }}
+    "activity": activity, "reddit": reddit_data, "query": query, "nodes": nodes, "links": links }}
 
     
     return json.dumps(json_response)

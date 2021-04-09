@@ -7,7 +7,7 @@
                 <td v-show="title.loaded == true">{{title.title}}</td> 
                 
                 <br>
-                    <div v-show="title.loaded == false"><img class="loadingspin" src="../assets/loading-spinnr.gif" alt=""></div>
+                    <div v-show="title.loaded == false"><img class="loadingspin" src="../assets/spinner-transparent.gif" alt=""></div>
             </tr>
         </table>
     </div>
@@ -71,7 +71,6 @@ table tr{
 }
 .loadingspin{
     width: 60px;
-    background-color: #C0C0C0;
 }
 
 .not_selected{
