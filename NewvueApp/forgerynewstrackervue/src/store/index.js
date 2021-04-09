@@ -35,6 +35,8 @@ export default createStore({
       state.searches[idx].active = false 
       state.tweets.splice(state.searches[idx].index, 1);
       state.searches[idx].index = null
+
+      console.log(state.searches)
     
     },
 
