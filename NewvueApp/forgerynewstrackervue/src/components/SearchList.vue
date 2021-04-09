@@ -1,12 +1,10 @@
 <template> 
     <div v-if="titles.length > 0" class="query-container">
         <table>
-            <tr v-for="(title, index) in titles" v-bind:key="index"  v-on:click="check(index)" :style="title.active ? { 'background-color': '#32CD32' } : null">
-            <transition name="slide-fade">
+            <tr v-for="(title, index) in titles" v-bind:key="index"  v-bind:class='{ "not_selected": title.active == false, "selected": title.active == true, "non_clickable": tweets_displayed == 2 && title.active == false}'
+            v-on:click="check(index)">
                 
                 <td v-show="title.loaded == true">{{title.title}}</td> 
-            </transition>
-                
                 <br>
                     <div v-show="title.loaded == false"><img class="loadingspin" src="../assets/spinner-transparent.gif" alt=""></div>
             </tr>
@@ -23,15 +21,29 @@ export default {
     computed: {
         titles(){
             return this.$store.state.searches;
+        },
+        tweets_displayed(){
+            return this.$store.state.tweets.length;
+
         }
     },  
     methods: {
         check: function(index){
-            if(this.titles[index].active == false){
-                this.$store.dispatch("addTweetToDisplay", index)
+            if(this.tweets_displayed == 2 && this.titles[index].active == false){
+                alert("You cannot add more than 2 queries at the same time. Please remove one of the already selected to add this query.")
+    
             }else{
-                this.$store.dispatch("removeFromTweets", index);
-            }
+                if(this.titles[index].loaded == true){
+                    if(this.titles[index].active == false){
+                    this.$store.dispatch("addTweetToDisplay", index)
+                    console.log(this.tweets_displayed)
+                }else{
+                    this.$store.dispatch("removeFromTweets", index);
+                    console.log(this.tweets_displayed)
+                }}
+        }
+
+        
         },
     },
 };
@@ -71,6 +83,20 @@ table tr{
 }
 .loadingspin{
     width: 60px;
+    background-color: #C0C0C0;
 }
 
+.not_selected{
+    background-color: white;
+}
+
+.selected{
+    background-color: #32CD32;
+
+}
+
+.non_clickable{
+    background-color: #C0C0C0;
+
+}
 </style>
