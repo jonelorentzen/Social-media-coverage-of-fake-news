@@ -92,13 +92,7 @@ def showinfo():
     bearer_token = auth()
     headers = create_headers(bearer_token)
 
-    url = "https://api.twitter.com/1.1/trends/place.json?id=1"
-
-
-    trending = connect_to_endpoint(url, headers)
-
-    print(trending)
-
+   
 
     #API call to get back a dictionary with 10 api call without any duplicates
     json_response = api_caller(query, headers)
@@ -393,7 +387,6 @@ def create_links(json_response):
                 idxAt = text.find('@')
                 idxCo = text.find(':')
 
-                print(text[idxAt+1:idxCo])
                 links.append({'source': text[idxAt+1:idxCo], 'target': tweets[i]['username']})
 
 
@@ -402,7 +395,7 @@ def create_links(json_response):
                 idxAt = text.find('@')
                 idxS = text.find(' ')
 
-                print(text[idxAt:idxS])
+                
                 links.append({'source': text[idxAt+1:idxS], 'target': tweets[i]['username']})
 
     return links
@@ -417,7 +410,7 @@ def create_nodes(links):
         
         if links[i]['target'] not in nodes:
             nodes.append({"id":links[i]['target']})
-    print(nodes)
+   
     return nodes
 
 

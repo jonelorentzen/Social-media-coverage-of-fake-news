@@ -28,6 +28,7 @@ export default createStore({
       }
       state.searches[idx].active = true
       state.searches[idx].index = state.tweets.length -1
+
     
     },
 

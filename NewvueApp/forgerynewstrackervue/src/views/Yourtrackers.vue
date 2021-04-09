@@ -1,17 +1,18 @@
 <template>
 
     <div class="container">
-
+        <div class="logo">
+            <img :src="'' + require('@/assets/logo2.png') + ''" alt=""><br>
+        </div>
         <div class="row">
-            <div class="col-md-auto">
-            
+            <div class="col-2">
+            </div>
+            <div class="col-3" id="select-container">
+                <div class="items-container">
                         <transition name="slide-fade">
-                            <p v-if="show">
-                                Use our premade searches.<br>
-                            </p>
+                            <p v-if="show">Use our premade searches.</p>
                         </transition>
                             <div class="select">
-
                                 <select id="selected" v-model="selected">
                                     <option disabled>Premade searches</option>
                                     <option>Donald Trump</option>
@@ -20,41 +21,37 @@
                                     <option>Corona changes DNA</option>
                                     <option>Apple is made by Microsoft</option>
                                     <option>Humans waste too much water</option>
-                                    <option>Jesus and I and are friends on Facebook</option>
                                     <option>The earth is flat</option>
                                 </select>
                             </div>
-                            <br>
-                    <button class="btn btn-primary" @click="addSearch();">Add search</button> <br>
+                            
+                    </div>
             </div>
-            <div class="col-5">
- 
-    </div>
-            <div class="col-md-auto">
+            
+            <div class="col-md-auto" id="item">
+                <div class="items-container">
                 <transition name="slide-fade">
                     <p v-if="show">
                         Write your own search.
                     </p>
                 </transition>
                     <input v-model="searchValue" class="form-control" type="text" placeholder="Search here">
-                    <br>
-                <button class="btn btn-primary" @click="addSearch();">Add search</button>
+                
+                </div>
             </div>
 
-        </div>
-
-
         
-            <button class="btn btn-primary" @click="gotoPage();">See results on DashBoard</button>
 
-        <button @click="showTut()" style="display: none">
-            show tutorial
-        </button>
+        </div>
+        <div class="add-container"><button class="btn btn-primary" id="add-search" @click="addSearch();">Add search</button> </div>
+        <div class="bottom">
 
+            <button @click="showTut()" style="display: none">show tutorial</button>
 
-
-            <h4>Your Recent Searches</h4>
+            <h4 v-show="searchlist_length>0">Your Recent Searches</h4>
             <search-list/> <br>
+            <button class="btn btn-primary" @click="gotoPage();">See results on Dashboard</button>
+        </div>
 
     </div>
 </template>
@@ -70,6 +67,12 @@ export default {
         SearchList,
 
     },
+    computed:{
+        searchlist_length(){
+            return this.$store.state.searches.length
+            
+        }},
+
     data() {
         return {
             twitteruser: 'Dönerkebab123',
@@ -117,6 +120,45 @@ export default {
 </script>
 
 <style scoped>
+
+.container{
+    color: black;
+
+}
+.logo{
+    padding: 25px;
+}
+.row{
+   
+    padding: 40px;
+}
+#item{
+    
+
+}
+
+#select-container{
+    
+
+}
+
+
+.items-container{
+    
+    
+    
+}
+.add-container{
+    padding-top: 20px;
+}
+
+.bottom{
+    padding-top: 50px;
+}
+
+#add-search{
+    width: 200px;
+}
 h2{
     margin-bottom: 30px;
 }
@@ -126,14 +168,12 @@ p{
 .show-info-txt{
     text-align: center;
 }
-.container{
-    color: black;
-}
 h4{
    text-align: left;
 }
 input{
-    width: 300px;
+    width: 450px;
+    height: 45px;
     text-align: center;
     display: block;
 }
@@ -157,14 +197,14 @@ select::-ms-expand {
 .select {
     align-content: center;
     text-align: center;
-  position: relative;
-  display: flex;
-  width: 20em;
-  height: 3em;
-  line-height: 3;
-  background: #414447;
-  overflow: hidden;
-  border-radius: .25em;
+    position: relative;
+    display: flex;
+    width: 15em;
+    height: 3em;
+    line-height: 3;
+    background: #414447;
+    overflow: hidden;
+    border-radius: .25em;
 }
 select {
   flex: 1;
