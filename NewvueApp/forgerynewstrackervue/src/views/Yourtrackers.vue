@@ -1,53 +1,50 @@
 <template>
-            <h4>Your Recent Searches</h4>
-            <search-list class="container"/> <br>
+
     <div class="container">
 
+        <div class="row">
+            <div class="col-md-auto">
+            
+                        <transition name="slide-fade">
+                            <p v-if="show">
+                                Use our premade searches.<br>
+                            </p>
+                        </transition>
+                            <div class="select">
 
-
-        <div class="row justify-content-md-center">
-
-           <div class="col-sm">
-            <transition name="slide-fade">
-                <p v-if="show">
-                    Use our premade searches.<br>
-                </p>
-            </transition>
-                <div class="select">
-
-                    <select id="selected" v-model="selected">
-                        <option disabled>Premade searches</option>
-                        <option>Donald Trump</option>
-                        <option>Joe Biden</option>
-                        <option>Barack Obama is white</option>
-                        <option>Corona changes DNA</option>
-                        <option>Apple is made by Microsoft</option>
-                        <option>Humans waste too much water</option>
-                        <option>Jesus and I and are friends on Facebook</option>
-                        <option>The earth is flat</option>
-                    </select>
-                </div>
-
-           </div>
-           <div class="col-sm">
-               <transition name="slide-fade">
-                <p v-if="show">
-                    Write your own search.
-                </p>
-            </transition>
-            <input v-model="searchValue" class="form-control" type="text" placeholder="Search here">
-           </div>
-           <div class="col-">
-               <br><br>
-           </div>
-
-            <div class=".col-">
-            <button class="btn btn-primary" @click="addSearch();">Add search</button><br><br>
-
+                                <select id="selected" v-model="selected">
+                                    <option disabled>Premade searches</option>
+                                    <option>Donald Trump</option>
+                                    <option>Joe Biden</option>
+                                    <option>Barack Obama is white</option>
+                                    <option>Corona changes DNA</option>
+                                    <option>Apple is made by Microsoft</option>
+                                    <option>Humans waste too much water</option>
+                                    <option>Jesus and I and are friends on Facebook</option>
+                                    <option>The earth is flat</option>
+                                </select>
+                            </div>
+                            <br>
+                    <button class="btn btn-primary" @click="addSearch();">Add search</button> <br>
             </div>
+            <div class="col-5">
+ 
+    </div>
+            <div class="col-md-auto">
+                <transition name="slide-fade">
+                    <p v-if="show">
+                        Write your own search.
+                    </p>
+                </transition>
+                    <input v-model="searchValue" class="form-control" type="text" placeholder="Search here">
+                    <br>
+                <button class="btn btn-primary" @click="addSearch();">Add search</button>
+            </div>
+
         </div>
 
 
+        
             <button class="btn btn-primary" @click="gotoPage();">See results on DashBoard</button>
 
         <button @click="showTut()" style="display: none">
@@ -55,9 +52,11 @@
         </button>
 
 
+
+            <h4>Your Recent Searches</h4>
+            <search-list/> <br>
+
     </div>
-
-
 </template>
 
 <script>
@@ -134,7 +133,7 @@ h4{
    text-align: left;
 }
 input{
-    width: 400px;
+    width: 300px;
     text-align: center;
     display: block;
 }
