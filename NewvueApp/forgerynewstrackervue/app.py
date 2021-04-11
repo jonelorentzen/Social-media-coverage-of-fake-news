@@ -83,13 +83,13 @@ def showinfo():
     #Reddit API call, time displayed in unix
 
    
-    reddit_data = reddit_api(query)
+    # reddit_data = reddit_api(query)
 
-    piechartreddit = reddit_piechart(reddit_data)
+    # piechartreddit = reddit_piechart(reddit_data)
 
-    for submission in reddit.subreddit("all").search(query, limit=100):
-       reddit_data.append({"title": str(submission.title), "update_ratio": str(submission.upvote_ratio), "upvotes": str(submission.ups),
-       "url": str(submission.url), "created_at": str(submission.created_utc), "subreddit": str(submission.subreddit), "number_of_comments": str(submission.num_comments)})
+    # for submission in reddit.subreddit("all").search(query, limit=100):
+    #    reddit_data.append({"title": str(submission.title), "update_ratio": str(submission.upvote_ratio), "upvotes": str(submission.ups),
+    #    "url": str(submission.url), "created_at": str(submission.created_utc), "subreddit": str(submission.subreddit), "number_of_comments": str(submission.num_comments)})
     
     #Create the token to get acess to the Twitter 
     bearer_token = auth()
@@ -132,7 +132,7 @@ def showinfo():
     alltext = all_text(json_response)
     
     json_response["data"] = {d["query"]: {"alldata": alldata, "barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, 
-    "activity": activity, "geochart": geochart, "reddit": reddit_data, "query": d["query"], "nodes": nodes, "links": links, "alltext": alltext, "piechartreddit": piechartreddit}}
+    "activity": activity, "query": d["query"], "nodes": nodes, "links": links, "alltext": alltext}}
     
 
     sentiment = show_tweets_text_sentiment(json_response)

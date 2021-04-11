@@ -35,7 +35,7 @@
                         Write your own search.
                     </p>
                 </transition>
-                    <input v-model="searchValue" class="form-control" type="text" placeholder="Search here">
+                    <input v-model="searchValue" class="form-control" type="text" placeholder="Search here" maxlength="256">
                 
                 </div>
             </div>

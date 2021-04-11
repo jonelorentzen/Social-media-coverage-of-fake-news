@@ -1,6 +1,7 @@
 <template>
   <div class="container">
-    
+
+    <!-- Top of the view, included for both the single view and the comparison view -->
     <SearchList/>
     <Trackerheader class="dashboard-comp" :listdata='Display1.query' :listdata2='Display2.query'/>
     
@@ -10,10 +11,34 @@
         <LineChart class="dashboard-comp" id="linechart" :listdata1='Display1' :listdata2='Display2' v-show="Display1.query && Display2.query !== {}"/>
     </div>
 
+    <!-- Displayed when the user has not selected any query -->
     <div class="container_for_no_query" v-show="Display1.query == '' && Display2.query == ''">
         <h1>Activate of the queries you have chosen above or go to yourTrackers to add a search</h1>
     </div>
 
+
+    <!-- Single view, when the user has only selected one query -->
+     <div class="container_for_single_query" v-show="Display1.query != '' &&  Display2.query == '' ">
+        <div class="container_for_barchart_single">
+            <BarChartBig  class="dashboard-comp" id="Barchart" :listdata='Display1.barchart'/>
+        </div>
+        
+        <div class="container_for_geochart_and_node">
+            <div class="container_for_geochart_single" >
+                <GeoChartSingle id="Geochart" :listdata='{"US": 69}'/>
+            </div>
+            <div class="container_for_nodegraph_single" v-if="Display1.query != ''">
+                <Sigmagraph :listdata='Display1'/>
+            </div>
+        </div>
+        
+        <div class="Post_user_container">
+            <topPosts class="dashboard-comp insight" :listdata='Display1.topposts'/>
+            <mostinfluentialusers class="dashboard-comp insight" :listdata='Display1.topusers' />
+        </div>
+    </div>
+
+    <!-- Comparison view, when the user has selected two query -->
     <div class="container_for_comparison" v-show="Display1.query && Display2.query !== ''">
         <div class="container_for_barchart">
             <BarChart  class="dashboard-comp" id="Barchart" :listdata='Display1.barchart'/>
@@ -21,8 +46,8 @@
         </div>
         
         <div class="container_for_geochart">
-            <GeoChart id="Geochart" :listdata='Display1.geochart'/>
-            <GeoChart id="Geochart" :listdata='Display2.geochart'/>
+            <GeoChart id="Geochart" :listdata='{"US": 69}'/>
+            <GeoChart id="Geochart" :listdata='{"US": 69}'/>
         </div>
 
         <div v-if="Display1.query != '' && Display2.query != ''" class="container_for_nodenetwork">
@@ -40,28 +65,6 @@
             <mostinfluentialusers class="dashboard-comp insight" :listdata='Display2.topusers'/>
         </div>
     </div>
-
-    <div class="container_for_single_query" v-show="Display1.query != '' &&  Display2.query == '' ">
-   
-        <div class="container_for_barchart_single">
-            <BarChartBig  class="dashboard-comp" id="Barchart" :listdata='Display1.barchart'/>
-        </div>
-        
-        <div class="container_for_geochart_single" >
-            <GeoChartSingle id="Geochart" :listdata='{"US": 69}'/>
-        </div>
-        
-        
-
-        <div class="Post_user_container">
-            <topPosts class="dashboard-comp insight" :listdata='Display1.topposts'/>
-            <mostinfluentialusers class="dashboard-comp insight" :listdata='Display1.topusers' />
-        </div>
-
-        
-
-    </div>
-
 
   </div>
 </template>
@@ -138,7 +141,6 @@ export default {
       grid-column-gap: 1.5em;
       grid-row-gap: 1.5em;
       grid-auto-rows: min-content;
-
       font-family: Quicksand,Helvetica,Arial,sans-serif;
       font-weight: 500;
       font-size: 16px;
