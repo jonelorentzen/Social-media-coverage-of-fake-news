@@ -1,3 +1,4 @@
+19. Jan
 In our first meeting we got information on what we should be look more into:
 - Create a GitHub repository 
 - Create a timeline 
