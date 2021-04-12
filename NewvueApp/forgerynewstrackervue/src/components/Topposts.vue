@@ -84,10 +84,12 @@ export default {
   flex-wrap: wrap;
   border: 1px solid #dddfea;
   padding: 20px;
-  width: 99%;
-  margin-right: 10px;
+  padding-bottom: 10px;
+ 
 }
-
+.toppostwrapper{
+  text-align: left;
+}
 
 .postrow{
   border: 1px solid grey;

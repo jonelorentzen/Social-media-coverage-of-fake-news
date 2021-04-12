@@ -31,7 +31,8 @@ export default {
     align-items: center;
     border: 1px solid #dddfea;
     padding: 20px;
-    margin-right:7px; 
+    
+    height: 450px;
    
 }
 

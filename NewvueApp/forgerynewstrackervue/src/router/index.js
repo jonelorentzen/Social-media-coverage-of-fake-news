@@ -3,7 +3,7 @@ import Ping from '../components/Ping.vue';
 import Home from '../views/Home.vue';
 import Yourtrackers from '../views/Yourtrackers.vue';
 import { createRouter } from 'vue-router';
-import Dashboard from '../views/Dashboard2.vue';
+import Dashboard from '../views/Dashboard.vue';
 import About from '../views/About.vue';
 import FAQ from '../views/FAQ.vue';
 
