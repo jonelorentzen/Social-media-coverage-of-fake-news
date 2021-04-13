@@ -3,7 +3,11 @@
 
     <!-- Top of the view, included for both the single view and the comparison view -->
     <SearchList/>
-    <Trackerheader class="dashboard-comp" :listdata='Display1.query' :listdata2='Display2.query'/>
+     <div class="header">
+        <Trackerheader class="dashboard-comp" :listdata='Display1.query' :listdata2='Display2.query'/>
+        <MediaSelector class="media"/>
+    </div>
+
     
     <Engagement class="dashboard-comp" :listdata1='Display1' :listdata2='Display2' />
     
@@ -174,6 +178,7 @@ import mostinfluentialusers from '../components/MostInfluentialUsers'
 import Trackerheader from "../components/Trackerheader"
 import Engagement from "../components/Engagement"
 import GeoChart from "../components/GeoChartComponent"
+import MediaSelector from "../components/MediaSelector"
 
 import Sigmagraph from "../components/Sigmagraph"
 import Sentiment from "../components/Sentiment"
@@ -191,7 +196,7 @@ export default {
     Trackerheader,
     Engagement,
     GeoChart,
-    
+    MediaSelector,
     Sigmagraph,
     Sentiment
     
@@ -223,8 +228,6 @@ export default {
 
 <style scoped>
 
-    
-
     .geochart{
         width: 50%;
     }
@@ -235,9 +238,8 @@ export default {
     .dashboard-comp{
       margin-bottom: 20px;
     }
-    .insight{
-      
-      
+    .media{
+        float: right;
     }
     .container{
       margin: auto;

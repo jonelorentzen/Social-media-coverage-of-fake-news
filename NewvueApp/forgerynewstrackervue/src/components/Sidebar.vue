@@ -2,8 +2,9 @@
     <div class="border-right" id="sidebar-wrapper">
       <div class="list-group list-group-flush">
 
-        <a @click="gotoDASHBOARD()" class="list-group-item list-group-item-action">Dashboard</a>
         <a @click="gotoYT()" class="list-group-item list-group-item-action">Your Trackers</a>
+        <a @click="gotoTwitterDashboard()" class="list-group-item list-group-item-action">Dashboard Twitter</a>
+        <a @click="gotoRedditDashboard()" class="list-group-item list-group-item-action">Dashboard Reddit</a>
         <a @click="gotoABOUTus()" class="list-group-item list-group-item-action">About us</a>
 
       </div>
@@ -18,10 +19,13 @@ export default {
         this.$router.push('/yourtrackers')
       },
       gotoABOUTus(){
-        this.$router.push('/dashboardreddit')
+        this.$router.push('/about')
       },
-      gotoDASHBOARD(){
+      gotoTwitterDashboard(){
         this.$router.push('/dashboard')
+      },
+      gotoRedditDashboard(){
+        this.$router.push('/dashboardreddit')
       }
     }
 }

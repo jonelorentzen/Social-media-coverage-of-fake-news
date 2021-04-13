@@ -35,18 +35,21 @@ export default {
     
 }
 
+.logo{
+    border: 3.5px #dddfea solid;
+    border-radius: 10px;
+}
+
 img{
     width: 50px;
     height: 50px;
 }
 
-#reddit{
-   
-}
 
 #check{
     width: 25px;
     height: 25px;
 }
+#reddit{}
 
 </style>

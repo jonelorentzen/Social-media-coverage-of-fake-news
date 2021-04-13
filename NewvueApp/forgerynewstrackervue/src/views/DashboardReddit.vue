@@ -140,9 +140,8 @@ export default {
       
       
     }
-
     .media{
-        padding-left: 700px;
+        float: right;
     }
 
     .container_for_linechart_reddit{
