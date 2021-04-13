@@ -74,3 +74,8 @@ Meeting February 19nd:
 - The user should have the possibility to change between the social media.
 - Implement a twitter login for the user so the website uses the user token instead of our token
 - The charts for reddit: 1. upvotes 2. ratio 3. top posts 4. top communities
+
+
+13. April
+- We showed the last result of the page 
+- Use queries from politifact. 
