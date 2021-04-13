@@ -18,7 +18,7 @@ export default {
         this.$router.push('/yourtrackers')
       },
       gotoABOUTus(){
-        this.$router.push('/about')
+        this.$router.push('/dashboardreddit')
       },
       gotoDASHBOARD(){
         this.$router.push('/dashboard')

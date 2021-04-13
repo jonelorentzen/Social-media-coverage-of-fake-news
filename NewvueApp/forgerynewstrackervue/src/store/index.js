@@ -28,7 +28,6 @@ export default createStore({
       }
       state.searches[idx].active = true
       state.searches[idx].index = state.tweets.length -1
-
     
     },
 
@@ -36,9 +35,13 @@ export default createStore({
       state.searches[idx].active = false 
       state.tweets.splice(state.searches[idx].index, 1);
       state.searches[idx].index = null
-
-      console.log(state.searches)
-    
+      if(state.tweets.length == 1){
+        for(let i in state.searches){
+          if(state.searches[i].active == true){
+            state.searches[i].index = 0
+          }
+        }
+      }
     },
 
     NewSearch(state,SearchItem){

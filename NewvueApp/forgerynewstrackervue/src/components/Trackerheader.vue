@@ -9,17 +9,6 @@
         </h1>
         </div>
 
-        <!-- <div class="trackerheader_filters">
-            <label class="platformbox">
-                <input type="checkbox" class="twitterchecbox">
-                <img src="../assets/logo.png" class="checkboxpic">
-                <input type="checkbox" class="twitterchecbox">
-                <img src="../assets/logo.png" class="checkboxpic">
-                <input type="checkbox" class="twitterchecbox">
-                <img src="../assets/logo.png" class="checkboxpic">
-            </label>
-           
-        </div> --> 
     
     </div>
 </template>

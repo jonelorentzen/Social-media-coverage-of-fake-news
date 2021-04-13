@@ -22,7 +22,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    width: 49.5%;
+    
 }
 .chartheader{
     height: 45px;
