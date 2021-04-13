@@ -6,6 +6,7 @@ import { createRouter } from 'vue-router';
 import Dashboard from '../views/Dashboard.vue';
 import About from '../views/About.vue';
 import FAQ from '../views/FAQ.vue';
+import DashboardReddit from '../views/DashboardReddit.vue';
 
 // here we create our routes
 export default createRouter({
@@ -30,6 +31,12 @@ export default createRouter({
     name: 'Dashboard',
     component: Dashboard
   },
+   {
+    path: '/dashboardreddit',
+    name: 'DashboardReddit',
+    component: DashboardReddit
+  },
+  
   {
     path: '/about',
     name: 'About',

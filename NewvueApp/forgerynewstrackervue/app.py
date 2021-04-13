@@ -82,14 +82,19 @@ def showinfo():
 
     #Reddit API call, time displayed in unix
 
-   
-    # reddit_data = reddit_api(query)
+    reddit_data = reddit_api(query)
 
-    # piechartreddit = reddit_piechart(reddit_data)
+    piechartreddit = reddit_piechart(reddit_data)
+    linechartreddit = reddit_linechart(reddit_data)
 
-    # for submission in reddit.subreddit("all").search(query, limit=100):
-    #    reddit_data.append({"title": str(submission.title), "update_ratio": str(submission.upvote_ratio), "upvotes": str(submission.ups),
-    #    "url": str(submission.url), "created_at": str(submission.created_utc), "subreddit": str(submission.subreddit), "number_of_comments": str(submission.num_comments)})
+    reddit_data = sorted(reddit_data, key = lambda i: i['upvotes'],reverse=True)
+
+    engagementreddit = reddit_engagement(reddit_data)
+    toppostsreddit = reddit_top_posts(reddit_data)
+    topusersreddit = reddit_top_users(reddit_data)
+    wordcloudreddit = reddit_wordcloud(reddit_data)
+
+
     
     #Create the token to get acess to the Twitter 
     bearer_token = auth()
@@ -131,8 +136,9 @@ def showinfo():
     nodes = create_nodes(links)
     alltext = all_text(json_response)
     
-    json_response["data"] = {d["query"]: {"alldata": alldata, "barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, 
-    "activity": activity, "query": d["query"], "nodes": nodes, "links": links, "alltext": alltext}}
+    json_response["data"] = {d["query"]: {"barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, 
+    "activity": activity, "query": d["query"], "nodes": nodes, "links": links, "alltext": alltext,"engagementreddit": engagementreddit, "piechartreddit": piechartreddit, "linechartreddit":linechartreddit,
+    "toppostsreddit": toppostsreddit, "topusersreddit": topusersreddit, "wordcloudreddit": wordcloudreddit}}
     
 
     sentiment = show_tweets_text_sentiment(json_response)
@@ -151,8 +157,13 @@ def reddit_api(query):
     user_agent="my user agent")
 
     for submission in reddit.subreddit("all").search(query, limit=100):
-       reddit_data.append({"title": str(submission.title), "upvote_ratio": submission.upvote_ratio, "upvotes": str(submission.ups),
-       "url": str(submission.url), "created_at": str(submission.created_utc), "subreddit": str(submission.subreddit), "number_of_comments": str(submission.num_comments)})
+        try:
+            reddit_data.append({"author": str(submission.author.name), "title": str(submission.title),"name": str(submission.name), "upvote_ratio": submission.upvote_ratio, "upvotes": submission.ups,
+            "url": str(submission.permalink), "created_at": str(submission.created_utc), "subreddit": str(submission.subreddit), "number_of_comments": str(submission.num_comments),
+            "post_karma": submission.author.link_karma, "comment_karma": submission.author.comment_karma, "icon_img": submission.author.icon_img})
+        except:
+            print("User suspended")
+   
 
     return reddit_data
 
@@ -178,9 +189,98 @@ def reddit_wordcloud(reddit_data):
             wordcloud[subreddit] = 1
         else:
             wordcloud[subreddit] += 1
-    return wordcloud
+
+    wordcloud_list = []
+    for value in wordcloud.keys():
+        if wordcloud[value]>1:
+            if wordcloud[value] <= 3:
+                wordcloud_list.append({"subreddit": value, "value": 1})
+            elif wordcloud[value] <= 6:
+                wordcloud_list.append({"subreddit": value, "value": 2})
+            elif wordcloud[value] <= 10:
+                wordcloud_list.append({"subreddit": value, "value": 3})
+            elif wordcloud[value] <= 20:
+                wordcloud_list.append({"subreddit": value, "value": 4})
+            else:
+                wordcloud_list.append({"subreddit": value, "value": 5})
+                
+
+    return wordcloud_list
             
-            
+def reddit_linechart(reddit_data):
+    allDates = []
+    finalDates = {}
+
+    for i in range(len(reddit_data)):
+        timestamp = reddit_data[i]["created_at"]
+        
+        timestamp = timestamp.replace(".0", "")
+        
+        allDates.append(datetime.utcfromtimestamp(int(timestamp)).strftime('%Y-%m-%dT%H:%M:%S'))
+        
+    allDates.sort() 
+   
+
+    for i in range(len(allDates)):
+        finalDates[allDates[i]]=i+1    
+    return finalDates
+          
+def reddit_top_posts(reddit_data):
+    top_posts = []
+    for i in range(3):
+        top_post = {}
+        top_post["title"] = reddit_data[i]["title"]
+        top_post["url"] = reddit_data[i]["url"]
+        top_post["title"] = reddit_data[i]["title"]
+        top_post["author"] = reddit_data[i]["author"]
+        top_post["upvotes"] = reddit_data[i]["upvotes"]
+        top_post["icon_img"] = reddit_data[i]["icon_img"]
+        top_post["subreddit"] = reddit_data[i]["subreddit"]
+        top_post["number_of_comments"] = reddit_data[i]["number_of_comments"]
+        timestamp = reddit_data[i]["created_at"]
+        timestamp = timestamp.replace(".0", "")
+        top_post["created_at"]= datetime.utcfromtimestamp(int(timestamp)).strftime('%Y-%m-%d')
+        top_posts.append(top_post)
+
+
+    return top_posts
+
+def reddit_top_users(reddit_data):
+    reddit_data = sorted(reddit_data, key = lambda i: i['post_karma'],reverse=True)
+    top_users = []
+    for i in range(len(reddit_data)):
+        top_user = {}
+        top_user["author"] = reddit_data[i]["author"]
+        top_user["post_karma"] = reddit_data[i]["post_karma"]
+        top_user["comment_karma"] = reddit_data[i]["comment_karma"]
+        top_user["icon_img"] = reddit_data[i]["icon_img"]
+        if top_user not in top_users:
+            top_users.append(top_user)
+            if len(top_users) == 9:
+                break
+
+    return top_users
+
+   
+def reddit_engagement(reddit_data):
+    engagement = {}
+    
+    user_ids = []
+    upvotes = 0 
+
+    for i in range(len(reddit_data)):
+        upvotes += reddit_data[i]["upvotes"]
+        if reddit_data[i]["author"] not in user_ids:
+            user_ids.append(reddit_data[i]["author"]) 
+    
+    engagement["posts"] = len(reddit_data)
+    engagement["users"] = len(user_ids)
+    engagement["engagement"] = upvotes
+
+    return  engagement
+
+
+
 
 
 
@@ -379,7 +479,7 @@ def create_topusers(json_response):
     tweets = json_response["data"]
     topusers = []
     for i in range(len(tweets)):
-        if tweets[i] not in topusers:
+        if tweets[i]["username"] not in topusers:
             topusers.append({"username": tweets[i]["username"], "img": tweets[i]["profile_image_url"], "followers": tweets[i]['public_metrics_user']["followers_count"], "verified": tweets[i]["verified"]})
             if len(topusers) == 9:
                 break

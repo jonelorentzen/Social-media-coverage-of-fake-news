@@ -44,11 +44,11 @@
 
         </div>
         <div class="add-container"><button class="btn btn-primary" id="add-search" @click="addSearch();">Add search</button> </div>
-        <div class="bottom">
+        <div class="bottom" v-show="searchlist_length>0">
 
             <button @click="showTut()" style="display: none">show tutorial</button>
 
-            <h4 v-show="searchlist_length>0">Your Recent Searches</h4>
+            <h4>Your Recent Searches</h4>
             <search-list/> <br>
             <button class="btn btn-primary" @click="gotoPage();">See results on Dashboard</button>
         </div>

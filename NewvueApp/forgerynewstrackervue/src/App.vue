@@ -34,9 +34,9 @@ export default {
   color: #ffffff;
  
 }
-html body{
-  
-}
+
+
+
 #nav {
   padding: 30px;
 }
@@ -51,7 +51,7 @@ html body{
 }
 
 #wrapper {
-    overflow-x: hidden;
+    overflow-x: auto;
  }
 
 #sidebar-wrapper {

@@ -77,6 +77,14 @@ table tr{
     border-bottom: 1px black solid;
     height: 75px;
 }
+table td{
+    font-family: tiempos headline,Georgia,times new roman,Times,serif;
+    font-size: 1.5em;
+}
+
+tr:hover{
+    opacity: 0.8;
+}
 
 .toggle_container.active {
     background: #009427;
@@ -96,6 +104,5 @@ table tr{
 
 .non_clickable{
     background-color: #C0C0C0;
-
 }
 </style>
