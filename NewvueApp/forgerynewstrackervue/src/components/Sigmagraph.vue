@@ -199,9 +199,12 @@ export default {
 }
 .node_container{
   
+
   border: 1px solid #dddfea;
   align-items: center;
-  height: 400px;
+  height: 450px;
+  padding-top: 25px;
+  padding-left: 55px;
   
 }
 

@@ -45,6 +45,9 @@ export default {
     font-size: 1.25em;
     line-height: 1.5;
 }
+.geochart-container{
+    padding-top: 35px;
+}
 .help-tip-container{
     z-index: 100;
     padding: 2.5px 0px 0px 5px;

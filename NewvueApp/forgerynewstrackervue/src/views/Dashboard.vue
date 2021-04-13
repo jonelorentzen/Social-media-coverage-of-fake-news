@@ -53,7 +53,7 @@
                 <Sentiment  :listdata='Display1.sentiment'/>
             </div>
         </div>
-        <div class="row dashboard-comp" >
+        <div class="row dashboard-comp" v-if="Display1.query != ''">
             <div class="col-sm">
              <Sigmagraph :listdata='Display1'/>
             </div>      
@@ -129,7 +129,7 @@
             </div>
         </div>
 
-         <div class="row dashboard-comp">
+         <div class="row dashboard-comp" v-if="Display1.query != '' && Display2.query != ''">
             <div class="col-sm-6">
                 <Sigmagraph :listdata='Display1'/>
             </div>
