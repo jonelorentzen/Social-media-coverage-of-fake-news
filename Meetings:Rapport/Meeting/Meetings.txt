@@ -78,4 +78,8 @@ Meeting February 19nd:
 
 13. April
 - We showed the last result of the page 
-- Use queries from politifact. Use topics
+- (dropdown) Use queries from politifact. Use topics
+- how accurate is the sentiment analysis
+- caching results to speed up process.
+- Vinay is setting up the flask on AWS 
+- make a requirements.txt file. 
