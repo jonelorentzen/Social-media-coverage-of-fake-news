@@ -43,14 +43,15 @@
         
 
         </div>
-        <div class="add-container"><button class="btn btn-primary" id="add-search" @click="addSearch();">Add search</button> </div>
+        <div class="add-container"><button class="btn btn-outline-secondary" id="add-search" @click="addSearch();">Add search</button> </div>
         <div class="bottom" v-show="searchlist_length>0">
 
             <button @click="showTut()" style="display: none">show tutorial</button>
 
             <h4>Your Recent Searches</h4>
             <search-list/> <br>
-            <button class="btn btn-primary" @click="gotoPage();">See results on Dashboard</button>
+            <button class="btn btn-primary" @click="gotoTwitter();">See results on Twitter</button>
+            <button class="btn btn-danger" @click="gotoReddit();">See results on Reddit</button>
         </div>
 
     </div>
@@ -108,8 +109,11 @@ export default {
         getResult(){
             this.$store.dispatch("getResult", this.$store.state.searches.active, )
         },
-        gotoPage() {
-        this.$router.push('/Dashboard');
+        gotoTwitter() {
+        this.$router.push('/dashboard');
+        },
+        gotoReddit() {
+        this.$router.push('/dashboardreddit');
         },
     },
     mounted(){
