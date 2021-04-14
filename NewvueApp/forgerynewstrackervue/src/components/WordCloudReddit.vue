@@ -43,6 +43,7 @@ export default {
 .entire_container{
   display: flex;
   flex-direction: column;
+  height: 100%;
   
 }
 

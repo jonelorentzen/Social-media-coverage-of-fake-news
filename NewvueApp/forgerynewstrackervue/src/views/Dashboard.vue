@@ -228,6 +228,10 @@ export default {
 
 <style scoped>
 
+    .header{
+        display: flex;
+    }
+
     .geochart{
         width: 50%;
     }

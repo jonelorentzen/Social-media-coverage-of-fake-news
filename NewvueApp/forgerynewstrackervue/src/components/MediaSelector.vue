@@ -1,12 +1,26 @@
 <template>
-    <div class="logo-container">
-        <div class="logo">
-            <img :src="'' + require('@/assets/twitterlogo.png') + ''" alt="" @click="gotoTwitter()" id="twitter">
+
+    <div class="media-container">
+        <h1 class="display-1">
+            Choose social media:
+        </h1>
+    
+        
+        <div class="logo-container">
+            
+            <div class="logo">
+                <img :src="'' + require('@/assets/twitterlogo.png') + ''" alt="" @click="gotoTwitter()" id="twitter">
+            </div>
+            <div class="logo">
+                <img :src="'' + require('@/assets/redditlogo.png') + ''" alt="" @click="gotoReddit()" id="reddit">
+            </div>
+            
         </div>
-        <div class="logo">
-            <img :src="'' + require('@/assets/redditlogo.png') + ''" alt="" @click="gotoReddit()" id="reddit">
-        </div>
+    
     </div>
+
+
+    
     
     
 </template>
@@ -28,10 +42,33 @@ export default {
 
 <style scoped>
 
+.display-1{
+margin: 0;
+max-width: 100%;
+overflow: hidden;
+-o-text-overflow: ellipsis;
+text-overflow: ellipsis;
+white-space: nowrap;
+padding-right: .5em;
+font-size: .8rem;
+color: #bec1d6;
+font-family: Quicksand,Helvetica,Arial,sans-serif;
+font-weight: 700;
+text-transform: uppercase;
+line-height: 1.25;
+margin-top: .35em;
+}
+
+.media-container{
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    
+}
 .logo-container{
     display: flex;
     width: 150x;
-   
+   margin-left: auto;
     
 }
 

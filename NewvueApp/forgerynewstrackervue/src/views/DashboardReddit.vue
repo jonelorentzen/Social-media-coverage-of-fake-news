@@ -19,8 +19,8 @@
     </div>
 
     <!-- Reddit view, only 1 query selected -->
-    <div class="container_for_single_reddit"  v-show="Display1.query != '' &&  Display2.query == '' ">
-        <div class="container_for_linechart_reddit"> 
+    <div class="container_for_single_reddit"  v-show="Display1.query != '' &&  Display2.query == ''">
+        <!-- <div class="container_for_linechart_reddit"> 
             <LineChartReddit :listdata1='Display1' :listdata2='Display2' v-if="Display1.query !== ''"/>
         </div>
         <div class="container_for_reddit">
@@ -31,13 +31,37 @@
         <div class="Post_user_container">
             <TopPostsReddit :listdata='Display1.toppostsreddit'/>
             <TopUsersReddit :listdata='Display1.topusersreddit'/>
+        </div> -->
+
+        <div class="row dashboard-comp">
+            <div class="col-sm">
+                <LineChartReddit :listdata1='Display1' :listdata2='Display2' v-if="Display1.query !== ''"/>
+            </div>
+        </div>
+
+         <div class="row dashboard-comp">
+            <div class="col-sm-6">
+                <WordCloudReddit :listdata='Display1.wordcloudreddit'/>
+            </div>
+             <div class="col-sm-6">
+                 <PieChartReddit :listdata='Display1.piechartreddit'/>
+            </div>
+        </div>
+
+        <div class="row dashboard-comp">
+            <div class="col-sm-6">
+                <TopPostsReddit :listdata='Display1.toppostsreddit'/>
+            </div>
+             <div class="col-sm-6">
+                 <TopUsersReddit :listdata='Display1.topusersreddit'/>
+            </div>
         </div>
 
     </div>
 
     <!-- Reddit view, 2 queries are selected -->
-    <div class="container_for_comparison_reddit"  v-show="Display1.query != '' &&  Display2.query != '' ">
-        <div class="container_for_linechart_reddit"> 
+    <div class="container_for_comparison_reddit"  v-show="Display1.query != '' &&  Display2.query != ''">
+        <!-- <div class="container_for_linechart_reddit"> 
             <LineChartReddit :listdata1='Display1' :listdata2='Display2' v-if="Display1.query !== ''"/>
         </div>
         <div class="container_for_reddit">
@@ -55,6 +79,48 @@
          <div class="Post_user_container">
             <TopUsersReddit :listdata='Display1.topusersreddit'/>
             <TopUsersReddit :listdata='Display2.topusersreddit'/>
+        </div> -->
+
+        <div class="row dashboard-comp">
+            <div class="col-sm">
+                <LineChartReddit :listdata1='Display1' :listdata2='Display2' v-if="Display1.query !== ''"/>
+            </div>
+        </div>
+
+        <div class="row dashboard-comp">
+            <div class="col-sm-6">
+                <WordCloudReddit :listdata='Display1.wordcloudreddit'/>
+            </div>
+             <div class="col-sm-6">
+                 <WordCloudReddit :listdata='Display2.wordcloudreddit'/>
+            </div>
+        </div>
+
+        <div class="row dashboard-comp">
+            <div class="col-sm-6">
+                <PieChartReddit :listdata='Display1.piechartreddit'/>
+            </div>
+             <div class="col-sm-6">
+                 <PieChartReddit :listdata='Display2.piechartreddit'/>
+            </div>
+        </div>
+
+        <div class="row dashboard-comp">
+            <div class="col-sm-6">
+                <TopPostsReddit :listdata='Display1.toppostsreddit'/>
+            </div>
+             <div class="col-sm-6">
+                 <TopPostsReddit :listdata='Display2.toppostsreddit'/>
+            </div>
+        </div>
+
+        <div class="row dashboard-comp">
+            <div class="col-sm-6">
+                <TopUsersReddit :listdata='Display1.topusersreddit'/>
+            </div>
+             <div class="col-sm-6">
+                 <TopUsersReddit :listdata='Display2.topusersreddit'/>
+            </div>
         </div>
 
     </div>
@@ -118,6 +184,10 @@ export default {
 
 
 <style scoped>
+
+    .header{
+        display: flex;
+    }
 
     .dashboard-comp{
       margin-bottom: 20px;

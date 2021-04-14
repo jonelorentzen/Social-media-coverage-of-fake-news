@@ -58,7 +58,7 @@ export default {
   flex-wrap: wrap;
   border: 1px solid #dddfea;
   padding: 20px;
-  
+  padding-bottom: 10px;
 }
 
 .influencercontainer{
