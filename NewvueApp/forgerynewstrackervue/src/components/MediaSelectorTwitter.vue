@@ -6,18 +6,20 @@
         </h1>
     
         
-        <div class="logo-container">
-            
+        <div  class="logo-container">    
             <div class="logo">
                 <img :src="'' + require('@/assets/twitterlogo.png') + ''" alt="" @click="gotoTwitter()" id="twitter">
+                <fa class="checkmarktwitter" icon="check-circle"/>
             </div>
             <div class="logo">
                 <img :src="'' + require('@/assets/redditlogo.png') + ''" alt="" @click="gotoReddit()" id="reddit">
-            </div>
             
+            </div>    
         </div>
-    
+        
     </div>
+
+    
 
 
     
@@ -28,13 +30,31 @@
 <script>
 export default {
     name: "topUsers",
+    data(){
+        return{
+            isReddit: false,
+            isTwitter: true
+        }     
+    },
     props:['listdata'],
      methods: {
         gotoTwitter() {
+            this.isReddit = !this.isReddit
+            this.isTwitter = !this.isTwitter
+            console.log("Reddit", this.isReddit)
+            console.log("Twitter", this.isTwitter)
             this.$router.push('/dashboard');
+            
     },
         gotoReddit() {
+            this.isReddit = !this.isReddit
+            this.isTwitter = !this.isTwitter
+            console.log("Reddit", this.isReddit)
+            console.log("Twitter", this.isTwitter)
             this.$router.push('/dashboardreddit');
+            
+
+            
     },
   }
 }
@@ -69,8 +89,24 @@ margin-top: .35em;
     display: flex;
     width: 150x;
    margin-left: auto;
+   position: relative;
     
 }
+
+.checkmarktwitter{
+    position: absolute;
+    top: 5px;
+    left: 40px;
+    color: #6af011;
+}
+
+.checkmarkreddit{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: #6af011;
+}
+
 
 .logo{
     border: 3.5px #dddfea solid;
@@ -88,5 +124,7 @@ img{
     height: 25px;
 }
 #reddit{}
+
+
 
 </style>
