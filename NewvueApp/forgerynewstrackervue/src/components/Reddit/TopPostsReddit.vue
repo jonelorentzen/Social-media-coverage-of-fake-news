@@ -5,17 +5,13 @@
       <h3>Top Posts</h3>
       <div class="help-tip-container">
                 <div class="help-tip">
-                    <p>The top posts is the 3 tweets with the most retweets. The reason it is sorted by retweets and not likes is because more retweets means a wider reach.</p>
+                    <p>The top posts is the 3 posts on Reddit. It is sorted by the number of upvotes.</p>
                 </div>
             </div>
     </div>
   <div class="toppostsbox">
         <div class="toppostswrapper">
-          <div class="postrow" v-for="(post, index) in listdata" v-bind:key="index" @click="gotopost(listdata[index].username, listdata[index].id)">
-            
-            <div class="profilepicture_container">
-                <img class="profilepicture" v-bind:src="listdata[index].img">
-              </div>
+          <div class="postrow" v-for="(post, index) in listdata" v-bind:key="index" @click="gotopost(listdata[index]['url'])">
             
             <div class="postrow_wrapper">
               
@@ -24,24 +20,22 @@
                 <div class="postinfo_container">
                   
                   <p class="postinfo">
-                    <strong>@{{listdata[index].username}}</strong>
+                    <img class="profilepicture" v-bind:src="listdata[index].icon_img">
+                    <strong>{{listdata[index]["author"]}}</strong>
                   </p>
   
-                  <p class="date">{{listdata[index]["date"]}}</p>
+                  <p class="date">{{listdata[index]["created_at"]}}</p>
                 </div>
 
                 <div class="post_engagement">
-                  <fa class="retweets" icon="retweet"/>
-                    <p >{{listdata[index].retweets}}</p>
-
-                  <fa class="likes" icon= "heart"/>
-                    <p >{{listdata[index].likes}}</p>
+                    <p>{{listdata[index]["upvotes"]}} upvotes</p>
+                    <p >{{listdata[index]["number_of_comments"]}} comments</p>
                 </div>
 
               </div>
 
               <p class="post_texts">
-                {{listdata[index].text}}
+                {{listdata[index]["title"]}}
               </p>
             
             </div>
@@ -62,8 +56,8 @@ export default {
     name: "topPosts",
     props:['listdata'],
     methods:{
-      gotopost(username, id){
-        window.open(`https://twitter.com/${username}/status/${id}`)
+      gotopost(url){
+        window.open(`https://www.reddit.com${url}`)
       }
     } 
    
@@ -84,12 +78,9 @@ export default {
   flex-wrap: wrap;
   border: 1px solid #dddfea;
   padding: 20px;
-  padding-bottom: 10px;
- 
+  margin-right: 10px;
 }
-.toppostwrapper{
-  text-align: left;
-}
+
 
 .postrow{
   border: 1px solid grey;
@@ -106,9 +97,9 @@ export default {
   background-color: whitesmoke;
 }
 .profilepicture{
-  width: 50px;
-  height: 60px;
-  border-radius: 50%;
+  width: 45px;
+  height: 50px;
+  border-radius: 5px;
 }
 
 .profilepicture_container{
@@ -133,14 +124,6 @@ export default {
  
 }
 
-.retweets{
-  color: #00acee;
-
-}
-
-.likes{
-  color: #cf2945;
-}
 
 .postinfo_container{
   display: flex;
@@ -198,85 +181,6 @@ export default {
     border: 1px solid #dddfea;
     padding: 3em;
     padding-top: 4em;
-}
-
-
-.help-tip-container{
-    z-index: 100;
-    padding: 2.5px 0px 0px 5px;
-}
-.help-tip{
-    text-align: center;
-    background-color: #BCDBEA;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    font-size: 14px;
-    line-height: 25px;
-    cursor: default;
-}
-
-.help-tip:before{
-    content:'?';
-    font-weight: bold;
-    color:#fff;
-}
-
-.help-tip:hover p{
-    display:block;
-    transform-origin: 100% 0%;
-    -webkit-animation: fadeIn 0.3s ease-in-out;
-    animation: fadeIn 0.3s ease-in-out;
-
-}
-
-.help-tip p{    /* The tooltip */
-    display: none;
-    text-align: left;
-    background-color: #1E2021;
-    padding: 20px;
-    width: 300px;
-    border-radius: 3px;
-    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
-    right: -4px;
-    color: #FFF;
-    font-size: 13px;
-    line-height: 1.4;
-}
-
-.help-tip p:before{ /* The pointer of the tooltip */
-    content: '';
-    width:0;
-    height: 0;
-    border:6px solid transparent;
-    border-bottom-color:#1E2021;
-
-}
-
-.help-tip p:after{ /* Prevents the tooltip from being hidden */
-    width:100%;
-    height:40px;
-    content:'';
-   
-}
-
-/* CSS animation */
-
-@-webkit-keyframes fadeIn {
-    0% { 
-        opacity:0; 
-        transform: scale(0.6);
-    }
-
-    100% {
-        opacity:100%;
-        transform: scale(1);
-    }
-}
-
-@keyframes fadeIn {
-    0% { opacity:0; }
-    100% { opacity:100%; }
 }
 
 </style>

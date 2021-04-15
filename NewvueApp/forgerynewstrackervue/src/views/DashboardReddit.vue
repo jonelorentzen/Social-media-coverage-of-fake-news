@@ -15,7 +15,7 @@
 
     <!-- Displayed when the user has not selected any query -->
     <div class="container_for_no_query" v-show="Display1.query == '' && Display2.query == ''">
-        <h1>Activate of the queries you have chosen above or go to yourTrackers to add a search</h1>
+        <h1>Activate of the queries you have chosen above or go to "Your Trackers" to add a search</h1>
     </div>
 
     <!-- Reddit view, only 1 query selected -->
@@ -69,12 +69,12 @@
 import SearchList from '../components/SearchList.vue';
 import Trackerheader from '../components/Trackerheader';
 import MediaSelector from '../components/MediaSelector';
-import EngagementReddit from '../components/EngagementReddit';
-import PieChartReddit from "../components/PieChartReddit"
-import LineChartReddit from "../components/LineChartReddit"
-import TopPostsReddit from "../components/TopPostsReddit"
-import TopUsersReddit from "../components/TopUsersReddit"
-import WordCloudReddit from "../components/WordCloudReddit"
+import EngagementReddit from '../components/Reddit/EngagementReddit';
+import PieChartReddit from "../components/Reddit/PieChartReddit"
+import LineChartReddit from "../components/Reddit/LineChartReddit"
+import TopPostsReddit from "../components/Reddit/TopPostsReddit"
+import TopUsersReddit from "../components/Reddit/TopUsersReddit"
+import WordCloudReddit from "../components/Reddit/WordCloudReddit"
 
 
 
@@ -122,10 +122,11 @@ export default {
     .dashboard-comp{
       margin-bottom: 20px;
     }
+
     .insight{
-      max-width: 50%;
-      
+      max-width: 50%; 
     }
+
     .container{
       margin: auto;
       display: grid;
@@ -137,9 +138,8 @@ export default {
       font-weight: 500;
       font-size: 16px;
       color: #26293c;
-      
-      
     }
+    
     .media{
         float: right;
     }
@@ -147,15 +147,16 @@ export default {
     .container_for_linechart_reddit{
         padding-bottom: 50px;
     }
+
     .Post_user_container{
       display: flex;
       justify-content: space-between;
     }
+
     .Post_container{
         display: flex;
         justify-content: space-between;
         width: 100%;
-
     }
 
     .container_for_reddit{
@@ -164,6 +165,5 @@ export default {
         padding-bottom: 25px;
        
     }
-  
 
 </style>

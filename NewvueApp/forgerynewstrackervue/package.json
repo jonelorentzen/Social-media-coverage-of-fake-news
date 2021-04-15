@@ -37,6 +37,7 @@
     "vue-burger-menu": "^2.0.5",
     "vue-chartkick": "^1.0.0",
     "vue-d3-network": "^0.1.28",
+    "vue-float-menu": "^1.9.0",
     "vue-router": "^4.0.0-0",
     "vuewordcloud": "^18.7.12",
     "vuex": "^4.0.0-0"
@@ -52,6 +53,7 @@
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/test-utils": "^2.0.0-0",
     "babel-eslint": "^10.1.0",
+    "bp-vuejs-dropdown": "^2.1.1",
     "chai": "^4.1.2",
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.1.3",

@@ -1,12 +1,14 @@
 <template> 
     <div v-if="titles.length > 0" class="query-container">
-        <table>
-            <tr v-for="(title, index) in titles" v-bind:key="index"  v-bind:class='{ "not_selected": title.active == false, "selected": title.active == true, "non_clickable": tweets_displayed == 2 && title.active == false}'
+        <table class="searchlist-table">
+            <tr v-for="(title, index) in titles" v-bind:key="index"  v-bind:class='{ "not_selected": title.active == false, "selected": title.active == true, 
+            "non_clickable": tweets_displayed == 2 && title.active == false, "no_data": title.data == false}'
             v-on:click="check(index)">
                 
                 <td v-show="title.loaded == true">{{title.title}}</td> 
                 <br>
                     <div v-show="title.loaded == false"><img class="loadingspin" src="../assets/spinner-transparent.gif" alt=""></div>
+                    <div v-show="title.data == false" class="no-data-container"><img class="no-data-img" src="../assets/No-data.png" alt=""></div>
             </tr>
         </table>
     </div>
@@ -29,6 +31,10 @@ export default {
     },  
     methods: {
         check: function(index){
+            if(this.titles[index].data == false){
+                alert("There is no data for this query please try another query")
+            }
+            else{
             if(this.tweets_displayed == 2 && this.titles[index].active == false){
                 alert("You cannot add more than 2 queries at the same time. Please remove one of the already selected to add this query.")
     
@@ -41,7 +47,7 @@ export default {
                     this.$store.dispatch("removeFromTweets", index);
                     console.log(this.tweets_displayed)
                 }}
-        }
+        }}
 
         
         },
@@ -74,7 +80,7 @@ table{
 }
 
 table tr{
-    border-bottom: 1px black solid;
+    border: 1px black solid;
     height: 75px;
 }
 table td{
@@ -105,4 +111,19 @@ tr:hover{
 .non_clickable{
     background-color: #C0C0C0;
 }
+
+.no-data-img{
+    width: 60px;
+    height: 60px;
+}
+.no-data-container{
+    float: right;
+    background-color: #C0C0C0;
+    
+}
+.no_data{
+    background-color: #C0C0C0;
+}
+
+
 </style>

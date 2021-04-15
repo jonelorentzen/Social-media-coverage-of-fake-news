@@ -17,7 +17,15 @@ export default createStore({
   
     SetTweets(state, response){
       state.allTweets.push(response)
-      state.searches[state.allTweets.length-1].loaded = true
+      console.log(response)
+      if(response == "No data"){
+        state.searches[state.allTweets.length-1].data = false
+        state.searches[state.allTweets.length-1].loaded = true
+      }else{
+        state.searches[state.allTweets.length-1].data = true
+        state.searches[state.allTweets.length-1].loaded = true
+      }
+     console.log(state.searches)
     },
 
     DisplayTweet(state, idx){
@@ -49,7 +57,8 @@ export default createStore({
         title: SearchItem,
         active: false,
         loaded: false,
-        index: null
+        index: null,
+        data: null
 
       })
     },
@@ -64,8 +73,14 @@ export default createStore({
         
         let response = await api.getMessages(searchValue);
         console.log(response.data)
-    
-        state.commit("SetTweets", response.data[searchValue]);
+
+        if(response.data == "No data"){
+          state.commit("SetTweets", response.data);
+        }else{
+          state.commit("SetTweets", response.data[searchValue]);
+        }
+
+       
         
       
       } catch (err){
