@@ -2,32 +2,10 @@
 
     <div class="container">
         <div class="logo">
-            <img :src="'' + require('@/assets/logo2.png') + ''" alt=""><br>
+            <img :src="'' + require('@/assets/logo-main-2.png') + ''" alt=""><br>
         </div>
+
         <div class="row">
-            <div class="col-2">
-            </div>
-            <div class="col-3" id="select-container">
-                <div class="items-container">
-                        <transition name="slide-fade">
-                            <p v-if="show">Use our premade searches.</p>
-                        </transition>
-                            <div class="select">
-                                <select id="selected" v-model="selected">
-                                    <option disabled>Premade searches</option>
-                                    <option>Donald Trump</option>
-                                    <option>Joe Biden</option>
-                                    <option>Barack Obama is white</option>
-                                    <option>Corona changes DNA</option>
-                                    <option>Apple is made by Microsoft</option>
-                                    <option>Humans waste too much water</option>
-                                    <option>The earth is flat</option>
-                                </select>
-                            </div>
-                            
-                    </div>
-            </div>
-            
             <div class="col-md-auto" id="item">
                 <div class="items-container">
                 <transition name="slide-fade">
@@ -36,18 +14,40 @@
                     </p>
                 </transition>
                     <input v-model="searchValue" class="form-control" type="text" placeholder="Search here" maxlength="256">
-                
                 </div>
             </div>
 
-        
-
         </div>
-        <div class="add-container"><button class="btn btn-outline-secondary" id="add-search" @click="addSearch();">Add search</button> </div>
+
+        <div class="row">
+            <div class="col-6" id="select-container">
+                <div class="items-container">
+                        <transition name="slide-fade">
+                            <p v-if="show">Use our premade searches.</p>
+                        </transition>
+                            <div class="select">
+                                <select id="selected" v-model="selected">
+                                    <option disabled>Premade searches</option>
+                                    <option>America is the greatest country in the world</option>
+                                    <option>Joe Biden is not president</option>
+                                    <option>Covid-19 vaccine is dangerous</option>
+                                    <option>Covid-19 is a hoax</option>
+                                    <option>Corona virus is a hoax</option>
+                                    <option>Barack Obama is white</option>
+                                    <option>Corona changes DNA</option>
+                                    <option>DMX received COVID vaccine days before heart attack </option>
+                                    <option>Crypto is a scam</option>
+                                </select>
+                            </div> 
+                    </div>
+            </div>
+        </div>
+    
+        <div class="row add-button">
+            <button class="btn btn-secondary" id="add-search" @click="addSearch();">Add search</button> 
+        </div>
+        
         <div class="bottom" v-show="searchlist_length>0">
-
-            <button @click="showTut()" style="display: none">show tutorial</button>
-
             <h4>Your Recent Searches</h4>
             <search-list/> <br>
             <button class="btn btn-primary" @click="gotoTwitter();">See results on Twitter</button>
@@ -133,35 +133,20 @@ export default {
     padding: 25px;
 }
 .row{
-   
-    padding: 40px;
-}
-#item{
-    
-
+   padding-top: 20px;
+    align-items: center;
+    justify-content: center;
 }
 
-#select-container{
-    
-
+img{
+    height: 400px;
 }
 
-
-.items-container{
-    
-    
-    
+.add-button{
+    padding-top: 40px;
 }
-.add-container{
-    padding-top: 20px;
-}
-
-.bottom{
-    padding-top: 50px;
-}
-
 #add-search{
-    width: 200px;
+    width: 150px;
 }
 h2{
     margin-bottom: 30px;
@@ -176,7 +161,7 @@ h4{
    text-align: left;
 }
 input{
-    width: 450px;
+    width: 700px;
     height: 45px;
     text-align: center;
     display: block;
@@ -203,7 +188,6 @@ select::-ms-expand {
     text-align: center;
     position: relative;
     display: flex;
-    width: 15em;
     height: 3em;
     line-height: 3;
     background: #414447;
@@ -252,5 +236,6 @@ select {
   transform: translateX(40px);
   opacity: 0;
 }
+
 </style>
 

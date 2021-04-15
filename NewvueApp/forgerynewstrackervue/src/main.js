@@ -11,6 +11,8 @@ import { faFontAwesome, faTwitterSquare, faTwitter} from '@fortawesome/free-bran
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import VTooltip from 'v-tooltip'
 import Highcharts from 'highcharts'
+import Dropdown from 'bp-vuejs-dropdown';
+
 
 
 
@@ -37,6 +39,7 @@ createApp(App)
   .use(store)
   .use(router)
   .use(VTooltip)
+  .use(Dropdown)
   .component("fa", FontAwesomeIcon)
   .use(Chartkick.use(Highcharts))
   .mount("#app");

@@ -1,12 +1,13 @@
 from flask import Flask, jsonify, redirect, request, url_for
 from flask_cors import CORS
+import config
 import requests
 import json
 import os
 import time
 from textblob import TextBlob
-import pandas as pd
 import numpy as np
+import pandas as pd
 import re
 import matplotlib.pyplot as plt
 plt.style.use('fivethirtyeight')
@@ -14,7 +15,6 @@ import praw
 import geocoder
 from datetime import datetime
 import urllib
-
 
 # configuration
 DEBUG = True
@@ -24,10 +24,8 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 app.config['TESTING'] = True
 
-
 # enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
-
 
 #Getting data from TWITTER
 def auth():
@@ -60,7 +58,7 @@ def create_users_url(query):
     return url
 
 def create_headers(bearer_token):
-    headers = {"Authorization": "Bearer AAAAAAAAAAAAAAAAAAAAAEYbLwEAAAAA2QFmIRNmiAc3uEuMAPT9AoknvZw%3D7rtwFRPtWgSFp70bogE1sBP1WzqkR5cubh9vlN2COt9AiT6kfk"}
+    headers = {"Authorization": config.bearer_token}
     return headers
 
 def connect_to_endpoint(url, headers):
@@ -75,213 +73,103 @@ def showinfo():
     d = request.json
     print(d)
 
-    unencoded_query = str(d["query"])
-    query = urllib.parse.quote(unencoded_query)
-
+    
 
 
     #Reddit API call, time displayed in unix
+    reddit_data = reddit_api(d["query"])
 
-    reddit_data = reddit_api(query)
+    if len(reddit_data) != 0:
+        try:
+            piechartreddit = reddit_piechart(reddit_data)
+            linechartreddit = reddit_linechart(reddit_data)
+            reddit_data = sorted(reddit_data, key = lambda i: i['upvotes'],reverse=True)
+            engagementreddit = reddit_engagement(reddit_data)
+            toppostsreddit = reddit_top_posts(reddit_data)
+            topusersreddit = reddit_top_users(reddit_data)
+            wordcloudreddit = reddit_wordcloud(reddit_data)
+        except Exception as e:
+            print(e)  
 
-    piechartreddit = reddit_piechart(reddit_data)
-    linechartreddit = reddit_linechart(reddit_data)
+    else:
+        print("No Reddit data")
+        piechartreddit = []
+        linechartreddit = {}
+        engagementreddit = {}
+        toppostsreddit = []
+        topusersreddit = []
+        wordcloudreddit = []
 
-    reddit_data = sorted(reddit_data, key = lambda i: i['upvotes'],reverse=True)
+    unencoded_query = str(d["query"])
 
-    engagementreddit = reddit_engagement(reddit_data)
-    toppostsreddit = reddit_top_posts(reddit_data)
-    topusersreddit = reddit_top_users(reddit_data)
-    wordcloudreddit = reddit_wordcloud(reddit_data)
-
-
+    unavailable_chars = ['$', '*', "'", '&', "‘"]
+ 
+    for i in unavailable_chars :
+        unencoded_query = unencoded_query.replace(i, '')
     
+    
+    query = urllib.parse.quote(unencoded_query)
+
     #Create the token to get acess to the Twitter 
     bearer_token = auth()
     headers = create_headers(bearer_token)
 
    
-
     #API call to get back a dictionary with 10 api call without any duplicates
-    json_response = api_caller(query, headers)
+    try:
+        json_response = api_caller(query, headers)
+        print(json_response)
+
+    except Exception as e:
+        print(e)  
+        json_response = {"data": "No data"}
+        
+    
     # New call to the the Twitter API that uses the ID of the retweeted tweets and adds the data of the original tweets to the dictionary
     #The create_id_url creates the url that is used to call the api with.
-    ids = extract_retweets(json_response)
-    url_ids = create_id_url(ids)
-    json_response2 = connect_to_endpoint(url_ids, headers)
-    
-    for item in json_response2["data"]:
-        json_response["data"].append(item)
+   
 
-    json_response["data"] = sorted(json_response["data"], key = lambda i: i['public_metrics']["retweet_count"],reverse=True)
+    if json_response["data"] != "No data":
+        ids = extract_retweets(json_response)
+        if len(ids) > 0:
+            url_ids = create_id_url(ids)
+            json_response2 = connect_to_endpoint(url_ids, headers)
+            for item in json_response2["data"]:
+                json_response["data"].append(item)
 
-    json_response3 = extract_usernames(json_response, headers)
-    
-    for i in range(len(json_response["data"])):
-        json_response3[i]["public_metrics_user"] = json_response3[i].pop("public_metrics")
-        json_response3[i]["author_id"] = json_response3[i].pop("id")
-        json_response["data"][i].update(json_response3[i])
-     
-    #Create all of the data that is going to be displayed in the frontend from the json_response
-    alldata = json_response["data"].copy()
-    barchart = create_barchart(json_response)
-    linechart = create_linechart(json_response)
-    topposts = create_topposts(json_response)
-    topusers = create_topusers(json_response)
-    activity = create_activity(json_response)
-    links = create_links(json_response)
-    nodes = create_nodes(links)
-    # geochart = create_geochart(json_response)
-    links = create_links(json_response)
-    nodes = create_nodes(links)
-    alltext = all_text(json_response)
-    
-    json_response["data"] = {d["query"]: {"barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, 
-    "activity": activity, "query": d["query"], "nodes": nodes, "links": links, "alltext": alltext,"engagementreddit": engagementreddit, "piechartreddit": piechartreddit, "linechartreddit":linechartreddit,
-    "toppostsreddit": toppostsreddit, "topusersreddit": topusersreddit, "wordcloudreddit": wordcloudreddit}}
-    
+        json_response["data"] = sorted(json_response["data"], key = lambda i: i['public_metrics']["retweet_count"],reverse=True)
 
-    sentiment = show_tweets_text_sentiment(json_response)
-    
-    json_response["data"][d["query"]]["sentiment"] = sentiment
+        json_response3 = extract_usernames(json_response, headers)
+        
+        for i in range(len(json_response["data"])):
+            json_response3[i]["public_metrics_user"] = json_response3[i].pop("public_metrics")
+            json_response3[i]["author_id"] = json_response3[i].pop("id")
+            json_response["data"][i].update(json_response3[i])
+        
+        #Create all of the data that is going to be displayed in the frontend from the json_response
+        barchart = create_barchart(json_response)
+        linechart = create_linechart(json_response)
+        topposts = create_topposts(json_response)
+        topusers = create_topusers(json_response)
+        activity = create_activity(json_response)
+        links = create_links(json_response)
+        nodes = create_nodes(links)
+        geochart = create_geochart(json_response)
+        links = create_links(json_response)
+        nodes = create_nodes(links)
+        alltext = all_text(json_response)
+        
+        json_response["data"] = {d["query"]: {"barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, 
+        "activity": activity, "query": d["query"], "nodes": nodes, "links": links, "geochart": geochart, "alltext": alltext,"engagementreddit": engagementreddit, "piechartreddit": piechartreddit, "linechartreddit":linechartreddit,
+        "toppostsreddit": toppostsreddit, "topusersreddit": topusersreddit, "wordcloudreddit": wordcloudreddit}}
+        
+
+        sentiment = show_tweets_text_sentiment(json_response)
+        
+        json_response["data"][d["query"]]["sentiment"] = sentiment
+ 
 
     return json.dumps(json_response)
-
-
-def reddit_api(query):
-    reddit_data = []
-    #Reddit API call, time displayed in unix
-    reddit = praw.Reddit(
-    client_id="UK5XRgvcO7C2cQ",
-    client_secret="9OIo7S6kOBLlQZadOlo5miG0A9OC4g",
-    user_agent="my user agent")
-
-    for submission in reddit.subreddit("all").search(query, limit=100):
-        try:
-            reddit_data.append({"author": str(submission.author.name), "title": str(submission.title),"name": str(submission.name), "upvote_ratio": submission.upvote_ratio, "upvotes": submission.ups,
-            "url": str(submission.permalink), "created_at": str(submission.created_utc), "subreddit": str(submission.subreddit), "number_of_comments": str(submission.num_comments),
-            "post_karma": submission.author.link_karma, "comment_karma": submission.author.comment_karma, "icon_img": submission.author.icon_img})
-        except:
-            print("User suspended")
-   
-
-    return reddit_data
-
-
-def reddit_piechart(reddit_data):
-    ratio_sum = 0
-    for i in range(len(reddit_data)):
-        ratio_sum += reddit_data[i]["upvote_ratio"]
-    
-    upvote_ratio = round(ratio_sum/len(reddit_data),2)
-
-    downvote_ratio = round(1-upvote_ratio,2)
-
-    ratio = [["Upvote Percentage", upvote_ratio*100], ["Downvote Percentage", downvote_ratio*100]] 
-
-    return ratio
-
-def reddit_wordcloud(reddit_data):
-    wordcloud = {}
-    for i in range(len(reddit_data)):
-        subreddit = reddit_data[i]["subreddit"]
-        if subreddit not in wordcloud:
-            wordcloud[subreddit] = 1
-        else:
-            wordcloud[subreddit] += 1
-
-    wordcloud_list = []
-    for value in wordcloud.keys():
-        if wordcloud[value]>1:
-            if wordcloud[value] <= 3:
-                wordcloud_list.append({"subreddit": value, "value": 1})
-            elif wordcloud[value] <= 6:
-                wordcloud_list.append({"subreddit": value, "value": 2})
-            elif wordcloud[value] <= 10:
-                wordcloud_list.append({"subreddit": value, "value": 3})
-            elif wordcloud[value] <= 20:
-                wordcloud_list.append({"subreddit": value, "value": 4})
-            else:
-                wordcloud_list.append({"subreddit": value, "value": 5})
-                
-
-    return wordcloud_list
-            
-def reddit_linechart(reddit_data):
-    allDates = []
-    finalDates = {}
-
-    for i in range(len(reddit_data)):
-        timestamp = reddit_data[i]["created_at"]
-        
-        timestamp = timestamp.replace(".0", "")
-        
-        allDates.append(datetime.utcfromtimestamp(int(timestamp)).strftime('%Y-%m-%dT%H:%M:%S'))
-        
-    allDates.sort() 
-   
-
-    for i in range(len(allDates)):
-        finalDates[allDates[i]]=i+1    
-    return finalDates
-          
-def reddit_top_posts(reddit_data):
-    top_posts = []
-    for i in range(3):
-        top_post = {}
-        top_post["title"] = reddit_data[i]["title"]
-        top_post["url"] = reddit_data[i]["url"]
-        top_post["title"] = reddit_data[i]["title"]
-        top_post["author"] = reddit_data[i]["author"]
-        top_post["upvotes"] = reddit_data[i]["upvotes"]
-        top_post["icon_img"] = reddit_data[i]["icon_img"]
-        top_post["subreddit"] = reddit_data[i]["subreddit"]
-        top_post["number_of_comments"] = reddit_data[i]["number_of_comments"]
-        timestamp = reddit_data[i]["created_at"]
-        timestamp = timestamp.replace(".0", "")
-        top_post["created_at"]= datetime.utcfromtimestamp(int(timestamp)).strftime('%Y-%m-%d')
-        top_posts.append(top_post)
-
-
-    return top_posts
-
-def reddit_top_users(reddit_data):
-    reddit_data = sorted(reddit_data, key = lambda i: i['post_karma'],reverse=True)
-    top_users = []
-    for i in range(len(reddit_data)):
-        top_user = {}
-        top_user["author"] = reddit_data[i]["author"]
-        top_user["post_karma"] = reddit_data[i]["post_karma"]
-        top_user["comment_karma"] = reddit_data[i]["comment_karma"]
-        top_user["icon_img"] = reddit_data[i]["icon_img"]
-        if top_user not in top_users:
-            top_users.append(top_user)
-            if len(top_users) == 9:
-                break
-
-    return top_users
-
-   
-def reddit_engagement(reddit_data):
-    engagement = {}
-    
-    user_ids = []
-    upvotes = 0 
-
-    for i in range(len(reddit_data)):
-        upvotes += reddit_data[i]["upvotes"]
-        if reddit_data[i]["author"] not in user_ids:
-            user_ids.append(reddit_data[i]["author"]) 
-    
-    engagement["posts"] = len(reddit_data)
-    engagement["users"] = len(user_ids)
-    engagement["engagement"] = upvotes
-
-    return  engagement
-
-
-
-
 
 
 #The fuction api_caller is a fuction that is used to call the api 10 times and add the responses to the json_response
@@ -292,21 +180,27 @@ def api_caller(query, headers):
 
     time.time()
     count = 0
-    while True:
-        api_call = connect_to_endpoint(url, headers)
-        for item in api_call["data"]:
-            if item["id"] not in json_response["data"]:
-                json_response["data"].append(item)
+    if "data" in json_response:
+        while True:
+            api_call = connect_to_endpoint(url, headers)
         
-        time.sleep(2)
-        count += 1
-        print ("tick")
+            for item in api_call["data"]:
+                if item["id"] not in json_response["data"]:
+                    json_response["data"].append(item)
+            
+            time.sleep(2)
+            count += 1
+            print ("tick")
 
-        if count == 2:
-            count = 0
-            break
+            if count == 2:
+                count = 0
+                break
+        json_response_no_duplicates = remove_duplicates(json_response)
+    
+    else:
+        json_response_no_duplicates = {"data": "No data"}
 
-    json_response_no_duplicates = remove_duplicates(json_response)
+    
     return json_response_no_duplicates
 
 #Function for removing the duplicate responses when calling the api 10 times. When searching for a query that is popular you get few duplicates from the api.
@@ -331,6 +225,7 @@ def remove_duplicates(json_response):
 #So we call the api for the orignal tweets that we extract from the retweets.
 def extract_retweets(json_response):
     id_list = []
+    joined_string = []  
     tweet_dict = json_response["data"]
     for i in range(len(tweet_dict)):
         if "referenced_tweets" in tweet_dict[i]:
@@ -339,7 +234,9 @@ def extract_retweets(json_response):
                     id_list.append(tweet_dict[i]["referenced_tweets"][0]["id"])
                     if len(id_list) == 100:
                         break
-    joined_string = ",".join(id_list)
+    if len(id_list) > 0:
+        joined_string = ",".join(id_list)
+
     return joined_string
 
 #Function for extracting all off the usernames and calling the API for every 100 tweet.
@@ -543,9 +440,6 @@ def create_links(json_response):
             
                 links.append({'source': text[idxAt+1:idxCo], 'target': tweets[i]['username'], 'size':size})
 
-            
-
-
             elif tweets[i]['referenced_tweets'][0]["type"] == "replied_to":
                 text = tweets[i]['text']
                 idxAt = text.find('@')
@@ -589,12 +483,15 @@ def create_geochart(json_response):
                 break
  
     all_countries = []
-   
-    g = geocoder.mapquest(all_locations, method='batch', key="DW8AsY8QcWjfHn5wzHK769LT4LwAK0l6")
-    for result in g:
-        all_countries.append(str(result.country))
-          
-    geochart = dict((x,all_countries.count(x)) for x in set(all_countries))
+
+    try:
+        g = geocoder.mapquest(all_locations, method='batch', key=config.mapquest_key)
+        for result in g:
+            all_countries.append(str(result.country))
+            
+        geochart = dict((x,all_countries.count(x)) for x in set(all_countries))
+    except:
+        geochart = {}
 
     return geochart
 
@@ -604,18 +501,6 @@ def all_text(json_response):
     for i in range(len(tweets)):
         allText.append({"tweets_text": tweets[i]["text"]})
     return allText
-
-
-# https://betterprogramming.pub/twitter-sentiment-analysis-15d8892c0082
-#####################################
-#########      SENTIMENT   ##########
-#########       TWEETS     ##########
-#####################################
-# 1) Get the text of every tweet. 
-# 2) put each tweet in a DataFrame
-# 3) remove "@", "#", "links" etc.
-# 4) Add subjectivity and polarity to the DataFrame
-# 5) Send data to json_response
 
 #  Print tweet text
 def show_tweets_text_sentiment(json_response):
@@ -682,7 +567,143 @@ def getAnalysis(score):
     else:
         return 'Positive'
     
+
+
+def reddit_api(query):
+    reddit_data = []
+    #Reddit API call, time displayed in unix
+    reddit = praw.Reddit(
+    client_id=config.client_id,
+    client_secret=config.client_secret,
+    user_agent="my user agent")
+
+    for submission in reddit.subreddit("all").search(query, limit=100):
+        try:
+            reddit_data.append({"author": str(submission.author.name), "title": str(submission.title),"name": str(submission.name), "upvote_ratio": submission.upvote_ratio, "upvotes": submission.ups,
+            "url": str(submission.permalink), "created_at": str(submission.created_utc), "subreddit": str(submission.subreddit), "number_of_comments": str(submission.num_comments),
+            "post_karma": submission.author.link_karma, "comment_karma": submission.author.comment_karma, "icon_img": submission.author.icon_img})
+        except:
+            print("User suspended")
+   
+    print(reddit_data)
+    return reddit_data
+
+
+def reddit_piechart(reddit_data):
+    ratio_sum = 0
+    for i in range(len(reddit_data)):
+        ratio_sum += reddit_data[i]["upvote_ratio"]
+    
+    upvote_ratio = round(ratio_sum/len(reddit_data),2)
+
+    downvote_ratio = round(1-upvote_ratio,2)
+
+    ratio = [["Upvote Percentage", upvote_ratio*100], ["Downvote Percentage", downvote_ratio*100]] 
+
+    return ratio
+
+def reddit_wordcloud(reddit_data):
+    wordcloud = {}
+    for i in range(len(reddit_data)):
+        subreddit = reddit_data[i]["subreddit"]
+        if subreddit not in wordcloud:
+            wordcloud[subreddit] = 1
+        else:
+            wordcloud[subreddit] += 1
+
+    wordcloud_list = []
+    for value in wordcloud.keys():
+        if wordcloud[value]>1:
+            if wordcloud[value] <= 3:
+                wordcloud_list.append({"subreddit": value, "value": 1})
+            elif wordcloud[value] <= 6:
+                wordcloud_list.append({"subreddit": value, "value": 2})
+            elif wordcloud[value] <= 10:
+                wordcloud_list.append({"subreddit": value, "value": 3})
+            elif wordcloud[value] <= 20:
+                wordcloud_list.append({"subreddit": value, "value": 4})
+            else:
+                wordcloud_list.append({"subreddit": value, "value": 5})
+                
+
+    return wordcloud_list
+            
+def reddit_linechart(reddit_data):
+    allDates = []
+    finalDates = {}
+
+    for i in range(len(reddit_data)):
+        timestamp = reddit_data[i]["created_at"]
+        
+        timestamp = timestamp.replace(".0", "")
+        
+        allDates.append(datetime.utcfromtimestamp(int(timestamp)).strftime('%Y-%m-%dT%H:%M:%S'))
+        
+    allDates.sort() 
+   
+
+    for i in range(len(allDates)):
+        finalDates[allDates[i]]=i+1    
+    return finalDates
+          
+def reddit_top_posts(reddit_data):
+    top_posts = []
+    for i in range(len(reddit_data)):
+        top_post = {}
+        top_post["title"] = reddit_data[i]["title"]
+        top_post["url"] = reddit_data[i]["url"]
+        top_post["title"] = reddit_data[i]["title"]
+        top_post["author"] = reddit_data[i]["author"]
+        top_post["upvotes"] = reddit_data[i]["upvotes"]
+        top_post["icon_img"] = reddit_data[i]["icon_img"]
+        top_post["subreddit"] = reddit_data[i]["subreddit"]
+        top_post["number_of_comments"] = reddit_data[i]["number_of_comments"]
+        timestamp = reddit_data[i]["created_at"]
+        timestamp = timestamp.replace(".0", "")
+        top_post["created_at"]= datetime.utcfromtimestamp(int(timestamp)).strftime('%Y-%m-%d')
+        top_posts.append(top_post)
+        if len(top_posts) == 3:
+            break
+
+
+
+    return top_posts
+
+def reddit_top_users(reddit_data):
+    reddit_data = sorted(reddit_data, key = lambda i: i['post_karma'],reverse=True)
+    top_users = []
+    for i in range(len(reddit_data)):
+        top_user = {}
+        top_user["author"] = reddit_data[i]["author"]
+        top_user["post_karma"] = reddit_data[i]["post_karma"]
+        top_user["comment_karma"] = reddit_data[i]["comment_karma"]
+        top_user["icon_img"] = reddit_data[i]["icon_img"]
+        if top_user not in top_users:
+            top_users.append(top_user)
+            if len(top_users) == 9:
+                break
+
+    return top_users
+
+   
+def reddit_engagement(reddit_data):
+    engagement = {}
+    
+    user_ids = []
+    upvotes = 0 
+
+    for i in range(len(reddit_data)):
+        upvotes += reddit_data[i]["upvotes"]
+        if reddit_data[i]["author"] not in user_ids:
+            user_ids.append(reddit_data[i]["author"]) 
+    
+    engagement["posts"] = len(reddit_data)
+    engagement["users"] = len(user_ids)
+    engagement["engagement"] = upvotes
+
+    return  engagement
+
+
 if __name__ == '__main__':
     app.run(debug=True)
-
 "export FLASK_DEBUG=ON"
