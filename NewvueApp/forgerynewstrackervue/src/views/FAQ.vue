@@ -1,7 +1,7 @@
 <template>
   <div class="faq">
-    <div class="headline">
-      <h1>Forgery News Tracker</h1>
+    <div class="logo">
+      <img :src="'' + require('@/assets/logo-main-2.png') + ''" alt="">
     </div>
 
     <div class="text-container">
@@ -77,15 +77,18 @@ export default {
 
 
 
-<style>
+<style scoped>
 .faq{
     color: black;
     text-align: left;
 }
+.logo{
+   text-align: center;
+   padding-top: 50px;
+}
 
-.headline{
-  text-align: center;
-  padding-top: 50px;
+img{
+  height: 300px;
 }
 
 .headline h1{
