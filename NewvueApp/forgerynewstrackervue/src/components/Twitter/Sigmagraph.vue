@@ -59,10 +59,7 @@
 
 <script>
 import * as d3 from "d3";
-var nodes_dummy = {id:[1, 2, 3, 4, 5]};
-var edges = [[1,2],[3,5],[5,2],[1,4]]
-console.log(nodes_dummy)
-console.log(edges)
+
 export default {
   el: "#graph",
   props:['listdata'],

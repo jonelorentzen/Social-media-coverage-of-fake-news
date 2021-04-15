@@ -32,7 +32,7 @@
         
         <div class="row dashboard-comp">
             <div class="col-6">
-                <GeoChart  id="Geochart" :listdata='{"US": 69}'/>  
+                <GeoChart  id="Geochart" :listdata='Display1.geochart'/>  
             </div>
             <div class="col-md-6">
                 <Sentiment  :listdata='Display1.sentiment'/>
@@ -67,10 +67,10 @@
 
          <div class="row dashboard-comp">
             <div class="col-sm-6">
-                <GeoChart  id="Geochart" :listdata='{"US": 69}'/>
+                <GeoChart  id="Geochart" :listdata='Display1.geochart'/>
             </div>
             <div class="col-sm-6">
-                <GeoChart  id="Geochart" :listdata='{"US": 69}'/>
+                <GeoChart  id="Geochart" :listdata='Display2.geochart'/>
             </div>
         </div>
 

@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, redirect, request, url_for
 from flask_cors import CORS
+import config
 import requests
 import json
 import os
@@ -57,7 +58,7 @@ def create_users_url(query):
     return url
 
 def create_headers(bearer_token):
-    headers = {"Authorization": "Bearer AAAAAAAAAAAAAAAAAAAAAEYbLwEAAAAA2QFmIRNmiAc3uEuMAPT9AoknvZw%3D7rtwFRPtWgSFp70bogE1sBP1WzqkR5cubh9vlN2COt9AiT6kfk"}
+    headers = {"Authorization": config.bearer_token}
     return headers
 
 def connect_to_endpoint(url, headers):
@@ -71,6 +72,9 @@ def connect_to_endpoint(url, headers):
 def showinfo():
     d = request.json
     print(d)
+
+    
+
 
     #Reddit API call, time displayed in unix
     reddit_data = reddit_api(d["query"])
@@ -150,13 +154,13 @@ def showinfo():
         activity = create_activity(json_response)
         links = create_links(json_response)
         nodes = create_nodes(links)
-        # geochart = create_geochart(json_response)
+        geochart = create_geochart(json_response)
         links = create_links(json_response)
         nodes = create_nodes(links)
         alltext = all_text(json_response)
         
         json_response["data"] = {d["query"]: {"barchart": barchart, "linechart": linechart, "topposts": topposts, "topusers": topusers, 
-        "activity": activity, "query": d["query"], "nodes": nodes, "links": links, "alltext": alltext,"engagementreddit": engagementreddit, "piechartreddit": piechartreddit, "linechartreddit":linechartreddit,
+        "activity": activity, "query": d["query"], "nodes": nodes, "links": links, "geochart": geochart, "alltext": alltext,"engagementreddit": engagementreddit, "piechartreddit": piechartreddit, "linechartreddit":linechartreddit,
         "toppostsreddit": toppostsreddit, "topusersreddit": topusersreddit, "wordcloudreddit": wordcloudreddit}}
         
 
@@ -479,12 +483,15 @@ def create_geochart(json_response):
                 break
  
     all_countries = []
-   
-    g = geocoder.mapquest(all_locations, method='batch', key="DW8AsY8QcWjfHn5wzHK769LT4LwAK0l6")
-    for result in g:
-        all_countries.append(str(result.country))
-          
-    geochart = dict((x,all_countries.count(x)) for x in set(all_countries))
+
+    try:
+        g = geocoder.mapquest(all_locations, method='batch', key=config.mapquest_key)
+        for result in g:
+            all_countries.append(str(result.country))
+            
+        geochart = dict((x,all_countries.count(x)) for x in set(all_countries))
+    except:
+        geochart = {}
 
     return geochart
 
@@ -566,8 +573,8 @@ def reddit_api(query):
     reddit_data = []
     #Reddit API call, time displayed in unix
     reddit = praw.Reddit(
-    client_id="UK5XRgvcO7C2cQ",
-    client_secret="9OIo7S6kOBLlQZadOlo5miG0A9OC4g",
+    client_id=config.client_id,
+    client_secret=config.client_secret,
     user_agent="my user agent")
 
     for submission in reddit.subreddit("all").search(query, limit=100):
@@ -641,7 +648,7 @@ def reddit_linechart(reddit_data):
           
 def reddit_top_posts(reddit_data):
     top_posts = []
-    for i in range(len(reddit_data))):
+    for i in range(len(reddit_data)):
         top_post = {}
         top_post["title"] = reddit_data[i]["title"]
         top_post["url"] = reddit_data[i]["url"]
@@ -655,8 +662,8 @@ def reddit_top_posts(reddit_data):
         timestamp = timestamp.replace(".0", "")
         top_post["created_at"]= datetime.utcfromtimestamp(int(timestamp)).strftime('%Y-%m-%d')
         top_posts.append(top_post)
-        if len(top_users) == 3:
-                break
+        if len(top_posts) == 3:
+            break
 
 
 
