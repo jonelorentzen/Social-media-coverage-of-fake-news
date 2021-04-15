@@ -6,7 +6,7 @@
     
     <div class="header">
         <Trackerheader class="dashboard-comp" :listdata='Display1.query' :listdata2='Display2.query'/>
-        <MediaSelector class="media"/>
+        <MediaSelectorreddit class="media"/>
     </div>
 
     
@@ -40,19 +40,19 @@
         </div>
 
          <div class="row dashboard-comp">
-            <div class="col-sm-6">
+            <div class="col-md-6 dashboard-comp">
                 <WordCloudReddit :listdata='Display1.wordcloudreddit'/>
             </div>
-             <div class="col-sm-6">
+             <div class="col-md-6 dashboard-comp">
                  <PieChartReddit :listdata='Display1.piechartreddit'/>
             </div>
         </div>
 
         <div class="row dashboard-comp">
-            <div class="col-sm-6">
+            <div class="col-md-6 dashboard-comp">
                 <TopPostsReddit :listdata='Display1.toppostsreddit'/>
             </div>
-             <div class="col-sm-6">
+             <div class="col-md-6 dashboard-comp">
                  <TopUsersReddit :listdata='Display1.topusersreddit'/>
             </div>
         </div>
@@ -134,7 +134,7 @@
 
 import SearchList from '../components/SearchList.vue';
 import Trackerheader from '../components/Trackerheader';
-import MediaSelector from '../components/MediaSelector';
+import MediaSelectorreddit from '../components/MediaSelectorReddit';
 import EngagementReddit from '../components/EngagementReddit';
 import PieChartReddit from "../components/PieChartReddit"
 import LineChartReddit from "../components/LineChartReddit"
@@ -149,7 +149,7 @@ export default {
   components: {
     SearchList,
     Trackerheader,
-    MediaSelector,
+    MediaSelectorreddit,
     EngagementReddit,
     PieChartReddit,
     LineChartReddit,

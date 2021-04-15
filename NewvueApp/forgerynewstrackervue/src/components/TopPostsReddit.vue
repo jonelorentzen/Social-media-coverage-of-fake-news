@@ -13,6 +13,10 @@
         <div class="toppostswrapper">
           <div class="postrow" v-for="(post, index) in listdata" v-bind:key="index" @click="gotopost(listdata[index]['url'])">
             
+            <div class="profilepicture_container">
+                <img class="profilepicture" v-bind:src="listdata[index].icon_img">
+              </div>
+
             <div class="postrow_wrapper">
               
               <div class="postinfo_wrapper">
@@ -20,7 +24,7 @@
                 <div class="postinfo_container">
                   
                   <p class="postinfo">
-                    <img class="profilepicture" v-bind:src="listdata[index].icon_img">
+                    
                     <strong>{{listdata[index]["author"]}}</strong>
                   </p>
   
@@ -28,8 +32,10 @@
                 </div>
 
                 <div class="post_engagement">
-                    <p>{{listdata[index]["upvotes"]}} upvotes</p>
-                    <p >{{listdata[index]["number_of_comments"]}} comments</p>
+                  <fa class="circleup" icon="arrow-alt-circle-up"/>
+                    <p>{{listdata[index]["upvotes"]}} </p>
+                  <fa class="comments" icon="comments"/>
+                    <p >{{listdata[index]["number_of_comments"]}} </p>
                 </div>
 
               </div>
@@ -103,14 +109,16 @@ export default {
 }
 
 .profilepicture_container{
-  margin: auto;
+  
   font-size: 1.25em;
   margin-right: .75em;
   margin-top: .25em;
   
 }
 .postrow_wrapper{
-  margin: auto;
+  
+  padding-top: 10px;
+  width: 100%;
 }
 
 .postinfo_wrapper{
@@ -120,16 +128,16 @@ export default {
 .post_engagement{
   display: flex;
   font-size: .9em;
-  display: inline-flex;
+  margin-left: auto;
  
 }
 
 
 .postinfo_container{
   display: flex;
-  margin-right: 150px;
   font-size: .85em;
   color: #828282;
+  margin-right: 100px;
   
 }
 .postinfo{
@@ -166,6 +174,8 @@ export default {
   font-weight: 500;
   color: #8086ae;
   padding-right: 50px;
+
+  text-align: left;
 }
 
 .chartheader{

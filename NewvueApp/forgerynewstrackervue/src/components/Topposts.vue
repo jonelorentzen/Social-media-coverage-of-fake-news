@@ -129,7 +129,7 @@ export default {
 .post_engagement{
   display: flex;
   font-size: .9em;
-  display: inline-flex;
+  margin-left: auto;
  
 }
 
@@ -144,7 +144,7 @@ export default {
 
 .postinfo_container{
   display: flex;
-  margin-right: 150px;
+  
   font-size: .85em;
   color: #828282;
   
@@ -183,6 +183,8 @@ export default {
   font-weight: 500;
   color: #8086ae;
   padding-right: 50px;
+
+  text-align: left;
 }
 
 .chartheader{

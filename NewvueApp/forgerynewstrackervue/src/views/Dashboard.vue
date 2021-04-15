@@ -5,7 +5,7 @@
     <SearchList/>
      <div class="header">
         <Trackerheader class="dashboard-comp" :listdata='Display1.query' :listdata2='Display2.query'/>
-        <MediaSelector class="media"/>
+        <MediaSelectortwitter class="media"/>
     </div>
 
     
@@ -44,13 +44,13 @@
             <mostinfluentialusers class="dashboard-comp insight" :listdata='Display1.topusers' />
         </div> -->
         <div class="row dashboard-comp">
-            <div class="col-sm">
+            <div class="col-md">
             <BarChartBig  class="dashboard-comp" id="Barchart" :listdata='Display1.barchart'/>
             </div>
         </div>
         
         <div class="row dashboard-comp">
-            <div class="col-6">
+            <div class="col-md-6">
                 <GeoChart  id="Geochart" :listdata='{"US": 69}'/>  
             </div>
             <div class="col-md-6">
@@ -58,12 +58,12 @@
             </div>
         </div>
         <div class="row dashboard-comp" v-if="Display1.query != ''">
-            <div class="col-sm">
+            <div class="col-md">
              <Sigmagraph :listdata='Display1'/>
             </div>      
         </div>
         <div class="row dashboard-comp">
-            <div class="col-6">
+            <div class="col-md-6">
                 <topPosts class="dashboard-comp insight" :listdata='Display1.topposts'/>
             </div>
             <div class="col-md-6">
@@ -107,28 +107,28 @@
         </div> -->
 
         <div class="row dashboard-comp">
-            <div class="col-sm-6">
+            <div class="col-md-6">
             <BarChart  id="Barchart" :listdata='Display1.barchart'/>
             </div>
-            <div class="col-sm-6">
+            <div class="col-md-6">
             <BarChart  id="Barchart" :listdata='Display2.barchart'/>
             </div>
         </div>
 
          <div class="row dashboard-comp">
-            <div class="col-sm-6">
+            <div class="col-md-6">
                 <GeoChart  id="Geochart" :listdata='{"US": 69}'/>
             </div>
-            <div class="col-sm-6">
+            <div class="col-md-6">
                 <GeoChart  id="Geochart" :listdata='{"US": 69}'/>
             </div>
         </div>
 
          <div class="row dashboard-comp">
-            <div class="col-sm-6">
+            <div class="col-md-6">
                 <Sentiment  :listdata='Display1.sentiment'/>
             </div>
-            <div class="col-sm-6">
+            <div class="col-md-6">
                 <Sentiment  :listdata='Display2.sentiment'/>
             </div>
         </div>
@@ -137,25 +137,25 @@
             <div class="col-sm-6">
                 <Sigmagraph :listdata='Display1'/>
             </div>
-            <div class="col-sm-6">
+            <div class="col-md-6">
                 <Sigmagraph :listdata='Display2'/>
             </div>
         </div>
 
         <div class="row dashboard-comp">
-            <div class="col-sm-6">
+            <div class="col-md-6">
                 <topPosts class=" insight" :listdata='Display1.topposts'/>
             </div>
-            <div class="col-sm-6">
+            <div class="col-md-6">
                 <topPosts class=" insight" :listdata='Display2.topposts'/> 
             </div>
         </div>
 
         <div class="row dashboard-comp">
-            <div class="col-sm-6">
+            <div class="col-md-6">
                 <mostinfluentialusers :listdata='Display1.topusers' />
             </div>
-            <div class="col-sm-6">
+            <div class="col-md-6">
                  <mostinfluentialusers :listdata='Display2.topusers' />
             </div>
         </div>
@@ -178,7 +178,7 @@ import mostinfluentialusers from '../components/MostInfluentialUsers'
 import Trackerheader from "../components/Trackerheader"
 import Engagement from "../components/Engagement"
 import GeoChart from "../components/GeoChartComponent"
-import MediaSelector from "../components/MediaSelector"
+import MediaSelectortwitter from "../components/MediaSelectorTwitter"
 
 import Sigmagraph from "../components/Sigmagraph"
 import Sentiment from "../components/Sentiment"
@@ -196,9 +196,9 @@ export default {
     Trackerheader,
     Engagement,
     GeoChart,
-    MediaSelector,
     Sigmagraph,
-    Sentiment
+    Sentiment,
+    MediaSelectortwitter
     
     },
     
