@@ -30,17 +30,33 @@ export default {
   data(){
       return{
           slides:[{
-              imgName: "LogoNr3.png"
+              imgName: "yourtrackersTut.png"
           },
           {
-            //   imgName: "nissan.jpg"
-              imgName: "template-twitters.png"
-
-
+              imgName: "Searchlist.png"
           },
           {
-              imgName: "Yourtrackers.png"
+              imgName: "timeline.png"
           },
+          {
+              imgName: "totalinter.png"
+          },
+          {
+              imgName: "locations.png"
+          },
+          {
+              imgName: "sentiment.png"
+          },
+          {
+              imgName: "NodeNetwork.png"
+          },
+          {
+              imgName: "Subreddits.png"
+          },
+          {
+              imgName: "andMore.png"
+          },
+
          ]
               
           
