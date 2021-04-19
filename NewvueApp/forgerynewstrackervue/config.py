@@ -1,0 +1,4 @@
+bearer_token ="Bearer AAAAAAAAAAAAAAAAAAAAAEYbLwEAAAAA2QFmIRNmiAc3uEuMAPT9AoknvZw%3D7rtwFRPtWgSFp70bogE1sBP1WzqkR5cubh9vlN2COt9AiT6kfk"
+client_id="UK5XRgvcO7C2cQ"
+client_secret="9OIo7S6kOBLlQZadOlo5miG0A9OC4g"
+mapquest_key="TmOfIn5rPTViGJ2rswAHGK7Etvj4FnNj"
